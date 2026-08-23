@@ -1,0 +1,7 @@
+# The resume is a SOURCE for this site's content, never something it publishes.
+# It contains a home address and phone number, so it must not reach a public
+# repo or Pages deploy -- a file in the site root is fetchable by URL whether
+# or not anything links to it.
+*.pdf
+*.docx
+Abhineeth_Duddela_Resume.pdf
