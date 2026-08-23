@@ -1,0 +1,1653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Abhineeth Duddela</title>
+<meta name="description" content="Abhineeth Duddela: CS/AI/ML. Distributed systems, NLP explainability, and local-first infrastructure.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=fallback" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Ambient field: one fixed canvas behind the whole document, not a hero
+     decoration. The network of nodes and links is the same visual idea the
+     HNSW and Raft pieces trade in, so the page sits inside the subject
+     rather than next to it. -->
+<canvas class="ambient" id="ambient" aria-hidden="true"></canvas>
+
+<div class="rail">
+  <div class="rail-in">
+    <a class="brand" href="#top">Abhineeth<i>.</i></a>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#research">Research</a>
+      <a href="#internship">Internship</a>
+      <a href="#cricket">Cricket</a>
+      <a href="#work">Work</a>
+      <!-- Live Systems is the longest section on the page and had no rail
+           link, so the scrollspy had nothing to mark while you were in it. -->
+      <a href="#systems">Systems</a>
+      <a href="#awards">Awards</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="rail-right">
+      <!-- Live telemetry from the Raft cluster running in Live Systems: the
+           term and leader it is actually on right now. Hidden until the
+           simulator publishes state, so it never shows as an empty widget.
+           aria-hidden because it changes several times a minute on its own --
+           a screen reader announcing every election would be unusable, and
+           the simulator itself is fully described where it lives. -->
+      <span class="rail-telemetry" id="rail-telemetry" aria-hidden="true" hidden>
+        <span class="rt-k">raft</span>
+        <span class="rt-v">t<b data-t="term">·</b></span>
+        <span class="rt-v" data-t="leader">·</span>
+      </span>
+      <span class="rail-clock" id="rail-clock" aria-hidden="true">··:··:··</span>
+      <button type="button" class="cmdk-trigger" id="cmdk-trigger" aria-label="Open quick navigation">⌘K</button>
+      <a class="rail-cta" href="#contact">Connect</a>
+    </div>
+  </div>
+</div>
+
+<!-- Scroll progress: a hairline across the top of the viewport. Real geometry:
+     position through the document. -->
+<div class="progress-bar" aria-hidden="true"><span id="progress-fill"></span></div>
+
+<div class="cmdk-overlay" id="cmdk-overlay" hidden>
+  <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Quick navigation">
+    <div class="cmdk-input-row">
+      <span class="cmdk-prompt">›</span>
+      <input type="text" id="cmdk-input" class="cmdk-input" placeholder="Jump to a section, project, or link…" autocomplete="off">
+      <span class="cmdk-hint">esc</span>
+    </div>
+    <div class="cmdk-list" id="cmdk-list"></div>
+  </div>
+</div>
+
+<main>
+
+  <!-- ============================================================ hero -->
+  <header class="hero wrap" id="top">
+    <!-- Node/link glyph: the motif the whole site is built on, and literally
+         the object all three projects operate over. -->
+    <!-- Orbit mark: concentric rings with two counter-rotating satellites.
+         Rotation is CSS animation on the groups, so it stops dead under
+         reduced motion and leaves a legible static mark. -->
+    <div class="hero-glyph hero-fade" style="--d:0s" aria-hidden="true">
+      <svg viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="52" stroke="currentColor" stroke-width="1" opacity=".16"/>
+        <circle cx="60" cy="60" r="36" stroke="currentColor" stroke-width="1" opacity=".26"/>
+        <g class="orbit orbit-a"><circle cx="60" cy="8" r="4" fill="var(--live)"/></g>
+        <g class="orbit orbit-b"><circle cx="60" cy="24" r="3.4" fill="var(--neg)"/></g>
+        <g class="glyph-core">
+          <ellipse cx="60" cy="60" rx="18" ry="8" stroke="currentColor" stroke-width="1.5" opacity=".8"/>
+          <ellipse cx="60" cy="60" rx="18" ry="8" stroke="currentColor" stroke-width="1.5" opacity=".8" transform="rotate(60 60 60)"/>
+          <ellipse cx="60" cy="60" rx="18" ry="8" stroke="currentColor" stroke-width="1.5" opacity=".8" transform="rotate(120 60 60)"/>
+          <circle cx="60" cy="60" r="4" fill="currentColor"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- The name is the h1. The thesis line below it used to hold that role,
+         which left the page with no heading that actually names whose site
+         this is. -->
+    <h1 class="hero-name">
+      <span class="hero-rise" style="--d:.16s"><span>Abhineeth Duddela<i class="caret" aria-hidden="true"></i></span></span>
+    </h1>
+    <p class="hero-eyebrow hero-fade" style="--d:.3s">Personal portfolio · Est. Frisco, TX</p>
+    <p class="hero-thesis">
+      <span class="hero-rise" style="--d:.42s"><span>Distributed systems,</span></span>
+      <span class="hero-rise" style="--d:.52s"><span class="ital">proven under fire.</span></span>
+    </p>
+    <p class="hero-bio hero-fade" style="--d:.6s">
+      I build distributed systems and the machine learning that runs on top of them:
+      Raft consensus hardened by fault injection, HNSW vector search over embeddings,
+      transformer-based NLP for crisis triage. USACO Gold, published in a peer-reviewed
+      journal, and a USA Cricket U19 athlete ranked 31st nationally when I'm away from
+      the terminal.
+    </p>
+
+    <!-- Editor frame rather than a terminal one: tab strip, line gutter,
+         syntax colouring, side panel, status bar. Everything in the file is a
+         fact stated elsewhere on this page -- the frame is the styling, the
+         values are not decorative.
+
+         The gutter numbers come from a CSS counter on .ide-line, not from
+         markup, so they can't be selected or copied and can never drift out
+         of step with the lines they label. -->
+    <div class="ide hero-fade" style="--d:.78s">
+      <div class="ide-bar">
+        <span class="console-dot r"></span><span class="console-dot y"></span><span class="console-dot g"></span>
+        <span class="ide-tab is-active">abhineeth.ts</span>
+        <span class="ide-tab">README.md</span>
+        <span class="ide-path">~/portfolio/src</span>
+      </div>
+
+      <div class="ide-split">
+        <div class="ide-editor">
+<pre class="ide-code"><code><span class="ide-line"><i class="k">export</i> <i class="k">const</i> <i class="f">abhineeth</i> <i class="o">=</i> <i class="o">{</i></span>
+<span class="ide-line">  <i class="p">name</i><i class="o">:</i>      <i class="s">"Abhineeth Duddela"</i><i class="o">,</i></span>
+<span class="ide-line">  <i class="p">based</i><i class="o">:</i>     <i class="s">"Frisco, TX"</i><i class="o">,</i></span>
+<span class="ide-line">  <i class="p">school</i><i class="o">:</i>    <i class="s">"Heritage High School"</i><i class="o">,</i>  <i class="c">// class of 2027</i></span>
+<span class="ide-line">  <i class="p">focus</i><i class="o">:</i>     <i class="o">[</i><i class="s">"consensus"</i><i class="o">,</i> <i class="s">"NLP"</i><i class="o">,</i> <i class="s">"inference"</i><i class="o">]</i><i class="o">,</i></span>
+<span class="ide-line"></span>
+<span class="ide-line">  <i class="p">research</i><i class="o">:</i>  <i class="s">"peer-reviewed · published"</i><i class="o">,</i></span>
+<span class="ide-line">  <i class="p">computing</i><i class="o">:</i> <i class="s">"USACO Gold"</i><i class="o">,</i></span>
+<span class="ide-line">  <i class="p">tutoring</i><i class="o">:</i>  <i class="n">2_500</i><i class="o">,</i>                  <i class="c">// students reached</i></span>
+<span class="ide-line">  <i class="p">cricket</i><i class="o">:</i>   <i class="o">{</i> <i class="p">squad</i><i class="o">:</i> <i class="s">"USA U19"</i><i class="o">,</i> <i class="p">rank</i><i class="o">:</i> <i class="n">31</i> <i class="o">}</i><i class="o">,</i></span>
+<span class="ide-line"></span>
+<span class="ide-line">  <i class="p">status</i><i class="o">:</i>    <i class="s">"open for opportunities"</i><i class="o">,</i></span>
+<span class="ide-line"><i class="o">}</i> <i class="k">as</i> <i class="k">const</i><i class="o">;</i></span></code></pre>
+        </div>
+
+        <aside class="ide-panel">
+          <div class="ide-panel-head">Outline</div>
+          <div class="console-tiles">
+            <div class="ctile"><span class="v accent">Published</span><span class="k">Research</span></div>
+            <div class="ctile"><span class="v green">USACO Gold</span><span class="k">Competition</span></div>
+            <div class="ctile"><span class="v">2,500+</span><span class="k">Tutoring</span></div>
+            <div class="ctile"><span class="v green">U19 / #31</span><span class="k">Cricket</span></div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="ide-status">
+        <span class="ide-branch">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="9" r="3"/><path d="M18 12v1a3 3 0 0 1-3 3H6M6 9v6"/></svg>
+          main
+        </span>
+        <span class="ide-ok">✓ 0 problems</span>
+        <span class="live-pill"><i></i>Open to work</span>
+        <span class="ide-meta">TypeScript · UTF-8 · Ln 13, Col 12</span>
+      </div>
+    </div>
+
+    <a class="scroll-cue hero-fade" style="--d:1s" href="#about">
+      <span>Scroll to explore</span>
+      <span class="scroll-cue-line" aria-hidden="true"><i></i></span>
+    </a>
+  </header>
+
+  <!-- =========================================================== about -->
+  <section id="about" class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>About</span>
+      <h2 class="sec-title">The person <em class="ital">behind</em> the work</h2>
+    </div>
+
+    <div class="about-grid">
+      <aside class="about-card reveal">
+        <!-- Explicit width/height so the browser reserves the 4:5 box before the
+             file arrives -- without them this image is the one thing on the page
+             that could reintroduce layout shift, and CLS is currently 0. -->
+        <figure class="about-portrait">
+          <picture>
+            <source srcset="abhineeth.webp" type="image/webp">
+            <img src="abhineeth.jpg" width="900" height="1125" decoding="async"
+                 alt="Abhineeth Duddela">
+          </picture>
+        </figure>
+        <div class="about-id">
+          <div>
+            <div class="about-name">Abhineeth Duddela</div>
+            <div class="about-loc">Frisco, TX</div>
+          </div>
+          <span class="live-pill"><i></i>Available</span>
+        </div>
+        <div class="about-school">Heritage High School · Class of 2027</div>
+        <div class="tags">
+          <span class="tag">Transformers</span><span class="tag">Bayesian Inference</span>
+          <span class="tag">NLP</span><span class="tag">Cybersecurity</span>
+          <span class="tag">Competitive Programming</span><span class="tag">Systems Architecture</span>
+          <span class="tag">Cricket</span><span class="tag">Social Impact</span>
+        </div>
+      </aside>
+
+      <div class="about-prose reveal">
+        <p>
+          I'm Abhineeth, a rising senior at Heritage High School in Frisco, TX. My work sits
+          where machine learning meets distributed systems: the models that make a prediction,
+          and the infrastructure that has to keep serving them when a node dies mid-write.
+          Most of what's on this page started as a question I couldn't answer by reading
+          (how does a cluster actually agree under partition, what does an HNSW graph look
+          like while it's searching) and ended as something I had to implement to find out.
+        </p>
+        <p>
+          I fine-tune transformer architectures, ship reproducible statistical tooling in R and
+          Python, and reverse-engineer the messy parts of the internet, from disaster-response
+          tweet streams to K–8 tutoring logistics. I'm a published researcher in a peer-reviewed
+          journal, a USACO Gold competitor, a data-science intern under a Harvard preceptor, a
+          nonprofit co-founder whose research reach spans three countries and five U.S. states,
+          and a USA Cricket U19 athlete ranked 31st nationally.
+        </p>
+        <p>
+          My north star is unreasonably simple: build technically elegant systems that
+          meaningfully compound in the real world. Whether that's an ensemble NLP classifier
+          triaging emergency signals, a Bayesian pedagogy module deployed to an international
+          bootcamp, or a lean edtech operation serving 2,500+ students, I optimize for depth,
+          reproducibility, and reach.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================= work -->
+  <section id="work" class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Work</span>
+      <h2 class="sec-title">Built from the <em class="ital">paper up</em></h2>
+      <p class="sec-lede">
+        Consensus, vector search and test-time compute, implemented from the primary
+        literature rather than pulled off a shelf. The first three run live in your browser
+        further down the page.
+      </p>
+    </div>
+
+    <div class="card-grid">
+      <article class="pcard spot reveal">
+        <div class="pcard-top">
+          <span class="pcard-badge">R</span>
+          <div>
+            <h3>raft-chaos-testing</h3>
+            <div class="pcard-status">Live</div>
+          </div>
+        </div>
+        <div class="pcard-cat">Distributed consensus · fault injection</div>
+        <p>
+          A queued-delivery transport with per-link <code>drop_prob</code> and
+          <code>delay_ticks</code>, asserting election safety, leader completeness and
+          state-machine safety per tick across a 600-seed randomized sweep.
+        </p>
+        <dl class="pspec">
+          <div><dt>Safety properties</dt><dd>3, asserted per tick</dd></div>
+          <div><dt>Seed sweep</dt><dd>600 randomized</dd></div>
+          <div><dt>Fault model</dt><dd>Per-link drop + delay</dd></div>
+        </dl>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">Raft</span>
+          <span class="tag">Linearizability</span><span class="tag">GitHub Actions</span>
+        </div>
+        <div class="pcard-actions">
+          <a class="tlink" href="#proj-raft">Explore live <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="tlink ext" href="https://abho7.github.io/raft-chaos-testing/" target="_blank" rel="noopener">Results <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+
+      <article class="pcard spot reveal">
+        <div class="pcard-top">
+          <span class="pcard-badge g">C</span>
+          <div>
+            <h3>crisis-nlp-demo</h3>
+            <div class="pcard-status">Live</div>
+          </div>
+        </div>
+        <div class="pcard-cat">Model explainability · NLP</div>
+        <p>
+          TF-IDF over 1–2 grams into L2-regularized logistic regression, chosen so
+          Shapley values reduce to the closed form <code>φⱼ = wⱼ(xⱼ − E[xⱼ])</code>.
+          Attributions are exact, not Monte-Carlo sampled.
+        </p>
+        <dl class="pspec">
+          <div><dt>Features</dt><dd>TF-IDF, 1–2 grams</dd></div>
+          <div><dt>Classifier</dt><dd>L2 logistic regression</dd></div>
+          <div><dt>Attributions</dt><dd>Exact, closed form</dd></div>
+        </dl>
+        <div class="tags">
+          <span class="tag">FastAPI</span><span class="tag">scikit-learn</span>
+          <span class="tag">SHAP</span><span class="tag">Docker</span>
+        </div>
+        <div class="pcard-actions">
+          <a class="tlink" href="#proj-nlp">Explore live <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="tlink ext" href="https://crisis-nlp-demo.onrender.com/" target="_blank" rel="noopener">Demo <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+
+      <article class="pcard spot reveal">
+        <div class="pcard-top">
+          <span class="pcard-badge a">M</span>
+          <div>
+            <h3>mcp-memory-server</h3>
+            <div class="pcard-status oss">Open source</div>
+          </div>
+        </div>
+        <div class="pcard-cat">Vector search · local-first</div>
+        <p>
+          Hand-written HNSW over 384-dim MiniLM embeddings: <code>M=16</code>,
+          <code>ef_construction=200</code>, cosine on L2-normalized vectors, built with
+          SELECT-NEIGHBORS-HEURISTIC. Zero network calls.
+        </p>
+        <dl class="pspec">
+          <div><dt>Index</dt><dd>HNSW, M=16</dd></div>
+          <div><dt>Embeddings</dt><dd>384-dim MiniLM</dd></div>
+          <div><dt>Network calls</dt><dd>Zero</dd></div>
+        </dl>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">MCP</span>
+          <span class="tag">HNSW</span><span class="tag">ONNX</span>
+        </div>
+        <div class="pcard-actions">
+          <a class="tlink" href="#proj-mcp">Explore live <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="tlink ext" href="https://github.com/abho7/mcp-memory-server" target="_blank" rel="noopener">Source <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+
+      <article class="pcard spot reveal">
+        <div class="pcard-top">
+          <span class="pcard-badge">K</span>
+          <div>
+            <h3>Raft KV Store</h3>
+            <div class="pcard-status">Shipped</div>
+          </div>
+        </div>
+        <div class="pcard-cat">Systems · distributed consensus</div>
+        <p>
+          Raft implemented from the primary paper: randomized-timeout leader election via
+          <code>RequestVote</code>, <code>AppendEntries</code> replication with
+          <code>prevLogIndex</code>/<code>prevLogTerm</code> consistency checking, and
+          quorum commit advancement restricted to the leader's current term (the Figure 8
+          constraint). Deterministic discrete-event simulator with injected crashes,
+          restarts and partitions; 23 tests including live asyncio TCP transport tests that
+          kill a server mid-write and confirm zero data loss through failover.
+        </p>
+        <dl class="pspec">
+          <div><dt>Implemented from</dt><dd>The primary paper</dd></div>
+          <div><dt>Commit rule</dt><dd>Figure 8 constraint</dd></div>
+          <div><dt>Tests</dt><dd>23, incl. live TCP</dd></div>
+        </dl>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">asyncio</span>
+          <span class="tag">Distributed Consensus</span><span class="tag">Raft</span>
+          <span class="tag">TCP</span><span class="tag">Fault Tolerance</span>
+        </div>
+        <div class="pcard-actions">
+          <a class="tlink ext" href="https://github.com/abho7" target="_blank" rel="noopener">View project <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+
+      <article class="pcard spot reveal">
+        <div class="pcard-top">
+          <span class="pcard-badge g">T</span>
+          <div>
+            <h3>MCTS Code Reasoner</h3>
+            <div class="pcard-status">Shipped</div>
+          </div>
+        </div>
+        <div class="pcard-cat">ML systems · test-time compute</div>
+        <p>
+          Asynchronous Monte Carlo Tree Search for LLM-guided code generation with a modified
+          UCB1 policy that discounts high-token-cost branches by remaining budget:
+          <code>Q(s,a) + c·√(ln N(s)/N(s,a)) − λ·(τ(s,a)/B_remaining)</code>. Enforces
+          <code>RLIMIT_AS</code>, <code>RLIMIT_CPU</code> and wall-clock limits on untrusted
+          generated code, validated against real infinite loops and memory-exhaustion
+          attempts. A self-reflection loop feeds execution tracebacks back into model context.
+          17 tests, zero external ML dependencies.
+        </p>
+        <dl class="pspec">
+          <div><dt>Search policy</dt><dd>Budget-discounted UCB1</dd></div>
+          <div><dt>Sandbox</dt><dd>RLIMIT_AS / RLIMIT_CPU</dd></div>
+          <div><dt>ML dependencies</dt><dd>Zero</dd></div>
+        </dl>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">MCTS</span>
+          <span class="tag">UCB1</span><span class="tag">LLM Inference</span>
+          <span class="tag">Sandboxing</span>
+        </div>
+        <div class="pcard-actions">
+          <a class="tlink ext" href="https://github.com/abho7" target="_blank" rel="noopener">View project <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+
+      <article class="pcard spot reveal">
+        <div class="pcard-top">
+          <span class="pcard-badge a">F</span>
+          <div>
+            <h3>Flightpath Course Scheduler</h3>
+            <div class="pcard-status">Shipped</div>
+          </div>
+        </div>
+        <div class="pcard-cat">Optimization · constraint programming</div>
+        <p>
+          Multi-term university scheduling modelled as a joint CSP/optimization problem, and it is
+          NP-hard: credit-limit bin-packing combined with precedence-constrained graph
+          colouring for prerequisites. Dual backends: an OR-Tools CP-SAT integer program doing
+          two-phase lexicographic optimization (minimize terms-to-graduation, then maximize
+          course quality under a fairness constraint), and a dependency-free backtracking
+          search with topological ordering and time-budgeted fallback. Catalogs from five
+          universities, modelling both semester and quarter calendars.
+        </p>
+        <dl class="pspec">
+          <div><dt>Problem class</dt><dd>NP-hard CSP</dd></div>
+          <div><dt>Backends</dt><dd>CP-SAT + backtracking</dd></div>
+          <div><dt>Catalogs</dt><dd>5 universities</dd></div>
+        </dl>
+        <div class="tags">
+          <span class="tag">OR-Tools</span><span class="tag">CP-SAT</span>
+          <span class="tag">FastAPI</span><span class="tag">React</span>
+          <span class="tag">Constraint Programming</span>
+        </div>
+        <div class="pcard-actions">
+          <a class="tlink ext" href="https://github.com/abho7" target="_blank" rel="noopener">View project <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+
+      <article class="pcard spot reveal">
+        <div class="pcard-top">
+          <span class="pcard-badge a">S</span>
+          <div>
+            <h3>Simple Tutors</h3>
+            <div class="pcard-status">Running</div>
+          </div>
+        </div>
+        <div class="pcard-cat">Venture · edtech operations</div>
+        <p>
+          Co-founded a vertically integrated K–8 tutoring company connecting high-school tutors
+          with students in Math, Science, Reading and History at below-market rates. Built lean
+          operations (onboarding, scheduling, payments reconciliation and curriculum logistics)
+          while serving 2,500+ students and generating roughly $20,000 in revenue.
+        </p>
+        <dl class="pspec">
+          <div><dt>Students served</dt><dd>2,500+</dd></div>
+          <div><dt>Revenue</dt><dd>~$20,000</dd></div>
+          <div><dt>Subjects</dt><dd>Math, Science, Reading, History</dd></div>
+        </dl>
+        <div class="tags">
+          <span class="tag">Operations</span><span class="tag">EdTech</span>
+          <span class="tag">Entrepreneurship</span><span class="tag">Systems</span>
+        </div>
+        <div class="pcard-actions">
+          <span class="pcard-private">Private project</span>
+        </div>
+      </article>
+
+      <article class="pcard spot reveal">
+        <div class="pcard-top">
+          <span class="pcard-badge g">W</span>
+          <div>
+            <h3>Willow Initiative</h3>
+            <div class="pcard-status">Active</div>
+          </div>
+        </div>
+        <div class="pcard-cat">Nonprofit · research advocacy</div>
+        <p>
+          Co-founded a nonprofit research and advocacy network on adolescent substance-abuse
+          awareness. Scaled a 14-person officer corps across 5 states and 3 countries, and
+          collaborated with 10+ university professors and researchers from Harvard, Yale, USC
+          and Johns Hopkins to inform research-backed policy advocacy.
+        </p>
+        <dl class="pspec">
+          <div><dt>Officer corps</dt><dd>14 across 5 states</dd></div>
+          <div><dt>Reach</dt><dd>3 countries</dd></div>
+          <div><dt>Collaborators</dt><dd>10+ university researchers</dd></div>
+        </dl>
+        <div class="tags">
+          <span class="tag">Nonprofit</span><span class="tag">Research</span>
+          <span class="tag">Advocacy</span>
+        </div>
+        <div class="pcard-actions">
+          <a class="tlink ext" href="https://www.willowinitiative.org/" target="_blank" rel="noopener">Visit the site <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ==================================================== live systems -->
+  <section id="systems" class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 7l3 3M17 7l-3 3M7 17l3-3M17 17l-3-3"/></svg>Live Systems</span>
+      <h2 class="sec-title">Running <em class="ital">live</em> in your browser</h2>
+      <p class="sec-lede">
+        Not screenshots and not recordings. Each panel below executes the real
+        algorithm (the same consensus logic, the same graph search, the same
+        closed-form attribution) as you scroll to it.
+      </p>
+    </div>
+
+    <!-- ---------------------------------------------------- raft -->
+    <article class="showcase reveal" id="proj-raft">
+      <div class="showcase-media">
+        <div class="panel" data-wake="raft">
+          <div class="panel-bar">
+            <span class="dot"></span>
+            <span>5-node Raft cluster</span>
+            <span class="src" id="raft-tick">tick 0</span>
+          </div>
+          <div class="panel-body">
+            <div class="sim-controls">
+              <button class="ctl is-primary" id="raft-kill" type="button">Kill leader</button>
+              <button class="ctl" id="raft-partition" type="button">Partition</button>
+              <button class="ctl" id="raft-pause" type="button">Pause</button>
+              <button class="ctl" id="raft-reset" type="button">Reset</button>
+            </div>
+            <div class="sim-status" id="raft-status"></div>
+            <div id="raft-timeline"><p class="loading">Starting cluster…</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase-text">
+        <div class="showcase-meta">Distributed consensus · Live</div>
+        <h3>Breaking a consensus algorithm on purpose, then proving it still held.</h3>
+        <p class="showcase-desc">
+          The stock engine ships two transports over the same <code>RaftNode</code>, and
+          neither can express message <em>delay</em>: the in-memory simulator's
+          <code>_deliver</code> invokes the recipient's handler synchronously and recurses,
+          so a <code>RequestVote</code> response can cascade through leadership election and
+          heartbeat fan-out inside one <code>tick()</code>. An in-flight message has no
+          state to hold a deadline in, and <code>drop_rate</code> is a single global
+          probability rather than per-edge.
+        </p>
+        <p class="showcase-desc">
+          So I wrote a third transport: a time-ordered priority queue of
+          <code>(deliver_at, seq, sender, recipient, msg)</code> against the unmodified
+          node API. Per-link <code>drop_prob</code> is rolled at send time to model packet
+          loss, while n-way partition membership and liveness are evaluated at
+          <em>delivery</em> time so a split kills packets already on the wire. Four
+          invariants are asserted every tick (election safety, leader completeness,
+          state-machine safety, and acknowledged-read consistency) with commitment
+          witnessed by quorum <code>match_index</code> advancement rather than by the
+          proposer's optimism. Cross-validating the queued transport against the engine's
+          own suite is what makes a reported violation attributable to the consensus
+          implementation and not to my harness.
+        </p>
+        <div class="figbox-grid">
+          <div class="figbox"><span class="n">600</span><span class="c">Seed randomized sweep</span></div>
+          <div class="figbox"><span class="n">6/6</span><span class="c">Chaos scenarios verified</span></div>
+          <div class="figbox"><span class="n">0</span><span class="c">Safety violations in the engine</span></div>
+          <div class="figbox"><span class="n">3</span><span class="c">Real defects found, all in my own harness</span></div>
+        </div>
+        <div class="showcase-actions">
+          <a class="btn-primary" href="https://abho7.github.io/raft-chaos-testing/" target="_blank" rel="noopener">
+            Open full report <span aria-hidden="true">→</span>
+          </a>
+          <a class="tlink ext" href="https://github.com/abho7/raft-chaos-testing" target="_blank" rel="noopener">
+            GitHub <span class="arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+
+        <details class="deep">
+          <summary><span class="tw">›</span> Implementation notes</summary>
+          <div class="deep-body">
+          <h4>Why a third transport</h4>
+          <p>
+            The engine ships two transports over the same <code>RaftNode</code>: an in-memory
+            simulator and an asyncio TCP server. Neither can express message <em>delay</em>.
+            The simulator's <code>_deliver</code> invokes the recipient's handler synchronously
+            and recurses, so a vote response can trigger leadership, heartbeats, and their
+            responses all inside one <code>tick()</code>: an in-flight message has no state,
+            and “hold this for five ticks” has nowhere to live. Its <code>drop_rate</code> is
+            also a single global probability, not per-edge.
+          </p>
+          <p>
+            So I wrote a queued transport against the same node API, which the engine's own
+            docstring anticipates: a harness may “deliver it, delay it, or drop it.”
+            <code>RaftNode</code> is used completely unmodified.
+          </p>
+
+          <h4>Architecture</h4>
+          <figure class="diagram">
+            <svg viewBox="0 0 640 210" preserveAspectRatio="xMidYMid meet" role="img"
+                 aria-label="A leader RaftNode sends AppendEntries into a queued transport, which time-orders the message and checks per-link and partition faults before either delivering it to the follower's handle_append_entries or dropping it.">
+              <defs>
+                <marker id="raft-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M0,0 L8,4 L0,8 Z" class="d-label"></path>
+                </marker>
+                <marker id="raft-arrow-drop" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M0,0 L8,4 L0,8 Z" class="d-drop-label"></path>
+                </marker>
+              </defs>
+
+              <rect x="16" y="74" width="120" height="52" rx="6" class="d-box"></rect>
+              <text x="76" y="96" text-anchor="middle" class="d-label" font-size="12" font-weight="700">Leader</text>
+              <text x="76" y="112" text-anchor="middle" class="d-label" font-size="10">RaftNode.tick()</text>
+
+              <rect x="196" y="40" width="248" height="130" rx="6" class="d-box"></rect>
+              <text x="320" y="58" text-anchor="middle" class="d-accent-label" font-size="12" font-weight="700">Queued Transport</text>
+
+              <rect x="214" y="68" width="26" height="18" rx="2" class="d-box"></rect>
+              <rect x="250" y="68" width="26" height="18" rx="2" class="d-box"></rect>
+              <rect x="286" y="68" width="26" height="18" rx="2" class="d-box"></rect>
+              <rect x="322" y="68" width="26" height="18" rx="2" class="d-box d-dim"></rect>
+              <line x1="212" y1="94" x2="410" y2="94" class="d-line" marker-end="url(#raft-arrow)"></line>
+              <text x="320" y="108" text-anchor="middle" class="d-label" font-size="9.5">ordered by deliver_at = tick + latency</text>
+
+              <text x="320" y="130" text-anchor="middle" class="d-label" font-size="9.5">LinkFault: drop_prob · delay_ticks (per edge)</text>
+              <text x="320" y="146" text-anchor="middle" class="d-label" font-size="9.5">Partition: sender/recipient same group?</text>
+
+              <rect x="504" y="74" width="120" height="52" rx="6" class="d-box"></rect>
+              <text x="564" y="96" text-anchor="middle" class="d-label" font-size="12" font-weight="700">Follower</text>
+              <text x="564" y="112" text-anchor="middle" class="d-label" font-size="10">handle_append_entries()</text>
+
+              <line x1="136" y1="98" x2="196" y2="98" class="d-line" marker-end="url(#raft-arrow)"></line>
+              <text x="166" y="90" text-anchor="middle" class="d-label" font-size="9.5">send</text>
+
+              <line x1="444" y1="90" x2="504" y2="90" class="d-line" marker-end="url(#raft-arrow)"></line>
+              <text x="474" y="82" text-anchor="middle" class="d-label" font-size="9.5">deliver at tick T</text>
+
+              <line x1="320" y1="170" x2="320" y2="196" class="d-line d-drop" marker-end="url(#raft-arrow-drop)"></line>
+              <text x="335" y="192" text-anchor="start" class="d-drop-label" font-size="9.5">dropped: drop_prob roll, or partitioned</text>
+            </svg>
+            <figcaption>The capability the original two transports couldn't express: a message held mid-flight, timestamped, and resolved against per-link and partition faults before delivery.</figcaption>
+          </figure>
+
+          <h4>Delivery model</h4>
+          <table class="spec">
+            <tr><td>queue entry</td><td><span class="val">(deliver_at, seq, sender, recipient, msg)</span>, ordered</td></tr>
+            <tr><td>base latency</td><td><span class="val">1 tick</span>, nothing resolves inside the tick that produced it</td></tr>
+            <tr><td>per-link drop</td><td>rolled at <span class="val">send</span> time, models packet loss</td></tr>
+            <tr><td>partition / liveness</td><td>evaluated at <span class="val">delivery</span> time, models a split killing in-flight packets</td></tr>
+            <tr><td>election timeout</td><td>randomized <span class="val">10–20</span> ticks; heartbeat every <span class="val">3</span></td></tr>
+          </table>
+
+          <h4>Composable faults</h4>
+          <p>
+            Faults are independent objects consulted per message, so composition is structural
+            rather than special-cased. <b>Partition</b> supports n-way groups and several
+            simultaneous splits; the engine's own field holds a single two-group tuple.
+            <b>LinkFault</b> targets one directed edge with <code>drop_prob</code> and
+            <code>delay_ticks</code>, optionally bidirectional. “Crash a node during an active
+            partition” is simply two faults being live at once.
+          </p>
+
+          <h4>Invariants, checked every tick</h4>
+          <ul>
+            <li><b>Election safety</b>: at most one leader per term.</li>
+            <li><b>State machine safety</b>: no two nodes apply different commands at the same log index.</li>
+            <li><b>Leader completeness</b>: every acknowledged entry is present, unchanged, in the log of every subsequently elected leader. Asserted at election time, which makes it race-free: Raft guarantees a new leader already <em>holds</em> every committed entry, so it needs no waiting on replication.</li>
+            <li><b>Acknowledged read consistency</b>: once the leader's <code>last_applied</code> covers an acked write, reading that key from the leader returns that value.</li>
+          </ul>
+          <div class="callout">
+            <p>
+              A write counts as acknowledged only once the accepting leader's
+              <code>commit_index</code> covers it, the instant a real server would answer the
+              client. An uncommitted entry vanishing is <em>correct</em> Raft behaviour and is
+              recorded as an overwrite, never a durability violation.
+            </p>
+          </div>
+
+          <h4>Trusting the results</h4>
+          <p>
+            A queued transport is a different code path from the engine's own 23 tests, so a
+            violation could in principle be the harness's fault. Every scenario the engine's
+            suite covers is re-run through the new transport with matching safety outcomes
+            asserted. That cross-validation is what makes a reported violation attributable to
+            the engine.
+          </p>
+          <p>
+            It earned its keep. A 600-seed randomized sweep flagged 50 violations under seed 124,
+            all false. An entry whose proposer was partitioned is only observed as committed
+            once that node rejoins, so index 3 was detected at tick 250 <em>after</em> index 4
+            was detected at tick 248; tracking the newest acked value per key in detection order
+            regressed the expectation to a value a later write had legitimately superseded.
+            Expected values are now keyed by log index, and commitment is witnessed by any live
+            node whose <code>commit_index</code> covers the entry. All three defects this
+            exercise surfaced were in the harness, and the report documents them rather than
+            hiding them.
+          </p>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    <!-- ----------------------------------------------------- nlp -->
+    <article class="showcase flip reveal" id="proj-nlp">
+      <div class="showcase-media">
+        <div class="panel" data-wake="nlp">
+          <div class="panel-bar">
+            <span class="dot"></span>
+            <span>Keyword match vs. the live model</span>
+            <span class="src">same sentence, two approaches</span>
+          </div>
+          <div class="panel-body">
+          <p class="sim-caption">
+            Naive keyword matching flags any message containing an urgency word,
+            with no regard for what the sentence actually means. Type something
+            and compare it against the real model.
+          </p>
+          <div class="sim-controls">
+            <input type="text" id="nlp-compare-input" class="nlp-input" maxlength="200"
+                   value="This new album is an absolute disaster lol" placeholder="Type a message…">
+            <button class="ctl is-primary" id="nlp-compare-run" type="button">Compare</button>
+          </div>
+          <div class="nlp-compare-grid">
+            <div class="nlp-compare-col">
+              <div class="nlp-compare-label">literal keyword match</div>
+              <div id="nlp-compare-keyword" class="nlp-compare-result"></div>
+            </div>
+            <div class="nlp-compare-col">
+              <div class="nlp-compare-label">semantic · live model</div>
+              <div id="nlp-compare-semantic" class="nlp-compare-result"></div>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <div class="panel" data-wake="nlp-frame" style="margin-top:1rem">
+          <div class="panel-bar">
+            <span class="dot"></span>
+            <span>The deployed classifier</span>
+            <span class="src">crisis-nlp-demo.onrender.com</span>
+          </div>
+          <div class="frame-wrap">
+            <iframe class="demo" src="https://crisis-nlp-demo.onrender.com/"
+                    title="Live crisis text classifier" loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase-text">
+        <div class="showcase-meta">Model explainability · Live</div>
+        <h3>The explanation is the product, not the label.</h3>
+        <p class="showcase-desc">
+          TF-IDF vectorization over 1–2 grams with <code>sublinear_tf</code>,
+          <code>min_df=2</code> and L2 normalization across a 14,758-term vocabulary, into
+          logistic regression at <code>C=4.0</code> with <code>class_weight="balanced"</code>.
+          Linear by deliberate choice: for a linear model the Shapley values collapse to the
+          closed form <code>φⱼ = wⱼ(xⱼ − E[xⱼ])</code> with base <code>w·E[x] + b</code>, so
+          <code>base + Σφⱼ ≡ logit(x)</code> holds exactly. No sampling, no KernelSHAP
+          approximation; a test asserts agreement with <code>shap.LinearExplainer</code> to
+          within 1e-8, which makes <code>shap</code> a test-only dependency and keeps serving
+          off any deep-learning stack at 107 MB resident.
+        </p>
+        <p class="showcase-desc">
+          The last mile is the harder part: contributions live on vocabulary features but the
+          highlight has to land on the characters the user actually typed. Tokens are matched
+          against the vectorizer's own <code>token_pattern</code> over the raw string and
+          normalized <em>per token</em> rather than per document, so unicode accent-stripping
+          cannot shift character offsets. Each bigram's φ is split across its two constituent
+          spans; any feature that fires but cannot be located is excluded from token scores and
+          reported as a residual, so the additive decomposition still reconciles to the logit.
+        </p>
+        <div class="figbox-grid">
+          <div class="figbox"><span class="n">0.8024</span><span class="c">Accuracy, held-out split</span></div>
+          <div class="figbox"><span class="n">0.7986</span><span class="c">Macro F1</span></div>
+          <div class="figbox"><span class="n">0.8705</span><span class="c">ROC-AUC</span></div>
+          <div class="figbox"><span class="n">1e-8</span><span class="c">Agreement with shap.LinearExplainer</span></div>
+        </div>
+
+        <div class="disclosure">
+          <span class="disclosure-label">On the model behind this demo</span>
+          <p>
+            This runs a <b>stand-in</b> model trained on the public Kaggle "Real or Not? NLP with
+            Disaster Tweets" dataset, <b>not</b> the model from the NHSJS 2025 paper below,
+            because that fine-tuned checkpoint was never available. Its accuracy is not comparable
+            to the figures reported there, and it predicts whether text is <em>disaster-related</em>,
+            not how <em>urgent</em> it is.
+          </p>
+          <p>
+            The four numbers above are this stand-in's own, measured on its own held-out split. The
+            same disclosure is served by the API on every single response, so it travels with the
+            output rather than living only on this page.
+          </p>
+        </div>
+
+        <div class="showcase-actions">
+          <a class="btn-primary" href="https://crisis-nlp-demo.onrender.com/" target="_blank" rel="noopener">
+            Open the demo <span aria-hidden="true">→</span>
+          </a>
+          <a class="tlink ext" href="https://github.com/abho7/crisis-nlp-demo" target="_blank" rel="noopener">
+            GitHub <span class="arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+
+        <details class="deep">
+          <summary><span class="tw">›</span> Implementation notes</summary>
+          <div class="deep-body">
+          <h4>Why linear, deliberately</h4>
+          <p>
+            A fine-tuned transformer would score higher and explain worse. For a linear model
+            the Shapley values have a <b>closed form</b>, so the attribution shown to the user
+            is the exact contribution rather than a sampled estimate:
+          </p>
+          <table class="spec">
+            <tr><td>SHAP value</td><td><span class="val">φⱼ = wⱼ · (xⱼ − E[xⱼ])</span></td></tr>
+            <tr><td>base value</td><td><span class="val">w · E[x] + b</span></td></tr>
+            <tr><td>identity</td><td><span class="val">base + Σφⱼ ≡ logit(x)</span>, exactly</td></tr>
+            <tr><td>verified against</td><td><code>shap.LinearExplainer</code>, max abs difference <span class="val">&lt; 1e-8</span></td></tr>
+          </table>
+          <p>
+            Two tests hold this in place: one asserts agreement with the reference implementation,
+            the other asserts the decomposition sums back to the model's logit over the wire. As
+            a consequence <code>shap</code> is a <em>test-only</em> dependency: serving needs no
+            deep-learning stack at all, and resident memory measures 107 MB.
+          </p>
+
+          <h4>Pipeline</h4>
+          <table class="spec">
+            <tr><td>features</td><td>TF-IDF, 1–2 grams, <code>sublinear_tf</code>, <code>min_df=2</code>, L2-normalized, unicode accent stripping</td></tr>
+            <tr><td>classifier</td><td>logistic regression, <code>C=4.0</code>, <code>class_weight="balanced"</code></td></tr>
+            <tr><td>vocabulary</td><td><span class="val">14,758</span> terms</td></tr>
+            <tr><td>data</td><td><span class="val">7,613</span> labelled examples, stratified 80/20 split</td></tr>
+            <tr><td>artifact</td><td><span class="val">0.55 MB</span>, fits any free tier</td></tr>
+          </table>
+
+          <h4>Mapping features back onto the raw text</h4>
+          <p>
+            The interesting engineering is the last mile. Contributions live on vocabulary
+            features, but the highlight has to land on characters the user typed. Tokens are
+            matched on the raw string with the vectorizer's own <code>token_pattern</code> and
+            normalized <em>per token</em> rather than per document, so accent stripping cannot
+            shift the character offsets. Each bigram's contribution is then split across its two
+            constituent spans. Any feature that fires but cannot be located stays out of the
+            token scores and is reported as a residual, so the additive identity above still
+            holds exactly.
+          </p>
+          <figure class="diagram">
+            <svg viewBox="0 0 680 220" preserveAspectRatio="xMidYMid meet" role="img"
+                 aria-label="Pipeline from raw text through TF-IDF features to per-feature SHAP contributions, then split across the raw-text token spans that produced them, reconstructing into highlighted segments whose contributions sum exactly to the model's logit.">
+              <defs>
+                <marker id="nlp-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M0,0 L8,4 L0,8 Z" class="d-label"></path>
+                </marker>
+              </defs>
+
+              <rect x="10" y="60" width="118" height="46" rx="6" class="d-box"></rect>
+              <text x="69" y="80" text-anchor="middle" class="d-label" font-size="10.5" font-weight="700">raw text</text>
+              <text x="69" y="95" text-anchor="middle" class="d-label" font-size="9">"…absolute disaster lol"</text>
+
+              <rect x="168" y="60" width="118" height="46" rx="6" class="d-box"></rect>
+              <text x="227" y="80" text-anchor="middle" class="d-label" font-size="10.5" font-weight="700">TF-IDF row x</text>
+              <text x="227" y="95" text-anchor="middle" class="d-label" font-size="9">14,758-dim, mostly zero</text>
+
+              <rect x="326" y="52" width="160" height="62" rx="6" class="d-box-accent"></rect>
+              <text x="406" y="74" text-anchor="middle" class="d-accent-label" font-size="10.5" font-weight="700">φⱼ = wⱼ(xⱼ − E[xⱼ])</text>
+              <text x="406" y="90" text-anchor="middle" class="d-label" font-size="9">exact, closed-form</text>
+              <text x="406" y="104" text-anchor="middle" class="d-label" font-size="9">per active feature</text>
+
+              <rect x="526" y="60" width="144" height="46" rx="6" class="d-box"></rect>
+              <text x="598" y="80" text-anchor="middle" class="d-label" font-size="10.5" font-weight="700">split across spans</text>
+              <text x="598" y="95" text-anchor="middle" class="d-label" font-size="9">bigram → its 2 tokens</text>
+
+              <line x1="128" y1="83" x2="168" y2="83" class="d-line" marker-end="url(#nlp-arrow)"></line>
+              <line x1="286" y1="83" x2="326" y2="83" class="d-line" marker-end="url(#nlp-arrow)"></line>
+              <line x1="486" y1="83" x2="526" y2="83" class="d-line" marker-end="url(#nlp-arrow)"></line>
+
+              <line x1="598" y1="106" x2="598" y2="140" class="d-line" marker-end="url(#nlp-arrow)"></line>
+
+              <rect x="40" y="150" width="600" height="42" rx="6" class="d-box"></rect>
+              <rect x="52" y="160" width="70" height="22" rx="3" class="d-box"></rect>
+              <text x="87" y="175" text-anchor="middle" class="d-label" font-size="9">new</text>
+              <rect x="128" y="160" width="70" height="22" rx="3" class="d-accent" fill-opacity="0.22"></rect>
+              <text x="163" y="175" text-anchor="middle" class="d-label" font-size="9">disaster</text>
+              <rect x="204" y="160" width="50" height="22" rx="3" class="d-box"></rect>
+              <text x="229" y="175" text-anchor="middle" class="d-label" font-size="9">lol</text>
+              <text x="430" y="175" text-anchor="middle" class="d-label" font-size="9.5">segments: reconstructed text, per-token φⱼ</text>
+
+              <text x="340" y="212" text-anchor="middle" class="d-label" font-size="9.5">base + Σφⱼ + absent = logit(x), exactly</text>
+            </svg>
+            <figcaption>The last mile: vocabulary-level math mapped back onto the exact characters the user typed, with nothing lost along the way.</figcaption>
+          </figure>
+
+          <div class="callout">
+            <p>
+              The demo runs a <b>stand-in</b> model trained on public Kaggle data, because the
+              original research checkpoint was unavailable. That disclosure is served by the API
+              on every response and rendered on the page, so it cannot be quietly dropped by an
+              embedder. The metrics quoted here are the stand-in's own, and reproducible.
+            </p>
+          </div>
+
+          <h4>Why the highlighting earns its place</h4>
+          <p>
+            On <em>“This new album is an absolute disaster lol”</em> the token <code>disaster</code>
+            contributes <b>+0.83</b> toward disaster-related, and the verdict is still
+            <em>not</em> disaster-related at 82%, because <code>new</code> (−0.85) and
+            <code>lol</code> (−0.55) outvote it. The label alone tells you nothing about that.
+          </p>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    <!-- ----------------------------------------------------- mcp -->
+    <article class="showcase reveal" id="proj-mcp">
+      <div class="showcase-media">
+        <div class="panel" data-wake="hnsw">
+          <div class="panel-bar">
+            <span class="dot"></span>
+            <span>HNSW graph search</span>
+            <span class="src" id="hnsw-caption">layer 2</span>
+          </div>
+          <div class="panel-body">
+            <p class="sim-caption">
+              A node's position on screen <em>is</em> its vector, so the highlighted
+              path is the actual geometry <code>_search_layer</code> navigates.
+              Click the sparse top layer to drop a query.
+            </p>
+            <div class="sim-controls">
+              <button class="ctl is-primary" id="hnsw-query" type="button">Random query</button>
+              <button class="ctl" id="hnsw-insert" type="button">Insert point</button>
+              <button class="ctl" id="hnsw-reset" type="button">Reset</button>
+            </div>
+            <div id="hnsw-viz"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase-text">
+        <div class="showcase-meta">Local-first infrastructure · Open source</div>
+        <h3>Memory that outlives the session, and never leaves the machine.</h3>
+        <p class="showcase-desc">
+          A hand-written hierarchical navigable small-world index: <code>M=16</code>,
+          <code>M_max0 = 2M</code> at the base layer, <code>ef_construction=200</code>, cosine
+          distance over L2-normalized 384-dim vectors from an ONNX-exported
+          <code>all-MiniLM-L6-v2</code> with attention-masked mean pooling. Because the vectors
+          are normalized, cosine reduces to a dot product, which is what keeps greedy traversal
+          cheap. Layer assignment is the paper's exponential decay
+          (<code>⌊−ln(U) · mL⌋</code>), and search descends greedily at <code>ef=1</code> per
+          layer before a bounded best-first <code>SEARCH-LAYER</code> at layer 0.
+        </p>
+        <p class="showcase-desc">
+          Insertion uses <code>SELECT-NEIGHBORS-HEURISTIC</code> (Algorithm 4), not the simple
+          nearest-M rule. A candidate is rejected when it sits closer to an already-selected
+          neighbor than to the query, which preferentially retains non-redundant candidates and
+          forces the long-range bridge edges the upper layers depend on for expected
+          <code>O(log n)</code> search; <code>keepPrunedConnections</code> backfills if the
+          diversity constraint under-fills the neighbor list. Without it the graph collapses
+          into per-cluster islands. Deletes are tombstoned rather than excised, since removing
+          a node can sever connectivity that neighbouring searches traverse through.
+        </p>
+
+        <!-- Why the layers exist. The paragraph above says "long-range bridge
+             edges" and "O(log n)"; this shows the shape that produces them --
+             a sparse top layer crossed in a couple of hops, a dense bottom
+             layer where the exact neighbours live, and the descent between. -->
+        <figure class="figure-flow figure-layers">
+          <svg viewBox="0 0 700 220" role="img" preserveAspectRatio="xMidYMid meet"
+               aria-label="Three HNSW layers. Layer 2 is sparse with long-range edges crossed in two hops; layer 1 is denser; layer 0 holds every node, where the bounded best-first search finds the exact nearest neighbours. The entry point descends through all three.">
+            <defs>
+              <marker id="ly-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+              </marker>
+            </defs>
+
+            <!-- Rules stop at x=520 and the per-layer notes start at x=536.
+                 Running the rules to the full width put the notes on top of
+                 the rules and the rightmost nodes once this column narrowed;
+                 the right 180 units are now reserved for text only.
+                 x=320 carries a node on every layer, which is what lets the
+                 descent arrow land on a real node rather than empty space. -->
+            <text x="8" y="30" class="ly-lab">layer 2</text>
+            <line x1="96" y1="26" x2="520" y2="26" class="ly-rule"/>
+            <g class="ly-edge"><path d="M150 26 H320 M320 26 H490"/></g>
+            <g class="ly-dot"><circle cx="150" cy="26" r="4"/><circle cx="320" cy="26" r="4"/><circle cx="490" cy="26" r="4"/></g>
+            <text x="536" y="30" class="ly-note">3 nodes · 2 hops across</text>
+
+            <text x="8" y="115" class="ly-lab">layer 1</text>
+            <line x1="96" y1="111" x2="520" y2="111" class="ly-rule"/>
+            <g class="ly-edge"><path d="M150 111 H490"/></g>
+            <g class="ly-dot"><circle cx="150" cy="111" r="4"/><circle cx="235" cy="111" r="4"/><circle cx="320" cy="111" r="4"/><circle cx="405" cy="111" r="4"/><circle cx="490" cy="111" r="4"/></g>
+            <text x="536" y="115" class="ly-note">5 nodes · bridge edges</text>
+
+            <text x="8" y="200" class="ly-lab">layer 0</text>
+            <line x1="96" y1="196" x2="520" y2="196" class="ly-rule"/>
+            <g class="ly-edge"><path d="M120 196 H480"/></g>
+            <g class="ly-dot">
+              <circle cx="120" cy="196" r="4"/><circle cx="160" cy="196" r="4"/><circle cx="200" cy="196" r="4"/>
+              <circle cx="240" cy="196" r="4"/><circle cx="280" cy="196" r="4"/><circle cx="320" cy="196" r="4"/>
+              <circle cx="360" cy="196" r="4"/><circle cx="400" cy="196" r="4"/><circle cx="440" cy="196" r="4"/>
+              <circle cx="480" cy="196" r="4"/>
+            </g>
+            <text x="536" y="200" class="ly-note">every node · exact search</text>
+
+            <!-- the descent -->
+            <path d="M320 32 V100" class="ly-descent" fill="none" marker-end="url(#ly-ar)"/>
+            <path d="M320 117 V186" class="ly-descent" fill="none" marker-end="url(#ly-ar)"/>
+            <text x="334" y="70" class="ly-note">ef=1 greedy</text>
+            <text x="334" y="156" class="ly-note">ef=1 greedy</text>
+          </svg>
+          <figcaption>Sparse on top for reach, dense at the bottom for precision. That gap is the O(log n).</figcaption>
+        </figure>
+
+        <div class="figbox-grid">
+          <div class="figbox"><span class="n">384</span><span class="c">Dimension embeddings, on-device</span></div>
+          <div class="figbox"><span class="n">0</span><span class="c">External API calls</span></div>
+          <div class="figbox"><span class="n">&gt;95%</span><span class="c">Connectivity with the heuristic, vs ~5% without</span></div>
+          <div class="figbox"><span class="n">~90MB</span><span class="c">Runtime, vs ~2GB for a PyTorch stack</span></div>
+        </div>
+        <div class="showcase-actions">
+          <a class="btn-primary" href="https://github.com/abho7/mcp-memory-server" target="_blank" rel="noopener">
+            View source <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <details class="deep">
+          <summary><span class="tw">›</span> Implementation notes</summary>
+          <div class="deep-body">
+          <h4>Retrieval</h4>
+          <p>
+            Recall is by meaning, not keyword, so it needs real embeddings and a real vector
+            index. Rather than calling a hosted embedding API, both run on the machine: a
+            hand-written <b>HNSW</b> (hierarchical navigable small world) graph over vectors
+            produced by an ONNX-exported MiniLM.
+          </p>
+          <table class="spec">
+            <tr><td>index</td><td>HNSW, <code>M=16</code>, <code>ef_construction=200</code>, cosine metric</td></tr>
+            <tr><td>embedder</td><td><code>all-MiniLM-L6-v2</code> via ONNX Runtime, <span class="val">384</span>-dim</td></tr>
+            <tr><td>pooling</td><td>attention-masked mean pool, then L2 normalization</td></tr>
+            <tr><td>runtime cost</td><td>onnxruntime + tokenizers ≈ <span class="val">90 MB</span>, against ~2 GB for a PyTorch stack</td></tr>
+            <tr><td>persistence</td><td>vectors as <code>.npz</code>, records as JSON, tombstoned deletes</td></tr>
+            <tr><td>network calls</td><td><span class="val">0</span></td></tr>
+          </table>
+
+          <h4>Why the heuristic, not the simple version</h4>
+          <p>
+            Inserting a node means picking up to <code>M</code> neighbors from the candidates
+            <code>_search_layer</code> found. The paper's simple rule (take the <code>M</code>
+            closest) sounds sufficient and isn't: for a node deep inside a tight cluster, its
+            <code>M</code> nearest candidates are almost always from that same cluster, so nothing
+            ever forces a long-range edge to a different region of the space. The graph
+            fragments. <b>SELECT-NEIGHBORS-HEURISTIC</b> instead rejects a candidate if it is
+            farther from the query than it is from a neighbor already picked, which
+            preferentially keeps candidates that aren't redundant with what's already selected.
+            On Gaussian-cluster test data this was the difference between ~5% of nodes reachable
+            from the entry point and &gt;95% connectivity at the same parameters.
+          </p>
+          <figure class="diagram">
+            <svg viewBox="0 0 640 230" preserveAspectRatio="xMidYMid meet" role="img"
+                 aria-label="Comparing two neighbor-selection rules for the same inserted node and candidate set: SELECT-NEIGHBORS-SIMPLE picks the three nearest candidates, all from the same cluster; SELECT-NEIGHBORS-HEURISTIC rejects the third redundant cluster candidate and instead keeps a bridge edge to a distant point.">
+              <line x1="320" y1="20" x2="320" y2="190" class="d-line d-dim"></line>
+
+              <text x="160" y="26" text-anchor="middle" class="d-label" font-size="12" font-weight="700">SELECT-NEIGHBORS-SIMPLE</text>
+              <circle cx="90" cy="120" r="5" class="d-accent"></circle>
+              <text x="90" y="105" text-anchor="middle" class="d-accent-label" font-size="9.5">new node</text>
+              <line x1="90" y1="120" x2="58" y2="98" class="d-line"></line>
+              <line x1="90" y1="120" x2="66" y2="145" class="d-line"></line>
+              <line x1="90" y1="120" x2="112" y2="88" class="d-line"></line>
+              <circle cx="58" cy="98" r="4" class="d-box"></circle>
+              <circle cx="66" cy="145" r="4" class="d-box"></circle>
+              <circle cx="112" cy="88" r="4" class="d-box"></circle>
+              <circle cx="122" cy="133" r="3.5" class="d-box d-dim"></circle>
+              <circle cx="95" cy="62" r="3.5" class="d-box d-dim"></circle>
+              <circle cx="250" cy="40" r="4" class="d-box d-dim"></circle>
+              <text x="160" y="205" text-anchor="middle" class="d-label" font-size="9.5">3 nearest: all one cluster, no bridge</text>
+
+              <text x="480" y="26" text-anchor="middle" class="d-accent-label" font-size="12" font-weight="700">SELECT-NEIGHBORS-HEURISTIC</text>
+              <circle cx="410" cy="120" r="5" class="d-accent"></circle>
+              <text x="410" y="105" text-anchor="middle" class="d-accent-label" font-size="9.5">new node</text>
+              <line x1="410" y1="120" x2="378" y2="98" class="d-line"></line>
+              <line x1="410" y1="120" x2="386" y2="145" class="d-line"></line>
+              <line x1="410" y1="120" x2="570" y2="40" class="d-line d-accent"></line>
+              <circle cx="378" cy="98" r="4" class="d-box"></circle>
+              <circle cx="386" cy="145" r="4" class="d-box"></circle>
+              <circle cx="432" cy="88" r="3.5" class="d-box d-dim"></circle>
+              <circle cx="442" cy="133" r="3.5" class="d-box d-dim"></circle>
+              <circle cx="415" cy="62" r="3.5" class="d-box d-dim"></circle>
+              <circle cx="570" cy="40" r="4.5" class="d-accent"></circle>
+              <text x="480" y="205" text-anchor="middle" class="d-label" font-size="9.5">3rd cluster point rejected: bridge kept instead</text>
+            </svg>
+            <figcaption>Same node, same candidates, same M=3. Only the selection rule changes which edges survive.</figcaption>
+          </figure>
+
+          <h4>Details that actually matter</h4>
+          <ul>
+            <li><b>Masked pooling is not optional.</b> Padding positions still carry real activations, so averaging the final layer without applying the attention mask silently corrupts every embedding of a short text.</li>
+            <li><b>Cosine on normalized vectors</b> reduces to a dot product, which is what keeps graph traversal cheap.</li>
+            <li><b>Deletes are tombstoned</b> rather than removing nodes, because excising a node from an HNSW graph can sever the connectivity that neighbouring searches depend on.</li>
+            <li><b>Durability is the whole point.</b> An index that does not survive a restart is a cache, not a memory.</li>
+          </ul>
+
+          <div class="callout">
+            <p>
+              Local-first is the design constraint, not a limitation: memory contents are exactly
+              the material you least want to hand to a third-party embedding endpoint.
+            </p>
+          </div>
+
+          <h4>What this looks like from Claude's side</h4>
+          <p>The visualizer above shows the index's internals; this is the tool interface a session actually calls.</p>
+<pre class="code"><span class="c"># session one, months ago</span>
+<span class="k">store_memory</span>(
+  text=<span class="s">"We picked Postgres over MySQL because we need JSONB indexing"</span>,
+  tags=[<span class="s">"decision"</span>, <span class="s">"db"</span>]
+)
+
+<span class="c"># session two, different machine, different day</span>
+<span class="k">search_memory</span>(<span class="s">"why did we not use mysql"</span>)
+<span class="c">→ "We picked Postgres over MySQL because we need JSONB indexing"</span>
+<span class="c">  matched by meaning, not by any shared keyword</span></pre>
+          </div>
+        </details>
+      </div>
+    </article>
+  </section>
+
+  <!-- ======================================================== research -->
+  <section id="research" class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 3v6l-5 9a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-5-9V3"/><path d="M8 3h8"/></svg>Research</span>
+      <h2 class="sec-title">Peer-reviewed <em class="ital">research</em></h2>
+    </div>
+
+    <article class="dossier spot reveal">
+      <div class="dossier-head">
+        <div>
+          <span class="dossier-kind">Research</span>
+          <h3>Transformer-Based NLP for Real-Time Disaster Response</h3>
+          <p class="dossier-org">National High School Journal of Science · Peer-Reviewed</p>
+        </div>
+        <span class="live-pill verified"><i></i>Verified</span>
+      </div>
+      <p class="dossier-lede">
+        A published, peer-reviewed paper benchmarking modern transformer architectures against
+        classical statistical baselines for humanitarian crisis intelligence. Mentored by
+        Dr. Chris Irwin Davis, PhD, at UT Dallas.
+      </p>
+
+      <ol class="steps">
+        <li><span class="step-n">01</span><p>Fine-tuned a pretrained BERT transformer on 10,000+ disaster-related tweets spanning wildfires, hurricanes and floods, using domain-specific tokenization, subword regularization and class-weighted cross-entropy to combat severe label imbalance.</p></li>
+        <li><span class="step-n">02</span><p>Architected a controlled three-way benchmark (BERT vs. TF-IDF + logistic regression vs. multinomial Naïve Bayes) under identical stratified k-fold cross-validation and held-out test splits, isolating architectural contribution from data leakage.</p></li>
+        <li><span class="step-n">03</span><p>Achieved 89.3% test accuracy and an F1 of 0.88, outperforming the strongest classical baseline by 21% and validating transformer transfer learning as a deployable primitive for real-time humanitarian triage.</p></li>
+        <li><span class="step-n">04</span><p>Conducted independent error analysis exposing a sharp accuracy collapse on sarcastic and semantically ambiguous text; engineered inverse-frequency class weighting and contextualized embedding-space oversampling to lift minority-class recall by 2.1% and F1 by 1.7%.</p></li>
+        <li><span class="step-n">05</span><p>Authored the manuscript end to end, defended it through NHSJS peer review, and published the full methodology and code as an open-source repository for reproducibility.</p></li>
+      </ol>
+
+      <!-- The method, drawn. The three-way benchmark is the point of the paper
+           and the reason the accuracy figure means anything: all three arms
+           see the identical stratified split, so the difference between them
+           is architecture and not data. That is the one claim this figure
+           makes, and it is not something the prose can show at a glance. -->
+      <figure class="figure-flow">
+        <svg viewBox="0 0 760 250" role="img" preserveAspectRatio="xMidYMid meet"
+             aria-label="Method: 10,000 annotated tweets are split by stratified k-fold, then fed identically to three models (fine-tuned BERT, TF-IDF with logistic regression, and multinomial Naive Bayes) and scored on the same held-out test set. BERT reaches 89.3% accuracy.">
+          <defs>
+            <marker id="fl-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+            </marker>
+          </defs>
+
+          <g class="fl-node">
+            <rect x="8" y="98" width="132" height="54" rx="8"/>
+            <text x="74" y="120" text-anchor="middle">10,000 tweets</text>
+            <text x="74" y="137" text-anchor="middle" class="fl-sub">annotated</text>
+          </g>
+          <line x1="140" y1="125" x2="192" y2="125" class="fl-edge" marker-end="url(#fl-ar)"/>
+
+          <g class="fl-node">
+            <rect x="198" y="98" width="140" height="54" rx="8"/>
+            <text x="268" y="120" text-anchor="middle">stratified</text>
+            <text x="268" y="137" text-anchor="middle" class="fl-sub">k-fold split</text>
+          </g>
+
+          <!-- one split, three arms: the fan-out is the controlled comparison -->
+          <path d="M338 125 H370 V40 H424" class="fl-edge" fill="none" marker-end="url(#fl-ar)"/>
+          <path d="M338 125 H424"          class="fl-edge" fill="none" marker-end="url(#fl-ar)"/>
+          <path d="M338 125 H370 V210 H424" class="fl-edge" fill="none" marker-end="url(#fl-ar)"/>
+
+          <g class="fl-node win">
+            <rect x="430" y="18" width="168" height="44" rx="8"/>
+            <text x="514" y="45" text-anchor="middle">BERT, fine-tuned</text>
+          </g>
+          <g class="fl-node">
+            <rect x="430" y="103" width="168" height="44" rx="8"/>
+            <text x="514" y="130" text-anchor="middle">TF-IDF + logreg</text>
+          </g>
+          <g class="fl-node">
+            <rect x="430" y="188" width="168" height="44" rx="8"/>
+            <text x="514" y="215" text-anchor="middle">Naïve Bayes</text>
+          </g>
+
+          <!-- Each arm keeps its own result. An earlier draft converged all
+               three arrows onto the 89.3% figure, which reads as though every
+               model scored it -- only the fine-tuned BERT did. -->
+          <path d="M598 40  H622" class="fl-edge win" fill="none" marker-end="url(#fl-ar)"/>
+          <path d="M598 125 H622" class="fl-edge"     fill="none" marker-end="url(#fl-ar)"/>
+          <path d="M598 210 H622" class="fl-edge"     fill="none" marker-end="url(#fl-ar)"/>
+
+          <text x="634" y="38"  class="fl-out">89.3%</text>
+          <text x="634" y="53"  class="fl-sub">held-out accuracy</text>
+          <text x="634" y="129" class="fl-sub">classical baseline</text>
+          <text x="634" y="214" class="fl-sub">classical baseline</text>
+        </svg>
+        <figcaption>One split, three arms, one test set, so the gap is architecture, not leakage.</figcaption>
+      </figure>
+
+      <div class="figbox-grid">
+        <div class="figbox"><span class="n">89.3%</span><span class="c">Test accuracy</span></div>
+        <div class="figbox"><span class="n">0.88</span><span class="c">F1 score</span></div>
+        <div class="figbox"><span class="n">+21%</span><span class="c">Over strongest classical baseline</span></div>
+        <div class="figbox"><span class="n">10,000</span><span class="c">Annotated disaster-related tweets</span></div>
+      </div>
+
+      <div class="tags">
+        <span class="tag">BERT</span><span class="tag">PyTorch-style fine-tuning</span>
+        <span class="tag">TF-IDF</span><span class="tag">Naïve Bayes</span>
+        <span class="tag">scikit-learn</span><span class="tag">Stratified K-Fold</span>
+        <span class="tag">Pandas</span><span class="tag">Python</span>
+      </div>
+
+      <div class="disclosure">
+        <span class="disclosure-label">Two different models on this page</span>
+        <p>
+          The figures above are those reported in the NHSJS publication. The interactive demo in
+          Live Systems is a <b>separate</b> model trained on public data so the attribution layer
+          is explorable without the original checkpoint; it measures 0.8024 accuracy on its own
+          held-out split. The two are not comparable.
+        </p>
+      </div>
+
+      <div class="showcase-actions">
+        <!-- The publication itself, not the repo. These are two different
+             things and were previously both pointing at GitHub. -->
+        <a class="btn-primary" href="https://nhsjs.com/2025/harnessing-natural-language-processing-for-disaster-response-and-crisis-management/" target="_blank" rel="noopener">
+          Read the paper <span aria-hidden="true">→</span>
+        </a>
+        <a class="btn-ghost" href="https://github.com/abho7/NLP-Disaster-Response" target="_blank" rel="noopener">
+          Source <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+
+        <details class="deep">
+          <summary><span class="tw">›</span> Method &amp; training configuration</summary>
+          <div class="deep-body">
+          <h4>Problem framing</h4>
+          <p>
+            During an active disaster the inbound volume of social posts vastly exceeds what
+            responders can read, and the messages that matter (trapped persons, structural
+            collapse, medical need) are diluted by commentary, metaphor and reshares. Framed as
+            supervised text classification, the difficulty is that the vocabulary of urgency
+            overlaps heavily with the vocabulary of ordinary hyperbole, so surface keyword
+            matching fails precisely where accuracy matters most.
+          </p>
+
+          <h4>Fine-tuning configuration</h4>
+          <table class="spec">
+            <tr><td>base model</td><td><code>bert-base-uncased</code>, sequence classification head</td></tr>
+            <tr><td>max sequence</td><td><span class="val">128</span> tokens, padded and truncated</td></tr>
+            <tr><td>optimizer</td><td>AdamW, learning rate <span class="val">2e-5</span></td></tr>
+            <tr><td>batch size</td><td><span class="val">16</span> per device</td></tr>
+            <tr><td>epochs</td><td><span class="val">5</span>, best checkpoint by eval loss</td></tr>
+            <tr><td>seed</td><td><span class="val">42</span></td></tr>
+          </table>
+
+          <h4>Evaluation</h4>
+          <p>
+            Macro-averaged precision, recall and F1 alongside a confusion matrix and ROC/AUC
+            over softmax probabilities for the positive class, macro rather than micro because
+            the urgent class is the minority, and micro-averaging would let majority-class
+            performance mask exactly the failure mode that matters. The transformer is measured
+            against a TF-IDF/Naive-Bayes baseline.
+          </p>
+
+          <div class="callout">
+            <p>
+              Two distinct models appear on this page. The <b>89.3% / F1 0.88</b> figures above
+              are those reported in the NHSJS publication. The interactive demo in section 01 is
+              a separate model trained on public data so the explanation layer is explorable
+              without the original checkpoint; its <b>0.8024</b> is measured on its own held-out
+              split and served live from its <code>/metrics</code> endpoint. The two are not
+              comparable: different models, different data.
+            </p>
+          </div>
+          </div>
+        </details>
+      </div>
+    </article>
+  </section>
+
+  <!-- ====================================================== internship -->
+  <section id="internship" class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 9L12 4 2 9l10 5 10-5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>Internship</span>
+      <h2 class="sec-title">Ivy League <em class="ital">internship</em></h2>
+    </div>
+
+    <article class="dossier spot reveal">
+      <div class="dossier-head">
+        <div>
+          <span class="dossier-kind">Internship</span>
+          <h3>SWE and Data Science Intern</h3>
+          <p class="dossier-org">Harvard University · under Professor David Kane, a Harvard preceptor</p>
+        </div>
+        <span class="live-pill verified"><i></i>Verified</span>
+      </div>
+      <p class="dossier-lede">
+        Shipping production-grade R infrastructure and Quarto-based curricula used by an
+        internationally distributed collegiate data-science bootcamp.
+      </p>
+
+      <ol class="steps">
+        <li><span class="step-n">01</span><p>Engineered production-grade R packages with proper NAMESPACE hygiene, unit tests, roxygen2 documentation and semantic versioning, deployed into a reproducible research toolchain used by students across multiple countries.</p></li>
+        <li><span class="step-n">02</span><p>Authored Quarto-based pedagogical modules integrating literate programming, executable code blocks, LaTeX-rendered math and reproducible HTML/PDF outputs, bridging pedagogy and research reproducibility in a single artifact.</p></li>
+        <li><span class="step-n">03</span><p>Developed Bayesian statistical pipelines (priors, likelihoods, posterior sampling and credible-interval reporting), abstracting the mechanical parts of probabilistic modelling so downstream learners focus on inference intuition.</p></li>
+        <li><span class="step-n">04</span><p>Resolved a critical defect in a shared library that carried no prior documentation or guidance, unblocking the international bootcamp curriculum and demonstrating independent systems-level debugging.</p></li>
+        <li><span class="step-n">05</span><p>Contributed 10+ hours per week to an open, versioned curriculum shipped into a live international bootcamp, with feedback loops from real students informing iterative library refactors.</p></li>
+      </ol>
+
+      <div class="tags">
+        <span class="tag">R</span><span class="tag">Quarto</span>
+        <span class="tag">Bayesian Inference</span><span class="tag">roxygen2</span>
+        <span class="tag">Reproducible Research</span><span class="tag">Git</span>
+      </div>
+    </article>
+
+    <article class="dossier spot reveal" style="margin-top: clamp(1.5rem,3vh,2.5rem)">
+      <div class="dossier-head">
+        <div>
+          <span class="dossier-kind">Research internship</span>
+          <h3>Intern &amp; Researcher</h3>
+          <p class="dossier-org">UT Dallas · NLP with Python · under Dr. Chris Irwin Davis, PhD</p>
+        </div>
+      </div>
+      <p class="dossier-lede">
+        An eight-week research immersion building Python NLP pipelines end to end
+        (tokenization, embedding generation and model fine-tuning) for real-world text
+        classification across multiple domains. This is the work that became the peer-reviewed
+        publication above.
+      </p>
+      <div class="tags">
+        <span class="tag">Python</span><span class="tag">NLP</span>
+        <span class="tag">Embeddings</span><span class="tag">Fine-tuning</span>
+      </div>
+    </article>
+  </section>
+
+  <!-- ========================================================= cricket -->
+  <section id="cricket" class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 21L17 5"/><circle cx="6" cy="19" r="2"/><path d="M14 3h5v5"/></svg>Athletics</span>
+      <h2 class="sec-title">National <em class="ital">cricket</em></h2>
+    </div>
+
+    <article class="dossier spot reveal">
+      <div class="dossier-head">
+        <div>
+          <span class="dossier-kind">Athlete</span>
+          <h3>USA Cricket U19 Athlete</h3>
+          <p class="dossier-org">USA Cricket U19 West Conference Team · Captain · 2021–present</p>
+        </div>
+        <span class="live-pill verified"><i></i>Verified</span>
+      </div>
+      <p class="dossier-lede">
+        Selected for the USA Cricket U19 West Conference Team through multi-stage national
+        tryouts, ranked 31st nationally among 200,000+ competitive players, 1st in the
+        Southwest Region and 2nd in the Dallas Region.
+      </p>
+
+      <ol class="steps">
+        <li><span class="step-n">01</span><p>Selected through multi-stage national tryouts and appointed Captain, leading squad strategy, training and competition execution.</p></li>
+        <li><span class="step-n">02</span><p>Ranked 31st nationally among 200,000+ competitive U19 players, 1st in the Southwest Region and 2nd in the Dallas Region, with a career record of 96 matches, 1,396 runs and 62 wickets.</p></li>
+        <li><span class="step-n">03</span><p>Founded the Coyote Cricket Club at Heritage HS from nothing in a school with no prior program, growing it to 25–30 students and leading it to consecutive top finishes in an 18-school interdistrict tournament: two 2nd-place results and a 3rd.</p></li>
+        <li><span class="step-n">04</span><p>Balanced high-performance athletics with research, USACO Gold, nonprofit leadership and a full academic load; elite sport and elite systems work compounding rather than competing.</p></li>
+      </ol>
+
+      <div class="figbox-grid">
+        <div class="figbox"><span class="n">31st</span><span class="c">Nationally, of 200,000+ players</span></div>
+        <div class="figbox"><span class="n">96</span><span class="c">Matches played</span></div>
+        <div class="figbox"><span class="n">1,396</span><span class="c">Runs scored</span></div>
+        <div class="figbox"><span class="n">62</span><span class="c">Wickets taken</span></div>
+      </div>
+
+      <div class="tags">
+        <span class="tag">Leadership</span><span class="tag">Strategy</span>
+        <span class="tag">Athletic Performance</span><span class="tag">Team Building</span>
+        <span class="tag">Competition</span>
+      </div>
+    </article>
+
+    <div class="also reveal">
+      <span class="also-label">Also active in</span>
+      <p>
+        Science Olympiad: President, Treasurer and four-year competitor across Entomology,
+        Dynamic Planet, Remote Sensing and Helicopter, top 3 of 16 teams at Regionals twice ·
+        Mind4Matter: Global Outreach Representative for a student-run mental-health nonprofit
+        spanning 10 chapters and 1,500+ volunteers · Karya Siddhi Hanuman Temple: 120+ hours
+        directing kitchen operations for large-scale community celebrations.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================================================ awards & academics -->
+  <section id="awards" class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="9" r="5"/><path d="M9 13l-2 8 5-3 5 3-2-8"/></svg>Recognition &amp; Awards</span>
+      <h2 class="sec-title">Nationally <em class="ital">recognized</em></h2>
+      <p class="sec-lede">
+        From national athletics to USACO Gold, peer-reviewed research, and global top-100
+        investment rankings.
+      </p>
+    </div>
+
+    <article class="reveal">
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">USA Cricket U19 · Ranked 31st Nationally</h3>
+          <div class="index-meta">2026 · <span class="st">Athletics</span> · USA Cricket</div>
+        </div>
+        <div class="index-fig"><b>31st</b>of 200,000+ competitive players</div>
+        <div class="index-actions"></div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">USACO Gold Division</h3>
+          <div class="index-meta">2026 · <span class="st">Olympiad</span> · USA Computing Olympiad</div>
+        </div>
+        <div class="index-fig">Advanced past Silver on graph-theory and optimization under contest conditions</div>
+        <div class="index-actions"></div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">IT Specialist in Java Certification</h3>
+          <div class="index-meta">2026 · <span class="st">Certification</span> · Certiport / Pearson</div>
+        </div>
+        <div class="index-fig">Performance-based OOP, data structures, debugging</div>
+        <div class="index-actions"></div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">PSAT/NMSQT Commended Scholar</h3>
+          <div class="index-meta">2026 · <span class="st">National</span></div>
+        </div>
+        <div class="index-fig"><b>Top 50K</b>of 1.5M+ entrants</div>
+        <div class="index-actions"></div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">Coolidge National Declamation</h3>
+          <div class="index-meta">2026 · <span class="st">National</span></div>
+        </div>
+        <div class="index-fig"><b>Top 30</b>Honorable Mention, nationally</div>
+        <div class="index-actions"></div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">Published Researcher, NHSJS</h3>
+          <div class="index-meta">2025 · <span class="st">Peer-reviewed</span> · National High School Journal of Science</div>
+        </div>
+        <div class="index-fig"><b>89.3%</b>Reported accuracy</div>
+        <div class="index-actions">
+          <a href="https://nhsjs.com/2025/harnessing-natural-language-processing-for-disaster-response-and-crisis-management/" target="_blank" rel="noopener">Paper</a>
+          <a href="https://github.com/abho7/NLP-Disaster-Response" target="_blank" rel="noopener">Code</a>
+        </div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">Cybersecurity Fundamentals Credential</h3>
+          <div class="index-meta">2025 · <span class="st">Certification</span> · NOCTI</div>
+        </div>
+        <div class="index-fig">Cryptography, threat analysis, authentication, digital forensics</div>
+        <div class="index-actions"></div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">BPA Nationals</h3>
+          <div class="index-meta">2025 · <span class="st">National</span> · 2× State Qualifier</div>
+        </div>
+        <div class="index-fig"><b>8 / 501</b>Meeting &amp; Event Planning · 17 of 665 Payroll Accounting</div>
+        <div class="index-actions"></div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">Young Investors Society Global Stock Pitch</h3>
+          <div class="index-meta">2025 · <span class="st">Global</span> · advanced to the Global Youth Investment Summit, NYC</div>
+        </div>
+        <div class="index-fig"><b>Top 100</b>of 1,000+ teams across 24 countries</div>
+        <div class="index-actions"></div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">Java Coding Specialist Certification</h3>
+          <div class="index-meta">2025 · <span class="st">Certification</span> · Knowledge Pillars</div>
+        </div>
+        <div class="index-fig"></div>
+        <div class="index-actions"></div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">AP Scholar with Distinction</h3>
+          <div class="index-meta">2025–26 · <span class="st">Academic</span> · College Board</div>
+        </div>
+        <div class="index-fig"></div>
+        <div class="index-actions"></div>
+      </div>
+
+      <div class="figbox-grid" style="margin-top: clamp(2.5rem,6vh,4rem)">
+        <div class="figbox"><span class="n">7</span><span class="c">Professional certifications</span></div>
+        <div class="figbox"><span class="n">11</span><span class="c">Awards and honors</span></div>
+        <div class="figbox"><span class="n">2027</span><span class="c">Graduating: Heritage High School, Frisco TX</span></div>
+      </div>
+      <details class="deep">
+        <summary><span class="tw">›</span> Certifications &amp; academics</summary>
+        <div class="deep-body">
+          <h4>Certifications</h4>
+          <table class="spec">
+            <tr><td>Aug 2026</td><td><b>Claude in Code</b>, Anthropic Academy. Deploying Claude Code as an autonomous engineering agent: explore-plan-code-commit, context management, project-level instructions and hooks.</td></tr>
+            <tr><td>Aug 2026</td><td><b>Model Context Protocol: Advanced Topics</b>, Anthropic Academy. Architecting MCP servers and clients across tools, resources and prompts.</td></tr>
+            <tr><td>Jul 2026</td><td><b>Software Engineer Intern</b>, HackerRank. Timed assessment across problem-solving and SQL.</td></tr>
+            <tr><td>Jun 2026</td><td><b>Frontend Developer (React)</b>, HackerRank. Component architecture, state, routing, ES6.</td></tr>
+            <tr><td>May 2026</td><td><b>IT Specialist in Java</b>, Certiport / Pearson. Performance-based OOP, data structures, debugging.</td></tr>
+            <tr><td>May 2025</td><td><b>Cybersecurity Fundamentals</b>, NOCTI. Cryptography, threat analysis, authentication, digital forensics.</td></tr>
+            <tr><td>Mar 2025</td><td><b>Java Coding Specialist</b>, Knowledge Pillars.</td></tr>
+          </table>
+
+          <h4>Academics: Heritage High School, Frisco TX</h4>
+          <table class="spec">
+            <tr><td>graduating</td><td class="val">May 2027</td></tr>
+            <tr><td>school</td><td>Heritage High School, Frisco TX</td></tr>
+          </table>
+
+          <h4>Technical proficiency</h4>
+          <table class="spec">
+            <tr><td>languages</td><td>Python, R, Java, JavaScript, SQL, HTML; C (introductory)</td></tr>
+            <tr><td>frameworks</td><td>React, FastAPI, Angular, NumPy, Pandas, Quarto, Google OR-Tools, asyncio, Go</td></tr>
+            <tr><td>tools</td><td>Git/GitHub, MCP, Claude Code, VS Code, Linux/Unix</td></tr>
+          </table>
+        </div>
+      </details>
+    </article>
+  </section>
+
+  <!-- ========================================================= contact -->
+  <section id="contact" class="wrap">
+    <div class="closing-head reveal">
+      <span class="sec-eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg>Contact</span>
+      <h2 class="closing-title">Open a <em class="ital">connection.</em></h2>
+      <p class="closing-lede">Listening on three channels. Response time is measured in hours, not weeks.</p>
+
+      <div class="contact-pills">
+        <a class="cpill solid" href="mailto:abhineeth78@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          abhineeth78@gmail.com
+        </a>
+        <a class="cpill" href="https://github.com/abho7" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+
+    <div class="handshake-grid reveal">
+      <!-- The three-way handshake, drawn because the section's whole idea is
+           "open a connection" -- the arrows carry the actual segment names
+           rather than being generic connectors. Animation is on the dashes
+           only, so reduced motion leaves a complete, legible static diagram. -->
+      <figure class="figure-hs">
+        <svg viewBox="0 0 480 232" role="img" preserveAspectRatio="xMidYMid meet"
+             aria-label="A TCP three-way handshake: you send SYN, the server replies SYN-ACK, you send ACK, and the connection is established.">
+          <defs>
+            <marker id="hs-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+            </marker>
+          </defs>
+          <!-- lifelines -->
+          <text x="60" y="20" class="hs-end" text-anchor="middle">you</text>
+          <text x="420" y="20" class="hs-end" text-anchor="middle">abhineeth</text>
+          <line x1="60"  y1="32" x2="60"  y2="196" class="hs-life"/>
+          <line x1="420" y1="32" x2="420" y2="196" class="hs-life"/>
+
+          <line x1="60"  y1="64"  x2="414" y2="64"  class="hs-seg" marker-end="url(#hs-ar)"/>
+          <text x="240" y="54"  class="hs-lab" text-anchor="middle">SYN</text>
+
+          <line x1="420" y1="112" x2="66"  y2="112" class="hs-seg back" marker-end="url(#hs-ar)"/>
+          <text x="240" y="102" class="hs-lab" text-anchor="middle">SYN-ACK</text>
+
+          <line x1="60"  y1="160" x2="414" y2="160" class="hs-seg" marker-end="url(#hs-ar)"/>
+          <text x="240" y="150" class="hs-lab" text-anchor="middle">ACK</text>
+
+          <text x="240" y="200" class="hs-state" text-anchor="middle">ESTABLISHED</text>
+        </svg>
+        <figcaption>Three segments and the socket is open. Same idea here.</figcaption>
+      </figure>
+
+      <!-- Channels as a listening-socket table rather than a shell prompt:
+           every row is a real, clickable destination. -->
+      <div class="channels">
+        <div class="ch-head">
+          <span>Proto</span><span>Address</span><span>State</span>
+        </div>
+        <a class="ch-row" href="mailto:abhineeth78@gmail.com">
+          <span class="ch-proto">smtp</span>
+          <span class="ch-addr">abhineeth78@gmail.com</span>
+          <span class="ch-state"><i></i>open <em aria-hidden="true">→</em></span>
+        </a>
+        <a class="ch-row" href="https://github.com/abho7" target="_blank" rel="noopener">
+          <span class="ch-proto">https</span>
+          <span class="ch-addr">github.com/abho7</span>
+          <span class="ch-state"><i></i>open <em aria-hidden="true">↗</em></span>
+        </a>
+        <a class="ch-row" href="https://www.linkedin.com/in/abhineeth-duddela-6b2a90319/" target="_blank" rel="noopener">
+          <span class="ch-proto">https</span>
+          <span class="ch-addr">linkedin.com/in/abhineeth-duddela</span>
+          <span class="ch-state"><i></i>open <em aria-hidden="true">↗</em></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="wrap">
+    <div class="footer-mark" aria-hidden="true">
+      <svg viewBox="0 0 40 40" fill="none">
+        <path d="M20 6 L32 13 M20 6 L8 13 M8 13 L8 27 M32 13 L32 27 M8 27 L20 34 M32 27 L20 34" stroke="currentColor" stroke-width="1" opacity=".35"/>
+        <circle cx="20" cy="6" r="2.2" fill="currentColor"/>
+        <circle cx="8" cy="13" r="1.7" fill="currentColor" opacity=".7"/>
+        <circle cx="32" cy="13" r="1.7" fill="currentColor" opacity=".7"/>
+        <circle cx="8" cy="27" r="1.7" fill="currentColor" opacity=".45"/>
+        <circle cx="32" cy="27" r="1.7" fill="currentColor" opacity=".45"/>
+        <circle cx="20" cy="34" r="2.2" fill="currentColor"/>
+      </svg>
+    </div>
+    <!-- Every figure here is measured at runtime by initFooterSignature(),
+         not typed in: the counts come from the DOM and the simulators, so the
+         line cannot drift out of date as the page changes. -->
+    <div class="status" id="footer-signature">All systems nominal · simulators running client-side</div>
+    <div class="row">
+      <span>© 2026 Abhineeth Duddela</span>
+      <span class="right">
+        <a href="https://github.com/abho7" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/abhineeth-duddela-6b2a90319/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:abhineeth78@gmail.com">Email</a>
+        <a href="#top">Back to top ↑</a>
+      </span>
+    </div>
+  </footer>
+
+</main>
+
+<script src="raft-sim.js"></script>
+<script src="hnsw-viz.js"></script>
+<script src="nlp-compare.js"></script>
+<script src="ui-polish.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
