@@ -240,14 +240,34 @@
       <span class="sec-eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Work</span>
       <h2 class="sec-title">Built from the <em class="ital">paper up</em></h2>
       <p class="sec-lede">
-        Consensus, vector search and test-time compute, implemented from the primary
-        literature rather than pulled off a shelf. The first three run live in your browser
+        Consensus, vector search, distributed training and incompressible flow, implemented
+        from the primary literature rather than pulled off a shelf. Each card opens on a
+        drawing of the mechanism it describes; the first three also run live in your browser
         further down the page.
       </p>
     </div>
 
     <div class="card-grid">
       <article class="pcard spot reveal">
+        <div class="pcard-viz">
+          <svg viewBox="-52 -4 424 128" role="img" aria-label="A leader replicating to four followers, with two of the links dropping messages">
+            <!-- healthy links carry a travelling dash; failed links are hairline and crossed -->
+            <g class="vz-line vz-flow"><path d="M147 51 L72 32"/><path d="M173 65 L248 84"/></g>
+            <g class="vz-faint" stroke-dasharray="3 4"><path d="M147 65 L72 84"/><path d="M173 51 L248 32"/></g>
+            <g class="vz-faint" stroke-width="1.3">
+              <path d="M104 53 L114 63 M114 53 L104 63"/>
+              <path d="M206 53 L216 63 M216 53 L206 63"/>
+            </g>
+            <circle cx="160" cy="58" r="21" class="vz-line vz-beat" opacity=".45"/>
+            <circle cx="160" cy="58" r="13" class="vz-line" fill="#08080b"/>
+            <circle cx="160" cy="58" r="5" class="vz-fill"/>
+            <g class="vz-line" fill="#08080b">
+              <circle cx="60" cy="26" r="8"/><circle cx="60" cy="90" r="8"/>
+              <circle cx="260" cy="26" r="8"/><circle cx="260" cy="90" r="8"/>
+            </g>
+            <text class="vz-txt" x="160" y="104" text-anchor="middle">election safety · leader completeness · state machine safety</text>
+          </svg>
+        </div>
         <div class="pcard-top">
           <span class="pcard-badge">R</span>
           <div>
@@ -276,7 +296,23 @@
         </div>
       </article>
 
-      <article class="pcard spot reveal">
+      <article class="pcard spot reveal v-grn">
+        <div class="pcard-viz">
+          <svg viewBox="-52 -4 424 128" role="img" aria-label="Per-token attributions drawn as bars diverging left and right from a zero axis">
+            <!-- the diverging pair is the site's blue/red, not the card tone: here
+                 the colour carries the sign of the attribution, so it is data -->
+            <line x1="160" y1="6" x2="160" y2="92" class="vz-line" opacity=".55" stroke-dasharray="3 4"/>
+            <g stroke-width="7" stroke-linecap="round" fill="none">
+              <path stroke="var(--pos)" d="M164 18 H 250" class="vz-beat"/>
+              <path stroke="var(--neg)" d="M156 32 H 108"/>
+              <path stroke="var(--pos)" d="M164 46 H 214"/>
+              <path stroke="var(--pos)" d="M164 60 H 190"/>
+              <path stroke="var(--neg)" d="M156 74 H 62" class="vz-beat d2"/>
+            </g>
+            <text class="vz-txt" x="150" y="104" text-anchor="end">pushes away</text>
+            <text class="vz-txt" x="170" y="104">pushes toward</text>
+          </svg>
+        </div>
         <div class="pcard-top">
           <span class="pcard-badge g">C</span>
           <div>
@@ -305,7 +341,30 @@
         </div>
       </article>
 
-      <article class="pcard spot reveal">
+      <article class="pcard spot reveal v-amb">
+        <div class="pcard-viz">
+          <svg viewBox="-52 -4 424 128" role="img" aria-label="A three-layer HNSW graph with the greedy search descending from the sparse top layer to the dense base layer">
+            <g class="vz-faint">
+              <path d="M110 22 H210"/>
+              <path d="M70 58 H130 M130 58 H190 M190 58 H250"/>
+              <path d="M30 94 H66 M66 94 H102 M102 94 H138 M138 94 H174 M174 94 H210 M210 94 H246 M246 94 H282"/>
+              <path d="M102 94 Q 138 78 174 94 M174 94 Q 210 78 246 94"/>
+            </g>
+            <!-- the descent: coarse hop, then refine, then land -->
+            <path class="vz-line vz-flow s3" stroke-width="1.8" d="M210 22 L190 58 L174 94"/>
+            <g class="vz-dim">
+              <circle cx="110" cy="22" r="4"/>
+              <circle cx="70" cy="58" r="4"/><circle cx="130" cy="58" r="4"/><circle cx="250" cy="58" r="4"/>
+              <circle cx="30" cy="94" r="4"/><circle cx="66" cy="94" r="4"/><circle cx="102" cy="94" r="4"/>
+              <circle cx="138" cy="94" r="4"/><circle cx="210" cy="94" r="4"/><circle cx="246" cy="94" r="4"/>
+              <circle cx="282" cy="94" r="4"/>
+            </g>
+            <g class="vz-fill">
+              <circle cx="210" cy="22" r="5"/><circle cx="190" cy="58" r="5"/><circle cx="174" cy="94" r="6"/>
+            </g>
+            <g class="vz-txt"><text x="6" y="25">L2</text><text x="6" y="61">L1</text><text x="6" y="97">L0</text></g>
+          </svg>
+        </div>
         <div class="pcard-top">
           <span class="pcard-badge a">M</span>
           <div>
@@ -334,7 +393,213 @@
         </div>
       </article>
 
+      <article class="pcard spot reveal v-blu">
+        <div class="pcard-viz">
+          <svg viewBox="-52 -4 424 128" role="img" aria-label="Streamlines deflected by two counter-rotating vortex cores">
+            <g class="vz-line vz-flow" opacity=".75">
+              <path d="M-56 16 Q 40 2 118 18 T 232 10 T 376 22"/>
+            </g>
+            <g class="vz-line vz-flow s1" opacity=".85">
+              <path d="M-56 38 Q 42 22 118 40 T 232 30 T 376 42"/>
+            </g>
+            <g class="vz-line vz-flow s2">
+              <path d="M-56 60 Q 44 46 118 60 T 232 50 T 376 60"/>
+            </g>
+            <g class="vz-line vz-flow s1" opacity=".85">
+              <path d="M-56 82 Q 42 68 118 82 T 232 72 T 376 82"/>
+            </g>
+            <g class="vz-line vz-flow" opacity=".75">
+              <path d="M-56 104 Q 40 92 118 104 T 232 94 T 376 104"/>
+            </g>
+            <!-- the two cores turn opposite ways, which is what a vortex pair does -->
+            <g class="vz-spin">
+              <circle cx="96" cy="40" r="9" class="vz-line" stroke-dasharray="13 8"/>
+              <circle cx="96" cy="40" r="16" class="vz-line" stroke-dasharray="19 15" opacity=".5"/>
+            </g>
+            <circle cx="96" cy="40" r="3" class="vz-fill"/>
+            <g class="vz-spin r">
+              <circle cx="224" cy="74" r="9" class="vz-line" stroke-dasharray="13 8"/>
+              <circle cx="224" cy="74" r="16" class="vz-line" stroke-dasharray="19 15" opacity=".5"/>
+            </g>
+            <circle cx="224" cy="74" r="3" class="vz-fill"/>
+          </svg>
+        </div>
+        <div class="pcard-top">
+          <span class="pcard-badge">&#8711;</span>
+          <div>
+            <h3>fluid-sim</h3>
+            <div class="pcard-status">Live</div>
+          </div>
+        </div>
+        <div class="pcard-cat">Computational physics · GPU compute</div>
+        <p>
+          Incompressible Navier-Stokes on WebGPU compute shaders, over a MAC staggered grid
+          so that divergence and gradient are exact negative adjoints and the checkerboard
+          pressure mode a collocated grid hides cannot form. Pressure projection is solved
+          five ways (conjugate gradient and an exact FFT solve on CPU; Jacobi, red-black
+          Gauss-Seidel and a geometric multigrid V-cycle on GPU) so the comparison between
+          them is measured rather than claimed. Vorticity confinement is a fabricated energy
+          source, so the solver throws if a validation run asks for it.
+        </p>
+        <dl class="pspec">
+          <div><dt>Numerical viscosity</dt><dd>ν_num = 5.79e-4, 2.9% of ν</dd></div>
+          <div><dt>Stability boundary</dt><dd>ν·dt/h² = 0.25 stable, 0.26 not</dd></div>
+          <div><dt>Inverse cascade</dt><dd>−1.525 vs Kraichnan −5/3</dd></div>
+        </dl>
+        <div class="tags">
+          <span class="tag">WebGPU</span><span class="tag">WGSL</span>
+          <span class="tag">Navier-Stokes</span><span class="tag">Multigrid</span>
+          <span class="tag">FFT</span>
+        </div>
+        <div class="pcard-actions">
+          <a class="tlink ext" href="https://abho7.github.io/fluid-sim/" target="_blank" rel="noopener">Live demo <span class="arrow" aria-hidden="true">↗</span></a>
+          <a class="tlink ext" href="https://abho7.github.io/fluid-sim/report.html" target="_blank" rel="noopener">Validation report <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+
       <article class="pcard spot reveal">
+        <div class="pcard-viz">
+          <svg viewBox="-52 -4 424 128" role="img" aria-label="Training workers publishing embeddings down through a Raft quorum into a vector index, with a fault injected across the layers">
+            <g class="vz-txt"><text x="8" y="24">train</text><text x="8" y="63">raft</text><text x="8" y="102">index</text></g>
+            <g class="vz-line" fill="#08080b">
+              <rect x="104" y="13" width="26" height="13" rx="3"/>
+              <rect x="140" y="13" width="26" height="13" rx="3"/>
+              <rect x="176" y="13" width="26" height="13" rx="3"/>
+              <rect x="212" y="13" width="26" height="13" rx="3"/>
+            </g>
+            <path class="vz-line vz-flow s3" d="M171 28 V 46"/>
+            <circle cx="171" cy="58" r="17" class="vz-line vz-beat" opacity=".4"/>
+            <g class="vz-line" fill="#08080b">
+              <circle cx="131" cy="58" r="8"/><circle cx="211" cy="58" r="8"/>
+            </g>
+            <circle cx="171" cy="58" r="9" class="vz-line" fill="#08080b"/>
+            <circle cx="171" cy="58" r="4" class="vz-fill"/>
+            <path class="vz-faint" d="M139 58 H162 M180 58 H203"/>
+            <path class="vz-line vz-flow s3" d="M171 70 V 88"/>
+            <g class="vz-dim">
+              <circle cx="104" cy="97" r="3.5"/><circle cx="126" cy="97" r="3.5"/>
+              <circle cx="148" cy="97" r="3.5"/><circle cx="170" cy="97" r="3.5"/>
+              <circle cx="192" cy="97" r="3.5"/><circle cx="214" cy="97" r="3.5"/>
+              <circle cx="236" cy="97" r="3.5"/>
+            </g>
+            <!-- one fault, crossing every layer at once: the state no component suite covers -->
+            <path d="M282 10 L272 50 L286 50 L276 100" fill="none" stroke="var(--amber)"
+                  stroke-width="1.6" stroke-linejoin="round" class="vz-beat d1"/>
+            <text class="vz-txt" x="279" y="112" text-anchor="middle">fault</text>
+          </svg>
+        </div>
+        <div class="pcard-top">
+          <span class="pcard-badge">P</span>
+          <div>
+            <h3>ml-infra-platform</h3>
+            <div class="pcard-status">Live</div>
+          </div>
+        </div>
+        <div class="pcard-cat">Distributed ML · cross-layer chaos</div>
+        <p>
+          Three systems that were already built and tested separately, a Raft consensus
+          engine, an HNSW index and a training framework, composed into one platform and
+          driven from outside as read-only dependencies. Each passes its own suite, and none
+          of those suites says anything about a training worker dying at the instant the
+          storage cluster splits in half. The first bug the cross-layer harness found was
+          exactly that shape: Raft behaved correctly, HNSW behaved correctly, and every
+          replica in the cluster crashed.
+        </p>
+        <dl class="pspec">
+          <div><dt>Engines composed</dt><dd>3, unmodified</dd></div>
+          <div><dt>Component suites</dt><dd>23 + 28 + 68 tests</dd></div>
+          <div><dt>Claim under test</dt><dd>The composition, not the parts</dd></div>
+        </dl>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">Raft</span>
+          <span class="tag">HNSW</span><span class="tag">Chaos Engineering</span>
+          <span class="tag">numpy</span>
+        </div>
+        <div class="pcard-actions">
+          <a class="tlink ext" href="https://abho7.github.io/ml-infra-platform/" target="_blank" rel="noopener">Report <span class="arrow" aria-hidden="true">↗</span></a>
+          <a class="tlink ext" href="https://abho7.github.io/ml-infra-platform/dashboard.html" target="_blank" rel="noopener">Dashboard replay <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+
+      <article class="pcard spot reveal v-grn">
+        <div class="pcard-viz">
+          <svg viewBox="-52 -4 424 128" role="img" aria-label="Six workers on a ring all-reduce with gradients circulating, one worker killed mid-step">
+            <circle cx="160" cy="54" r="40" class="vz-line vz-flow s1" stroke-width="1.6"/>
+            <g class="vz-line" fill="#08080b">
+              <circle cx="200" cy="54" r="7"/>
+              <circle cx="180" cy="89" r="7"/>
+              <circle cx="120" cy="54" r="7"/>
+              <circle cx="140" cy="19" r="7"/>
+              <circle cx="180" cy="19" r="7"/>
+            </g>
+            <!-- the killed worker: drawn as absent, because the invariant is that
+                 the remaining five still reduce to the exact single-process update -->
+            <g class="vz-faint" stroke-width="1.5">
+              <path d="M135 84 L145 94 M145 84 L135 94"/>
+            </g>
+            <text class="vz-txt raw" x="160" y="57" text-anchor="middle">&#931; n&#8342;/N &#183; &#8711;L&#8342;</text>
+            <text class="vz-txt" x="160" y="110" text-anchor="middle">6 invariants, checked every step</text>
+          </svg>
+        </div>
+        <div class="pcard-top">
+          <span class="pcard-badge g">D</span>
+          <div>
+            <h3>distributed-training-framework</h3>
+            <div class="pcard-status">Live</div>
+          </div>
+        </div>
+        <div class="pcard-cat">Distributed training · correctness verification</div>
+        <p>
+          Data-parallel SGD with gradients synchronised each step by ring all-reduce or a
+          parameter server, and six invariants checked on <em>every</em> step against a
+          single-process reference rebuilt by a route that shares no arithmetic with the
+          production path. The reduction sums in canonical worker-id order, since float
+          addition is not associative and without a fixed order bitwise replica agreement
+          fails intermittently and looks like a race. Four of the six findings published on
+          the report are defects in this repository's own harness, two of which would have
+          produced a confidently wrong result.
+        </p>
+        <dl class="pspec">
+          <div><dt>Checked steps</dt><dd>1,960</dd></div>
+          <div><dt>Workers killed mid-step</dt><dd>22, no violation</dd></div>
+          <div><dt>Worst gradient error</dt><dd>8.9e-16, floor ~5e-16</dd></div>
+        </dl>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">Data Parallelism</span>
+          <span class="tag">Ring All-Reduce</span><span class="tag">Fault Injection</span>
+          <span class="tag">numpy</span>
+        </div>
+        <div class="pcard-actions">
+          <a class="tlink ext" href="https://abho7.github.io/distributed-training-framework/" target="_blank" rel="noopener">Report <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+
+      <article class="pcard spot reveal v-blu">
+        <div class="pcard-viz">
+          <svg viewBox="-52 -4 424 128" role="img" aria-label="Three replicated logs with entries committed up to a shared commit index and one follower still catching up">
+            <g class="vz-txt"><text x="8" y="26">leader</text><text x="8" y="60">f1</text><text x="8" y="94">f2</text></g>
+            <!-- committed entries are filled, uncommitted are outlined; the vertical
+                 rule is the commit index, and it only moves on a quorum -->
+            <g class="vz-fill">
+              <rect x="62" y="15" width="22" height="15" rx="2"/><rect x="88" y="15" width="22" height="15" rx="2"/>
+              <rect x="114" y="15" width="22" height="15" rx="2"/><rect x="140" y="15" width="22" height="15" rx="2"/>
+              <rect x="62" y="49" width="22" height="15" rx="2"/><rect x="88" y="49" width="22" height="15" rx="2"/>
+              <rect x="114" y="49" width="22" height="15" rx="2"/><rect x="140" y="49" width="22" height="15" rx="2"/>
+              <rect x="62" y="83" width="22" height="15" rx="2"/><rect x="88" y="83" width="22" height="15" rx="2"/>
+              <rect x="114" y="83" width="22" height="15" rx="2"/>
+            </g>
+            <g class="vz-line" fill="none">
+              <rect x="166" y="15" width="22" height="15" rx="2"/><rect x="192" y="15" width="22" height="15" rx="2"/>
+              <rect x="166" y="49" width="22" height="15" rx="2"/>
+            </g>
+            <g class="vz-faint" stroke-dasharray="3 4">
+              <rect x="140" y="83" width="22" height="15" rx="2" fill="none"/>
+              <rect x="166" y="83" width="22" height="15" rx="2" fill="none"/>
+            </g>
+            <line x1="164" y1="8" x2="164" y2="106" class="vz-line vz-beat" stroke-dasharray="4 4"/>
+            <text class="vz-txt" x="170" y="112">commit index</text>
+          </svg>
+        </div>
         <div class="pcard-top">
           <span class="pcard-badge">K</span>
           <div>
@@ -367,7 +632,27 @@
         </div>
       </article>
 
-      <article class="pcard spot reveal">
+      <article class="pcard spot reveal v-grn">
+        <div class="pcard-viz">
+          <svg viewBox="-52 -4 424 128" role="img" aria-label="A search tree with one branch selected and expanded, the rest left thin">
+            <g class="vz-faint">
+              <path d="M160 20 L88 48 M160 20 L160 48"/>
+              <path d="M88 60 L60 88 M88 60 L116 88"/>
+              <path d="M232 60 L268 88"/>
+            </g>
+            <!-- the branch the budget was actually spent on: thicker, and moving -->
+            <path class="vz-line vz-flow s3" stroke-width="2.2" d="M160 20 L232 48 L204 88"/>
+            <g class="vz-dim">
+              <circle cx="88" cy="54" r="5"/><circle cx="160" cy="54" r="5"/>
+              <circle cx="60" cy="94" r="4"/><circle cx="116" cy="94" r="4"/><circle cx="268" cy="94" r="4"/>
+            </g>
+            <g class="vz-fill">
+              <circle cx="160" cy="14" r="6"/><circle cx="232" cy="54" r="6"/>
+              <circle cx="204" cy="94" r="6" class="vz-beat"/>
+            </g>
+            <text class="vz-txt raw" x="160" y="112" text-anchor="middle">Q + c&#8730;(ln N / n) &#8722; &#955;&#183;&#964; / B</text>
+          </svg>
+        </div>
         <div class="pcard-top">
           <span class="pcard-badge g">T</span>
           <div>
@@ -400,7 +685,36 @@
         </div>
       </article>
 
-      <article class="pcard spot reveal">
+      <article class="pcard spot reveal v-amb">
+        <div class="pcard-viz">
+          <svg viewBox="-52 -4 424 128" role="img" aria-label="Courses packed into four terms with prerequisite arrows forcing the ordering between them">
+            <g class="vz-line" fill="#08080b">
+              <rect x="30" y="14" width="46" height="14" rx="3"/>
+              <rect x="30" y="34" width="46" height="14" rx="3"/>
+              <rect x="30" y="54" width="46" height="14" rx="3"/>
+              <rect x="106" y="14" width="46" height="14" rx="3"/>
+              <rect x="106" y="34" width="46" height="14" rx="3"/>
+              <rect x="106" y="54" width="46" height="14" rx="3"/>
+              <rect x="182" y="14" width="46" height="14" rx="3"/>
+              <rect x="182" y="34" width="46" height="14" rx="3"/>
+              <rect x="258" y="14" width="46" height="14" rx="3"/>
+            </g>
+            <!-- every arrow is a prerequisite, which is what makes the packing
+                 a precedence-constrained colouring rather than a bin-pack -->
+            <g class="vz-line vz-flow s1" opacity=".9">
+              <path d="M76 21 Q 92 21 106 41"/>
+              <path d="M76 61 Q 92 61 106 21"/>
+              <path d="M152 41 Q 168 41 182 21"/>
+              <path d="M228 21 Q 244 21 258 21"/>
+            </g>
+            <line x1="12" y1="80" x2="308" y2="80" class="vz-faint"/>
+            <g class="vz-txt" text-anchor="middle">
+              <text x="53" y="94">T1</text><text x="129" y="94">T2</text>
+              <text x="205" y="94">T3</text><text x="281" y="94">T4</text>
+            </g>
+            <text class="vz-txt" x="160" y="110" text-anchor="middle">credit limit respected per term</text>
+          </svg>
+        </div>
         <div class="pcard-top">
           <span class="pcard-badge a">F</span>
           <div>
@@ -433,7 +747,33 @@
         </div>
       </article>
 
-      <article class="pcard spot reveal">
+      <article class="pcard spot reveal v-amb">
+        <div class="pcard-viz">
+          <svg viewBox="-52 -4 424 128" role="img" aria-label="A matching hub connecting four tutors on one side to students on the other">
+            <g class="vz-line vz-flow s1" opacity=".85">
+              <path d="M78 24 Q 120 24 152 50"/><path d="M78 50 Q 120 50 152 54"/>
+              <path d="M78 76 Q 120 76 152 58"/><path d="M78 96 Q 122 96 152 62"/>
+            </g>
+            <g class="vz-line vz-flow s2" opacity=".85">
+              <path d="M172 50 Q 204 24 244 18"/><path d="M172 52 Q 204 40 244 40"/>
+              <path d="M172 58 Q 204 66 244 66"/><path d="M172 62 Q 206 92 246 96"/>
+            </g>
+            <g class="vz-line" fill="#08080b">
+              <circle cx="70" cy="24" r="7"/><circle cx="70" cy="50" r="7"/>
+              <circle cx="70" cy="76" r="7"/><circle cx="70" cy="96" r="7"/>
+            </g>
+            <circle cx="162" cy="56" r="13" class="vz-line vz-beat" opacity=".45"/>
+            <circle cx="162" cy="56" r="8" class="vz-line" fill="#08080b"/>
+            <g class="vz-dim">
+              <circle cx="250" cy="18" r="5"/><circle cx="250" cy="40" r="5"/>
+              <circle cx="250" cy="66" r="5"/><circle cx="252" cy="96" r="5"/>
+              <circle cx="272" cy="28" r="4"/><circle cx="274" cy="54" r="4"/>
+              <circle cx="272" cy="80" r="4"/><circle cx="292" cy="42" r="3"/>
+              <circle cx="292" cy="68" r="3"/>
+            </g>
+            <g class="vz-txt"><text x="46" y="112">tutors</text><text x="244" y="112">students</text></g>
+          </svg>
+        </div>
         <div class="pcard-top">
           <span class="pcard-badge a">S</span>
           <div>
@@ -462,7 +802,36 @@
         </div>
       </article>
 
-      <article class="pcard spot reveal">
+      <article class="pcard spot reveal v-grn">
+        <div class="pcard-viz">
+          <svg viewBox="-52 -4 424 128" role="img" aria-label="Five regional chapters linked into one network, with research collaborators attached to each">
+            <g class="vz-line vz-flow s2" opacity=".8">
+              <path d="M52 34 L120 20 L200 44 L268 26"/>
+              <path d="M120 20 L104 84 L200 44"/>
+              <path d="M104 84 L232 88 L268 26"/>
+            </g>
+            <g class="vz-dim">
+              <circle cx="38" cy="18" r="3"/><circle cx="34" cy="48" r="3"/>
+              <circle cx="136" cy="6" r="3"/><circle cx="104" cy="8" r="3"/>
+              <circle cx="216" cy="60" r="3"/><circle cx="184" cy="62" r="3"/>
+              <circle cx="286" cy="14" r="3"/><circle cx="288" cy="40" r="3"/>
+              <circle cx="220" cy="106" r="3"/><circle cx="250" cy="100" r="3"/>
+              <circle cx="88" cy="102" r="3"/><circle cx="120" cy="100" r="3"/>
+            </g>
+            <g class="vz-faint">
+              <path d="M52 34 L38 18 M52 34 L34 48 M120 20 L136 6 M120 20 L104 8"/>
+              <path d="M200 44 L216 60 M200 44 L184 62 M268 26 L286 14 M268 26 L288 40"/>
+              <path d="M232 88 L220 106 M232 88 L250 100 M104 84 L88 102 M104 84 L120 100"/>
+            </g>
+            <g class="vz-line" fill="#08080b">
+              <circle cx="52" cy="34" r="7"/><circle cx="120" cy="20" r="7"/>
+              <circle cx="200" cy="44" r="7"/><circle cx="268" cy="26" r="7"/>
+              <circle cx="104" cy="84" r="7"/><circle cx="232" cy="88" r="7"/>
+            </g>
+            <circle cx="120" cy="20" r="3" class="vz-fill vz-beat"/>
+            <circle cx="232" cy="88" r="3" class="vz-fill vz-beat d2"/>
+          </svg>
+        </div>
         <div class="pcard-top">
           <span class="pcard-badge g">W</span>
           <div>
