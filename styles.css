@@ -467,12 +467,107 @@ section { padding-block: var(--section-y); scroll-margin-top: 4.5rem; }
    one column on narrow viewports without a breakpoint. */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(24rem,1fr)); gap: clamp(1.25rem,2.5vw,2rem); }
 .pcard {
+  --pad: clamp(1.6rem,3vw,2.4rem);
   background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: clamp(1.6rem,3vw,2.4rem); display: flex; flex-direction: column;
+  padding: var(--pad); display: flex; flex-direction: column;
   transition: border-color .25s ease, transform .25s ease, background .25s ease;
 }
 .pcard:hover { border-color: var(--line-2); background: var(--card-2); transform: translateY(-3px); }
 @media (prefers-reduced-motion: reduce) { .pcard:hover { transform: none; } }
+
+/* ------------------------------------------------------- schematic plates
+   Every card opens with a small drawing of the thing it describes: the ring
+   the gradients actually travel around, the log the followers actually
+   replicate, the layers the search actually descends. They are schematics of
+   the mechanism, not decoration -- a reader who never opens the repo should
+   still come away knowing the shape of what runs.
+
+   Hand-authored inline SVG rather than images: it inherits the card's tone
+   through --viz, scales without assets, costs no request, and the motion is
+   pure CSS so nothing animates off-screen except via the compositor.
+
+   The plate is full-bleed, so it cancels the card's own padding with negative
+   margins. --pad is declared on .pcard above precisely so this can mirror it
+   exactly; hard-coding the clamp() a second time would drift the moment the
+   card padding is ever retuned. */
+.pcard-viz {
+  position: relative; z-index: 1;
+  margin: calc(var(--pad) * -1) calc(var(--pad) * -1) 1.5rem;
+  border-bottom: 1px solid var(--line);
+  /* minus the card's own 1px border, or the plate's corner sits a hairline
+     proud of it and reads as a rendering fault at the top of every card */
+  border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
+  overflow: hidden;
+  background:
+    radial-gradient(110% 130% at 50% 0%, var(--viz-soft), transparent 68%),
+    linear-gradient(180deg, #0c0c11, #08080b);
+}
+/* Engineering-paper ground. 24px squares, one hairline of the card's own line
+   colour, so the drawings read as measured rather than sketched. The mask
+   fades it out at the bottom edge so the grid never competes with the title
+   sitting directly beneath the plate. */
+.pcard-viz::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(47,47,58,.5) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(47,47,58,.5) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: linear-gradient(180deg, #000 35%, transparent);
+  mask-image: linear-gradient(180deg, #000 35%, transparent);
+}
+.pcard-viz svg { display: block; width: 100%; height: auto; position: relative; }
+
+/* Tone. The plate, the badge and the spotlight all read from --viz, so a card
+   is recoloured in one place. --viz-soft is the same hue at low alpha for
+   fills and glows; it is a separate token rather than a color-mix() so the
+   plates still tint on engines without it. */
+.pcard { --viz: var(--accent); --viz-soft: rgba(167,139,250,.14); --viz-line: rgba(167,139,250,.42); }
+.pcard.v-grn { --viz: var(--live);  --viz-soft: rgba(74,222,128,.13);  --viz-line: rgba(74,222,128,.42); }
+.pcard.v-amb { --viz: var(--amber); --viz-soft: rgba(224,177,85,.13);  --viz-line: rgba(224,177,85,.42); }
+.pcard.v-blu { --viz: var(--neg);   --viz-soft: rgba(124,196,255,.13); --viz-line: rgba(124,196,255,.42); }
+
+/* Shared drawing vocabulary, so eleven separate schematics still look like one
+   instrument family. */
+.vz-line  { fill: none; stroke: var(--viz); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.vz-faint { fill: none; stroke: var(--line-2); stroke-width: 1.2; stroke-linecap: round; }
+.vz-fill  { fill: var(--viz); }
+.vz-dim   { fill: var(--line-2); }
+/* Captions inside a plate are annotation, not headline. The plates draw into a
+   424-unit box rendered around 550px wide, so 6.4 user units land near 8px on
+   screen: readable at rest, and small enough that the eye reaches the project
+   title first. */
+.vz-txt   { font-family: var(--mono); font-size: 6.4px; letter-spacing: .12em; fill: var(--label); text-transform: uppercase; }
+/* Formulae opt out of the uppercasing: c, λ, τ and nₖ are named variables, and
+   folding their case turns a correct expression into a wrong-looking one. */
+.vz-txt.raw { text-transform: none; letter-spacing: .05em; }
+/* Everything in an SVG scales together, which is right for the drawing and
+   wrong for its labels: on a single-column phone card the plate is roughly
+   0.6x, and 6.4 user units lands under 4px. The captions get their size back. */
+@media (max-width: 640px) { .vz-txt { font-size: 10px; letter-spacing: .06em; } }
+
+/* Motion. Three effects only: something travelling along a path, something
+   registering a beat, something turning. Each is slow enough to be ambient at
+   the edge of vision and never fast enough to pull the eye off the prose. */
+.vz-flow { stroke-dasharray: 6 10; animation: vzDash 3.4s linear infinite; }
+.vz-flow.s1 { animation-duration: 4.6s; }
+.vz-flow.s2 { animation-duration: 5.8s; animation-direction: reverse; }
+.vz-flow.s3 { animation-duration: 2.8s; }
+.vz-beat { animation: vzBeat 2.6s ease-in-out infinite; }
+.vz-beat.d1 { animation-delay: .45s; }
+.vz-beat.d2 { animation-delay: .9s; }
+.vz-beat.d3 { animation-delay: 1.35s; }
+.vz-spin { animation: vzSpin 9s linear infinite; transform-box: fill-box; transform-origin: center; }
+.vz-spin.r { animation-duration: 6s; animation-direction: reverse; }
+.vz-spin.q { animation-duration: 13s; }
+
+@keyframes vzDash { to { stroke-dashoffset: -128; } }
+@keyframes vzBeat { 0%,100% { opacity: .3; } 50% { opacity: 1; } }
+@keyframes vzSpin { to { rotate: 360deg; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .vz-flow, .vz-beat, .vz-spin { animation: none; }
+  .vz-beat { opacity: .75; }
+}
 
 /* ------------------------------------------------------- pointer spotlight
    A soft pool of accent light tracking the cursor inside whichever card it is
@@ -490,7 +585,7 @@ section { padding-block: var(--section-y); scroll-margin-top: 4.5rem; }
   content: ""; position: absolute; inset: 0; border-radius: inherit;
   pointer-events: none; z-index: 0;
   background: radial-gradient(340px circle at var(--mx,50%) var(--my,50%),
-              rgba(167,139,250,.11), transparent 68%);
+              var(--viz-soft, rgba(167,139,250,.11)), transparent 68%);
   opacity: 0; transition: opacity .28s ease;
 }
 .spot:hover::after { opacity: 1; }
@@ -499,14 +594,18 @@ section { padding-block: var(--section-y); scroll-margin-top: 4.5rem; }
 .spot > * { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) { .spot::after { transition: none; } }
 .pcard-top { display: flex; align-items: center; gap: .9rem; margin-bottom: 1.1rem; }
+/* The badge takes the card's tone from --viz rather than carrying its own
+   colour, so the plate above it and the letter below it can never disagree.
+   The .g / .a modifiers are kept because older markup still sets them; they
+   now just override the token. */
 .pcard-badge {
   width: 44px; height: 44px; border-radius: 50%; flex: none;
   display: grid; place-items: center;
-  font-family: var(--mono); font-size: .95rem; font-weight: 700; color: var(--accent);
-  background: rgba(167,139,250,.09); border: 1px solid rgba(167,139,250,.4);
+  font-family: var(--mono); font-size: .95rem; font-weight: 700; color: var(--viz);
+  background: var(--viz-soft); border: 1px solid var(--viz-line);
 }
-.pcard-badge.g { color: var(--live); background: rgba(74,222,128,.09); border-color: rgba(74,222,128,.4); }
-.pcard-badge.a { color: var(--amber); background: rgba(224,177,85,.09); border-color: rgba(224,177,85,.4); }
+.pcard-badge.g { --viz: var(--live);  --viz-soft: rgba(74,222,128,.09);  --viz-line: rgba(74,222,128,.4); }
+.pcard-badge.a { --viz: var(--amber); --viz-soft: rgba(224,177,85,.09);  --viz-line: rgba(224,177,85,.4); }
 .pcard h3 { font-size: 1.45rem; font-weight: 400; letter-spacing: 0; margin: 0; line-height: 1.15; }
 .pcard-status { font-family: var(--mono); font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--label); display: flex; align-items: center; gap: .35rem; margin-top: .2rem; }
 .pcard-status::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--live); }
