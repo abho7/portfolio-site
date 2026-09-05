@@ -397,7 +397,13 @@
         const level = lo + (hi - lo) * t;
         // Deeper level sets (nearer the minima) are drawn slightly stronger, so
         // the basins read as basins instead of as uniform noise.
-        cctx.strokeStyle = `rgba(167,139,250,${0.055 + 0.075 * (1 - t)})`;
+        // Signed colouring, matching the site's palette: this is a scalar
+        // field with a mid-level, so level sets below it take one pole and
+        // those above it take the other -- the same convention fluid-sim's
+        // vorticity view uses. A single hue for every contour threw away
+        // information the field already carries.
+        const pole = t < 0.5 ? "86,225,255" : "255,92,196";
+        cctx.strokeStyle = `rgba(${pole},${0.055 + 0.075 * (1 - t)})`;
         cctx.beginPath();
 
         for (let j = 0; j < rows - 1; j++) {
@@ -516,7 +522,7 @@
         const wide = ctx.measureText(c.text).width;
         if (c.vx > 0 && c.x > w) c.x = -wide;
         if (c.vx < 0 && c.x < -wide) c.x = w;
-        ctx.fillStyle = `rgba(167,139,250,${c.alpha})`;
+        ctx.fillStyle = `rgba(126,196,222,${c.alpha})`;
         ctx.fillText(c.text, c.x, c.y);
       }
 
@@ -549,14 +555,14 @@
         const n = p.trail.length / 2;
         for (let i = 1; i < n; i++) {
           const a = i / n;
-          ctx.strokeStyle = `rgba(167,139,250,${0.32 * a})`;
+          ctx.strokeStyle = `rgba(255,92,196,${0.30 * a})`;
           ctx.beginPath();
           ctx.moveTo(p.trail[(i - 1) * 2], p.trail[(i - 1) * 2 + 1]);
           ctx.lineTo(p.trail[i * 2], p.trail[i * 2 + 1]);
           ctx.stroke();
         }
       }
-      ctx.fillStyle = "rgba(74,222,128,.75)";
+      ctx.fillStyle = "rgba(255,236,248,.82)";
       for (const p of walkers) {
         ctx.beginPath();
         ctx.arc(p.x, p.y, 1.7, 0, Math.PI * 2);
