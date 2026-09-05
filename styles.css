@@ -1491,3 +1491,31 @@ pre.code .s { color: #8fd4a8; }
 @keyframes heroExit {
   to { opacity: 0; translate: 0 -34px; scale: .95; }
 }
+
+/* --------------------------------------------- wide showcase, embedded demos
+   fluid-sim's result *is* the picture, so its panel gets the full column width
+   instead of sharing the row with the prose. Everything else about the card is
+   unchanged; only the grid collapses to one column. */
+.showcase.wide { grid-template-columns: 1fr; }
+.showcase.wide .showcase-text { max-width: none; }
+.showcase.wide .figbox-grid { margin-top: 1.75rem; }
+
+/* An embedded demo fills its panel edge to edge: the panel already supplies the
+   frame, and a second inset border inside it reads as a mistake. */
+.panel-body.is-embed { padding: 0; }
+.embed-frame {
+  display: block; width: 100%; border: 0; background: var(--page);
+  height: clamp(20rem, 52vh, 32rem);
+}
+.showcase.wide .embed-frame { height: clamp(24rem, 64vh, 40rem); }
+.embed-note {
+  padding: .8rem 1rem; border-top: 1px solid var(--line); margin: 0;
+  font-family: var(--mono); font-size: .66rem; line-height: 1.65; color: var(--label);
+}
+.embed-note a { color: var(--accent); }
+
+/* A diagram used as a panel's centrepiece rather than inside a details body:
+   the panel is already the frame, so drop the figure's own. */
+.panel .diagram { margin: 0; max-width: none; }
+.panel .diagram svg { border: 0; background: transparent; }
+.panel .diagram figcaption { margin-top: .9rem; }
