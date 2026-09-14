@@ -145,6 +145,9 @@
       { group: "Links", label: "GitHub", note: "↗", href: "https://github.com/abho7", external: true },
       { group: "Links", label: "LinkedIn", note: "↗", href: "https://www.linkedin.com/in/abhineeth-duddela-6b2a90319/", external: true },
       { group: "Links", label: "Email", note: "↵", href: "mailto:abhineeth78@gmail.com" },
+      { group: "Site", label: "Privacy", note: "↵", href: "privacy.html" },
+      { group: "Site", label: "Terms", note: "↵", href: "terms.html" },
+      { group: "Site", label: "Cookies", note: "↵", href: "cookies.html" },
     ];
 
     let filtered = ITEMS.slice();
@@ -201,6 +204,7 @@
     function open() {
       lastFocused = document.activeElement;
       overlay.hidden = false;
+      trigger.setAttribute("aria-expanded", "true");
       input.value = "";
       render();
       input.focus();
@@ -208,8 +212,20 @@
 
     function close() {
       overlay.hidden = true;
+      trigger.setAttribute("aria-expanded", "false");
       if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
     }
+
+    /* The panel is aria-modal, which tells a screen reader the rest of the
+       page is inert -- but Tab does not obey that claim on its own. Without
+       this, tabbing out of the input lands on the page behind an overlay that
+       is still covering it, which is the worst of both states. Only the input
+       is focusable inside the panel, so the trap is a single wrap. */
+    overlay.addEventListener("keydown", (e) => {
+      if (e.key !== "Tab") return;
+      e.preventDefault();
+      input.focus();
+    });
 
     trigger.addEventListener("click", open);
 
