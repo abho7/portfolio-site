@@ -5,12 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Abhineeth Duddela</title>
 <meta name="description" content="Abhineeth Duddela: CS/AI/ML. Distributed systems, NLP explainability, and local-first infrastructure.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=fallback" rel="stylesheet">
+<!-- No font preconnects: the faces are served from this site, so there is no
+     third party to warm a connection to. -->
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+<!-- First thing in the tab order: this page is one long document, and without
+     a bypass a keyboard user tabs the whole rail before reaching content. -->
+<a class="skip-link" href="#main">Skip to content</a>
 
 <!-- Ambient field: one fixed canvas behind the whole document, not a hero
      decoration. The network of nodes and links is the same visual idea the
@@ -46,7 +49,9 @@
         <span class="rt-v" data-t="leader">·</span>
       </span>
       <span class="rail-clock" id="rail-clock" aria-hidden="true">··:··:··</span>
-      <button type="button" class="cmdk-trigger" id="cmdk-trigger" aria-label="Open quick navigation">⌘K</button>
+      <button type="button" class="cmdk-trigger" id="cmdk-trigger"
+              aria-label="Open quick navigation" aria-expanded="false"
+              aria-haspopup="dialog" aria-controls="cmdk-overlay">⌘K</button>
       <a class="rail-cta" href="#contact">Connect</a>
     </div>
   </div>
@@ -67,7 +72,7 @@
   </div>
 </div>
 
-<main>
+<main id="main">
 
   <!-- ============================================================ hero -->
   <header class="hero wrap" id="top">
@@ -220,8 +225,7 @@
           Python, and reverse-engineer the messy parts of the internet, from disaster-response
           tweet streams to K–8 tutoring logistics. I'm a published researcher in a peer-reviewed
           journal, a USACO Gold competitor, a data-science intern under a Harvard preceptor, a
-          nonprofit co-founder whose research reach spans three countries and five U.S. states,
-          and a USA Cricket U19 athlete ranked 31st nationally.
+          nonprofit co-founder, and a USA Cricket U19 athlete ranked 31st nationally.
         </p>
         <p>
           My north star is unreasonably simple: build technically elegant systems that
@@ -890,7 +894,10 @@
               <button class="ctl" id="raft-pause" type="button">Pause</button>
               <button class="ctl" id="raft-reset" type="button">Reset</button>
             </div>
-            <div class="sim-status" id="raft-status"></div>
+            <!-- The simulator rewrites this as elections happen; polite means a
+                 screen reader finishes the current sentence first rather than
+                 interrupting on every term change. -->
+            <div class="sim-status" id="raft-status" role="status" aria-live="polite"></div>
             <div id="raft-timeline"><p class="loading">Starting cluster…</p></div>
           </div>
         </div>
@@ -1087,7 +1094,7 @@
             </div>
             <div class="nlp-compare-col">
               <div class="nlp-compare-label">semantic · live model</div>
-              <div id="nlp-compare-semantic" class="nlp-compare-result"></div>
+              <div id="nlp-compare-semantic" class="nlp-compare-result" role="status" aria-live="polite"></div>
             </div>
           </div>
           </div>
@@ -1101,7 +1108,8 @@
           </div>
           <div class="frame-wrap">
             <iframe class="demo" src="https://crisis-nlp-demo.onrender.com/"
-                    title="Live crisis text classifier" loading="lazy"></iframe>
+                    title="Live crisis text classifier" loading="lazy"
+                    referrerpolicy="no-referrer"></iframe>
           </div>
         </div>
       </div>
@@ -1805,7 +1813,7 @@
           <h3>Transformer-Based NLP for Real-Time Disaster Response</h3>
           <p class="dossier-org">National High School Journal of Science · Peer-Reviewed</p>
         </div>
-        <span class="live-pill verified"><i></i>Verified</span>
+        <span class="live-pill verified"><i></i>Published</span>
       </div>
       <p class="dossier-lede">
         A published, peer-reviewed paper benchmarking modern transformer architectures against
@@ -1978,7 +1986,6 @@
           <h3>SWE and ML Intern</h3>
           <p class="dossier-org">Harvard University · under Professor David Kane, a Harvard preceptor</p>
         </div>
-        <span class="live-pill verified"><i></i>Verified</span>
       </div>
       <p class="dossier-lede">
         Shipping production-grade R infrastructure and Quarto-based curricula used by an
@@ -2035,7 +2042,6 @@
           <h3>USA Cricket U19 Athlete</h3>
           <p class="dossier-org">USA Cricket U19 West Conference Team · Captain · 2021–present</p>
         </div>
-        <span class="live-pill verified"><i></i>Verified</span>
       </div>
       <p class="dossier-lede">
         Selected for the USA Cricket U19 West Conference Team through multi-stage national
@@ -2082,8 +2088,8 @@
       <span class="sec-eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="9" r="5"/><path d="M9 13l-2 8 5-3 5 3-2-8"/></svg>Recognition &amp; Awards</span>
       <h2 class="sec-title">Nationally <em class="ital">recognized</em></h2>
       <p class="sec-lede">
-        From national athletics to USACO Gold, peer-reviewed research, and global top-100
-        investment rankings.
+        From national athletics to USACO Gold, peer-reviewed research, and a top-100 finish
+        at the Young Investors Society Global Stock Pitch.
       </p>
     </div>
 
@@ -2315,6 +2321,9 @@
         <a href="https://github.com/abho7" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/abhineeth-duddela-6b2a90319/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="mailto:abhineeth78@gmail.com">Email</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="cookies.html">Cookies</a>
         <a href="#top">Back to top ↑</a>
       </span>
     </div>

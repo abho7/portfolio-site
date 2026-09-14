@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy — Abhineeth Duddela</title>
+<meta name="description" content="What this site collects, which is nothing, and the few places a visitor's browser connects elsewhere.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="rail">
+  <div class="rail-in">
+    <a class="brand" href="index.html">Abhineeth<i>.</i></a>
+    <nav><a href="index.html">Back to the site</a></nav>
+  </div>
+</div>
+
+<main id="main" class="wrap legal">
+  <h1>Privacy</h1>
+  <p class="updated">Last updated 13 September 2026</p>
+
+  <p>
+    This is a personal portfolio. It has no accounts, no sign-up, no forms, no shopping cart and
+    no newsletter. <strong>It collects nothing about you.</strong> The sections below describe the
+    few places where your browser talks to a server anyway, because that is true of any website
+    and pretending otherwise would be the dishonest version of this page.
+  </p>
+
+  <h2>What this site stores on your device</h2>
+  <p>
+    Nothing. No cookies, no local storage, no session storage, no database in your browser. There
+    is no consent banner because there is nothing to consent to — see
+    <a href="cookies.html">the cookie page</a> for how to check that claim yourself in about ten
+    seconds.
+  </p>
+
+  <h2>Analytics</h2>
+  <p>
+    There are none. No Google Analytics, no Plausible, no Fathom, no Matomo, no pixel, no tag
+    manager, no heatmap, no session recording. I do not know how many people visit this site, and
+    I have not tried to find out.
+  </p>
+
+  <h2>Hosting</h2>
+  <p>
+    The site is served by GitHub Pages. Like any web host, GitHub receives the requests your
+    browser makes — your IP address, the page requested, your user agent, the time — and handles
+    them under
+    <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener">GitHub's privacy statement</a>.
+    I do not receive those logs and cannot see them.
+  </p>
+
+  <h2>Fonts</h2>
+  <p>
+    The three typefaces are stored in this site's own repository and served from the same place as
+    the page. Your browser does not contact Google, or any other font service, to render this
+    site.
+  </p>
+
+  <h2>The embedded demos</h2>
+  <p>
+    Two panels on the home page embed live projects of mine in an <code>iframe</code>. Both are
+    set to load lazily, which means your browser only connects to them if you scroll far enough
+    for them to come into view:
+  </p>
+  <ul>
+    <li>
+      <strong>fluid-sim</strong>, hosted on GitHub Pages. Loading it means GitHub sees the same
+      kind of request described above.
+    </li>
+    <li>
+      <strong>crisis-nlp-demo</strong>, hosted on Render. Loading it means
+      <a href="https://render.com/privacy" target="_blank" rel="noopener">Render</a> sees the
+      request, including your IP address.
+    </li>
+  </ul>
+  <p>
+    Both are my own projects rather than third-party widgets, and neither is an advertising or
+    tracking service. Both embeds are sent without a referrer, so the demo is not told which page
+    you came from.
+  </p>
+
+  <h2>The text box in the NLP comparison</h2>
+  <p>
+    This is the only part of the site that sends anything you produce off the page. When you type
+    a message and press <em>Compare</em>, that text is sent to my crisis-classifier service on
+    Render, which returns the model's prediction and its per-word attributions.
+  </p>
+  <p>
+    That text is not stored by this site, and it is not connected to you in any way — no
+    identifier is sent with it. The service receiving it is mine, and like any web service it may
+    keep ordinary request logs. <strong>Please do not type anything personal, sensitive or
+    confidential into it.</strong> It exists to demonstrate a classifier on example sentences, and
+    a made-up sentence demonstrates it just as well as a real one.
+  </p>
+
+  <h2>Live figures</h2>
+  <p>
+    A few numbers on the home page are fetched at load time from a results file published by
+    another of my projects on GitHub Pages, so the page cannot quote a figure that has gone stale.
+    That request carries nothing about you beyond what any request carries.
+  </p>
+
+  <h2>Links to other sites</h2>
+  <p>
+    Links to GitHub, LinkedIn, the National High School Journal of Science and the Willow
+    Initiative leave this site. Once you follow one, that site's own privacy policy applies and
+    this one stops being relevant.
+  </p>
+
+  <h2>Information about me on this site</h2>
+  <p>
+    The site publishes my name, photograph, city, school, work history and email address. That is
+    deliberate — it is a portfolio, and those details are the point of it. It is not information
+    collected from you.
+  </p>
+
+  <h2>Children</h2>
+  <p>
+    This site is not directed at children and does not knowingly collect information from anyone,
+    of any age, because it does not collect information at all.
+  </p>
+
+  <h2>Your rights</h2>
+  <p>
+    Privacy laws generally give you the right to see, correct or delete the personal data a site
+    holds about you. I hold none, so there is nothing to show you and nothing to delete. If you
+    believe that is wrong, or you want something about this site changed, email
+    <a href="mailto:abhineeth78@gmail.com">abhineeth78@gmail.com</a> and I will answer.
+  </p>
+
+  <h2>Changes</h2>
+  <p>
+    If the site starts collecting something — an analytics script, a contact form, anything — this
+    page will say so before that goes live, and the date at the top will change. The full edit
+    history of this page is public in
+    <a href="https://github.com/abho7/portfolio-site" target="_blank" rel="noopener">the repository</a>,
+    so you can check what it said at any point in the past rather than taking my word for it.
+  </p>
+
+  <p><a class="back" href="index.html">← Back to the site</a></p>
+</main>
+
+<footer class="wrap">
+  <div class="row">
+    <span>© 2026 Abhineeth Duddela</span>
+    <span class="right">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="mailto:abhineeth78@gmail.com">Email</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
