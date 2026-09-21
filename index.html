@@ -578,6 +578,68 @@
         </div>
       </article>
 
+      <article class="pcard spot reveal v-amb">
+        <div class="pcard-viz">
+          <svg viewBox="-52 -4 424 128" role="img" aria-label="A compiler pipeline: source text becomes a syntax tree, then SSA, then optimized SSA, then bytecode. A reference interpreter runs beside it and the two outputs are compared byte for byte.">
+            <!-- the pipeline along the top; the oracle underneath it, because the
+                 comparison is the point rather than the lowering -->
+            <g class="vz-line" fill="#08080b">
+              <rect x="10" y="20" width="54" height="20" rx="4"/>
+              <rect x="88" y="20" width="54" height="20" rx="4"/>
+              <rect x="166" y="20" width="54" height="20" rx="4"/>
+              <rect x="244" y="20" width="60" height="20" rx="4"/>
+            </g>
+            <g class="vz-txt" text-anchor="middle">
+              <text x="37" y="34">source</text><text x="115" y="34">AST</text>
+              <text x="193" y="34">SSA</text><text x="274" y="34">bytecode</text>
+            </g>
+            <g class="vz-line vz-flow s1">
+              <path d="M64 30 H88"/><path d="M142 30 H166"/><path d="M220 30 H244"/>
+            </g>
+            <path class="vz-faint" d="M37 40 V72 H274 V40"/>
+            <g class="vz-line" fill="#08080b">
+              <rect x="88" y="62" width="132" height="20" rx="4"/>
+            </g>
+            <text class="vz-txt" x="154" y="76" text-anchor="middle">reference interpreter</text>
+            <circle cx="274" cy="52" r="5" class="vz-fill vz-beat"/>
+            <text class="vz-txt" x="160" y="100" text-anchor="middle">same bytes, same trap, same exit status</text>
+            <text class="vz-txt raw" x="160" y="114" text-anchor="middle">100,000 random programs &#183; 0 disagreements</text>
+          </svg>
+        </div>
+        <div class="pcard-top">
+          <span class="pcard-badge a">&#955;</span>
+          <div>
+            <h3>toy-compiler</h3>
+            <div class="pcard-status">Live</div>
+          </div>
+        </div>
+        <div class="pcard-cat">Compilers · differential testing</div>
+        <p>
+          A compiler for minic with no dependencies and no build step: lexer, parser, type
+          checker, an SSA intermediate representation, four optimization passes, linear-scan
+          register allocation and a bytecode VM. Every optimization has to preserve the exact
+          output bytes, the exact trap and the exact exit status, checked against a reference
+          interpreter on a corpus and on 100,000 generated programs. Register allocation is
+          where the win is: <b>47.5% fewer instructions executed</b> than keeping every value in
+          a frame slot. The places a pass would have been wrong are written up rather than
+          quietly fixed.
+        </p>
+        <dl class="pspec">
+          <div><dt>Random programs</dt><dd>100,000, 0 disagreements</dd></div>
+          <div><dt>Allocation</dt><dd>47.5% less executed</dd></div>
+          <div><dt>Dependencies</dt><dd>None</dd></div>
+        </dl>
+        <div class="tags">
+          <span class="tag">JavaScript</span><span class="tag">SSA</span>
+          <span class="tag">Register Allocation</span><span class="tag">Bytecode VM</span>
+          <span class="tag">Differential Testing</span>
+        </div>
+        <div class="pcard-actions">
+          <a class="tlink ext" href="https://abho7.github.io/toy-compiler/web/playground.html" target="_blank" rel="noopener">Compile something <span class="arrow" aria-hidden="true">↗</span></a>
+          <a class="tlink ext" href="https://abho7.github.io/toy-compiler/" target="_blank" rel="noopener">Report <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+
       <article class="pcard spot reveal v-blu">
         <div class="pcard-viz">
           <svg viewBox="-52 -4 424 128" role="img" aria-label="Three replicated logs with entries committed up to a shared commit index and one follower still catching up">
