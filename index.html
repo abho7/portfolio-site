@@ -640,6 +640,67 @@
         </div>
       </article>
 
+      <article class="pcard spot reveal v-grn">
+        <div class="pcard-viz">
+          <svg viewBox="-52 -4 424 128" role="img" aria-label="A three-layer navigable small world graph. The search enters at the sparse top layer, descends greedily through a middle layer, and finishes with a bounded best-first search across the dense bottom layer.">
+            <g class="vz-txt"><text x="4" y="24">L2</text><text x="4" y="58">L1</text><text x="4" y="92">L0</text></g>
+            <!-- each layer is sparser than the one below it; the descent is the
+                 one path that matters, so it is the only moving line -->
+            <g class="vz-faint">
+              <path d="M96 20 H232"/>
+              <path d="M60 54 H140 M140 54 H232 M232 54 H288"/>
+              <path d="M40 88 H96 M96 88 H152 M152 88 H208 M208 88 H264 M264 88 H304"/>
+              <path d="M40 88 Q 96 72 152 88 M152 88 Q 208 72 264 88"/>
+            </g>
+            <g class="vz-dim">
+              <circle cx="96" cy="20" r="4"/><circle cx="232" cy="20" r="4"/>
+              <circle cx="60" cy="54" r="4"/><circle cx="140" cy="54" r="4"/>
+              <circle cx="288" cy="54" r="4"/>
+              <circle cx="40" cy="88" r="3.5"/><circle cx="96" cy="88" r="3.5"/>
+              <circle cx="208" cy="88" r="3.5"/><circle cx="264" cy="88" r="3.5"/>
+              <circle cx="304" cy="88" r="3.5"/>
+            </g>
+            <path class="vz-line vz-flow s3" stroke-width="2.2" d="M96 20 L232 20 L232 54 L152 88"/>
+            <g class="vz-fill">
+              <circle cx="96" cy="20" r="5.5"/><circle cx="232" cy="54" r="5.5"/>
+              <circle cx="152" cy="88" r="6" class="vz-beat"/>
+            </g>
+            <text class="vz-txt raw" x="160" y="112" text-anchor="middle">recall@10 = 1.000 &#183; 20.1&#215; over brute force at n=8,000</text>
+          </svg>
+        </div>
+        <div class="pcard-top">
+          <span class="pcard-badge g">H</span>
+          <div>
+            <h3>vectordb-hnsw</h3>
+            <div class="pcard-status oss">Open source</div>
+          </div>
+        </div>
+        <div class="pcard-cat">Vector search · approximate nearest neighbours</div>
+        <p>
+          HNSW built from Malkov &amp; Yashunin rather than from a library: the multi-layer graph,
+          the greedy layer descent and the bounded best-first search are written in NumPy, with no
+          FAISS and no hnswlib. The paper's Algorithm 4 neighbour heuristic is the part that is
+          not optional, and the repository shows why &mdash; keeping the M nearest candidates
+          instead passes every test on uniform random data and then collapses graph connectivity
+          to <b>4.8% of nodes</b> on clustered data. Both correctness bugs found on the way are
+          written up rather than quietly fixed.
+        </p>
+        <dl class="pspec">
+          <div><dt>Recall@10</dt><dd>1.000 vs exact search</dd></div>
+          <div><dt>Speedup</dt><dd>1.8&times; to 20.1&times;, 500&ndash;8,000 vectors</dd></div>
+          <div><dt>Dependencies</dt><dd>NumPy only</dd></div>
+        </dl>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">NumPy</span>
+          <span class="tag">HNSW</span><span class="tag">ANN Search</span>
+          <span class="tag">Algorithms</span>
+        </div>
+        <div class="pcard-actions">
+          <a class="tlink ext" href="https://github.com/abho7/vectordb-hnsw" target="_blank" rel="noopener">View project <span class="arrow" aria-hidden="true">↗</span></a>
+          <a class="tlink ext" href="https://github.com/abho7/vectordb-hnsw/blob/main/ARCHITECTURE.md" target="_blank" rel="noopener">Architecture <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+
       <article class="pcard spot reveal v-blu">
         <div class="pcard-viz">
           <svg viewBox="-52 -4 424 128" role="img" aria-label="Three replicated logs with entries committed up to a shared commit index and one follower still catching up">
@@ -694,7 +755,7 @@
           <span class="tag">TCP</span><span class="tag">Fault Tolerance</span>
         </div>
         <div class="pcard-actions">
-          <a class="tlink ext" href="https://github.com/abho7" target="_blank" rel="noopener">View project <span class="arrow" aria-hidden="true">↗</span></a>
+          <a class="tlink ext" href="https://github.com/abho7/raft-kv-store" target="_blank" rel="noopener">View project <span class="arrow" aria-hidden="true">↗</span></a>
         </div>
       </article>
 
@@ -747,7 +808,7 @@
           <span class="tag">Sandboxing</span>
         </div>
         <div class="pcard-actions">
-          <a class="tlink ext" href="https://github.com/abho7" target="_blank" rel="noopener">View project <span class="arrow" aria-hidden="true">↗</span></a>
+          <a class="tlink ext" href="https://github.com/abho7/mcts-code-reasoner" target="_blank" rel="noopener">View project <span class="arrow" aria-hidden="true">↗</span></a>
         </div>
       </article>
 
@@ -809,7 +870,7 @@
           <span class="tag">Constraint Programming</span>
         </div>
         <div class="pcard-actions">
-          <a class="tlink ext" href="https://github.com/abho7" target="_blank" rel="noopener">View project <span class="arrow" aria-hidden="true">↗</span></a>
+          <a class="tlink ext" href="https://github.com/abho7/flightpath-scheduler" target="_blank" rel="noopener">View project <span class="arrow" aria-hidden="true">↗</span></a>
         </div>
       </article>
 
