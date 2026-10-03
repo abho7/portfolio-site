@@ -1948,6 +1948,139 @@
         </details>
       </div>
     </article>
+
+    <!-- toy-compiler. The live site has an interactive playground, but it costs
+         a visitor a compile-and-step session to get anything from it, so the
+         centrepiece here is the same choice already made for
+         llm-inference-webgpu: the validation argument drawn, with the
+         playground one deliberate click away rather than an autoloading embed.
+         Every figure in this block is read from the project's own
+         golden/measurements.json and docs/correctness.md. -->
+    <article class="showcase reveal" id="proj-compiler">
+      <div class="showcase-media">
+        <div class="panel" data-wake="compiler">
+          <div class="panel-bar">
+            <span class="dot"></span>
+            <span>Differential campaign</span>
+            <span class="src">100,000 programs</span>
+          </div>
+          <div class="panel-body">
+            <figure class="diagram">
+              <svg viewBox="0 0 640 330" preserveAspectRatio="xMidYMid meet" role="img"
+                   aria-label="A randomly generated, well-typed program is run three ways: a reference interpreter written from the semantics, an SSA IR interpreter, and the bytecode VM. The IR interpreter and the VM each run unoptimized and fully optimized. All runs are compared byte for byte on output, trap kind and source position, and exit status. Across 100,000 programs at two optimization configurations there were zero disagreements. Below, the harness itself is checked by injecting two bugs into the optimizer: rewriting x plus 1 to x was caught within 4 programs, and removing the folder's trap guard was caught within 40.">
+                <defs>
+                  <marker id="tc-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+                  </marker>
+                </defs>
+
+                <rect x="140" y="10" width="360" height="46" rx="6" class="d-box"/>
+                <text x="320" y="31" text-anchor="middle" class="d-label" font-size="12">generated program</text>
+                <text x="320" y="47" text-anchor="middle" class="d-label d-dim" font-size="9.5">well-typed by construction, so a rejection is a bug</text>
+
+                <path d="M320 56 V78" class="d-line"/>
+                <path d="M100 78 H540" class="d-line"/>
+                <path d="M100 78 V102" class="d-line" marker-end="url(#tc-ar)"/>
+                <path d="M320 78 V102" class="d-line" marker-end="url(#tc-ar)"/>
+                <path d="M540 78 V102" class="d-line" marker-end="url(#tc-ar)"/>
+
+                <rect x="18" y="106" width="164" height="62" rx="6" class="d-box"/>
+                <text x="100" y="130" text-anchor="middle" class="d-label" font-size="11.5">reference interpreter</text>
+                <text x="100" y="148" text-anchor="middle" class="d-label d-dim" font-size="9.5">written from the semantics</text>
+
+                <rect x="238" y="106" width="164" height="62" rx="6" class="d-box"/>
+                <text x="320" y="130" text-anchor="middle" class="d-label" font-size="11.5">SSA IR interpreter</text>
+                <text x="320" y="148" text-anchor="middle" class="d-label d-dim" font-size="9.5">unoptimized and optimized</text>
+
+                <!-- Accent as an inline stroke rather than the d-accent class: that
+                     class sets fill as well, which would fill the box solid. -->
+                <rect x="458" y="106" width="164" height="62" rx="6" class="d-box"
+                      style="stroke: var(--accent)"/>
+                <text x="540" y="130" text-anchor="middle" class="d-label" font-size="11.5">bytecode VM</text>
+                <text x="540" y="148" text-anchor="middle" class="d-label d-dim" font-size="9.5">unoptimized and optimized</text>
+
+                <path d="M100 168 V190 H540 V168" class="d-line"/>
+                <path d="M320 168 V190" class="d-line"/>
+
+                <text x="320" y="208" text-anchor="middle" class="d-label" font-size="10.5">compared byte for byte</text>
+                <text x="320" y="224" text-anchor="middle" class="d-label d-dim" font-size="9.5">output bytes &middot; trap kind and source position &middot; exit status</text>
+
+                <rect x="150" y="238" width="340" height="40" rx="6" class="d-box"/>
+                <text x="320" y="255" text-anchor="middle" class="d-label" font-size="11">100,000 programs &times; 2 configurations</text>
+                <text x="320" y="270" text-anchor="middle" class="d-label d-dim" font-size="9.5">0 disagreements, 0 skipped, 0 failed to compile</text>
+
+                <line x1="18" y1="292" x2="622" y2="292" class="d-line d-dim"/>
+
+                <text x="18" y="308" class="d-label d-dim" font-size="9.5">and the harness itself, checked by breaking the compiler on purpose</text>
+                <text x="18" y="324" class="d-label" font-size="10">x + 1 &rarr; x &mdash; caught in 4</text>
+                <text x="622" y="324" text-anchor="end" class="d-label" font-size="10">trap guard removed &mdash; caught in 40</text>
+              </svg>
+              <figcaption>
+                Three executors, two optimization settings, one comparison. The zero means
+                something only because the same harness was shown to catch bugs that were put
+                there deliberately, and then reverted.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase-text">
+        <div class="showcase-meta">Compilers &middot; Differential testing</div>
+        <h3>Every optimization checked against a reference, and the checker checked back.</h3>
+        <p class="showcase-desc">
+          minic &mdash; integers, arrays, functions, loops &mdash; through a full pipeline with no
+          dependencies and no build step: lexer, parser, type checker, an SSA intermediate
+          representation over a control flow graph, four optimization passes (constant folding,
+          dead code elimination, common subexpression elimination, copy propagation), linear-scan
+          register allocation with real spilling, and a register-based bytecode VM. The VM is a
+          choice with a cost stated plainly: emitted x86-64 could never be assembled, run or
+          differentially tested on this machine, so it would be an artifact whose correctness is
+          asserted rather than checked. The target is instead one that keeps every stage
+          executable, and gives up instruction selection, an ABI, and cycles as the metric.
+        </p>
+        <p class="showcase-desc">
+          Every program runs three ways &mdash; a reference interpreter written straight from the
+          semantics, the IR interpreter, and the VM &mdash; unoptimized and fully optimized, and
+          the runs are compared byte for byte on output, trap kind, trap source position and exit
+          status. The campaign covered <b>100,000 generated programs</b> at two configurations
+          each in 530.7&nbsp;s: <b>zero disagreements</b>, none skipped, none that failed to
+          compile. A suite that has never reported a failure has not been shown capable of
+          reporting one, so the optimizer was broken on purpose. Rewriting <code>x + 1</code> to
+          <code>x</code> was caught within <b>4</b> programs; deleting constant folding's trap
+          guard was caught within <b>40</b> and shrunk automatically from 35 statements to
+          <code>int main() { int v1 = (11 % 0); return 0; }</code>. Both injections were reverted,
+          and a permanent test now does the same job without touching <code>src/</code>.
+        </p>
+        <p class="showcase-desc">
+          The performance result is narrower than the pipeline implies, and the report leads with
+          that rather than around it. Register allocation is where the dynamic win actually comes
+          from: against the same compiler with zero allocatable registers it removes <b>47.5%</b>
+          of instructions executed &mdash; 594,474 down to 311,815 &mdash; and every frame-slot
+          operation with them. The four passes together cut <b>15.0%</b> of static code size but
+          only <b>0.2%</b> of instructions executed. None of them moves work across an iteration
+          or a call: no loop-invariant code motion, no strength reduction, no unrolling, no
+          inlining. So <code>fib</code> runs the identical 219,159 steps and <code>nqueens</code>
+          the identical 75,785 at every optimization setting, while small straight-line code
+          gives up as much as 53.7%. Measured alone, three of the four passes change nothing at
+          all, and the report says so instead of omitting them.
+        </p>
+        <div class="figbox-grid">
+          <div class="figbox"><span class="n">100,000</span><span class="c">Generated programs compared byte for byte, zero disagreements</span></div>
+          <div class="figbox"><span class="n">47.5%</span><span class="c">Instructions executed removed by register allocation alone</span></div>
+          <div class="figbox"><span class="n">0.2%</span><span class="c">What all four optimization passes remove from executed instructions</span></div>
+          <div class="figbox"><span class="n">4 and 40</span><span class="c">Programs needed to catch two deliberately injected bugs</span></div>
+        </div>
+        <div class="showcase-actions">
+          <a class="btn-primary" href="https://abho7.github.io/toy-compiler/" target="_blank" rel="noopener">
+            Read the report <span aria-hidden="true">&rarr;</span>
+          </a>
+          <a class="tlink ext" href="https://github.com/abho7/toy-compiler" target="_blank" rel="noopener">
+            GitHub <span class="arrow" aria-hidden="true">&#8599;</span>
+          </a>
+        </div>
+      </div>
+    </article>
   </section>
 
   <!-- ======================================================== research -->
