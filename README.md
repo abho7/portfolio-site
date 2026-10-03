@@ -55,6 +55,11 @@ Two files in `tools/` produce the images that cannot be written by hand:
 
 Each file's header comment carries the exact command that regenerates it.
 
+`tools/shot.mjs` is not a generator but a check: it drives headless Chrome over the
+DevTools protocol to screenshot this page at a real device size, so a layout change can
+be looked at before it is pushed. Its header explains why the obvious
+`chrome --headless --screenshot` invocation gives misleading results here.
+
 ## Layout
 
 ```
@@ -69,7 +74,7 @@ privacy.html      what the site collects, which is nothing
 terms.html        what the material may be used for
 cookies.html      why there is no consent banner
 fonts/            self-hosted woff2
-tools/            generators for og.png and the icons
+tools/            og.png and icon generators, plus a screenshot checker
 ```
 
 ## Licence
