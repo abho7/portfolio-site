@@ -58,6 +58,9 @@ Each file's header comment carries the exact command that regenerates it.
 `tools/tensor-compiler-figures.mjs` writes every tensor-compiler-webgpu figure on the page
 from that project's deployed `golden/measurements.json`, so none of them is typed by hand;
 `--check` exits non-zero if any figure on the page differs from the file.
+`tools/llm-inference-figures.mjs` does the same for llm-inference-webgpu's speed figures:
+its same-session comparison with ONNX Runtime, computed the way its report computes it, with
+the power mode written beside every timing.
 
 `tools/shot.mjs` is not a generator but a check: it drives headless Chrome over the
 DevTools protocol to screenshot this page at a real device size, so a layout change can
@@ -78,7 +81,7 @@ privacy.html      what the site collects, which is nothing
 terms.html        what the material may be used for
 cookies.html      why there is no consent banner
 fonts/            self-hosted woff2
-tools/            og.png and icon generators, a figure generator, and a screenshot checker
+tools/            og.png and icon generators, figure generators, and a screenshot checker
 ```
 
 ## Licence

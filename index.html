@@ -1924,19 +1924,34 @@
           correct if it changes nothing.
         </p>
         <p class="showcase-desc">
-          It is slower than ONNX Runtime, by 1.3&times; on decode and 5.6&times; on prefill, and
-          the measurement says where the time goes rather than leaving it as a shrug. Two of the
-          three things I predicted about this engine turned out to be wrong, and the report keeps
-          both: the outlier activation channel that was supposed to break quantization has the
-          smallest normalisation gain of all 896, so no projection ever sees it; and batching
-          roughly 400 GPU submissions per token down to one did not measurably help, which means
-          submission count was never the bottleneck.
+          Against ONNX Runtime on the same laptop's CPU, run alternately in one session, it wins
+          the generated tokens and still loses the prompt. A decode step takes
+          <b data-figure="llm-decode-engine">53.0 ms</b> against ONNX Runtime's
+          <span data-figure="llm-decode-ort">73.7 ms</span> (both under the
+          <span data-figure="llm-mode">Best performance</span> power mode), so the engine is
+          <b data-figure="llm-decode-ratio">1.4×</b> faster there. Prefilling a
+          <span data-figure="llm-prompt-tokens">52</span>-token prompt takes
+          <span data-figure="llm-prefill-engine">964.0 ms</span> against
+          <span data-figure="llm-prefill-ort">230.9 ms</span> (<span data-figure="llm-mode">Best performance</span>), so
+          ONNX Runtime is still <b data-figure="llm-prefill-ratio">4.2×</b> faster at that. The power
+          mode is named because on this machine it moves the CPU baseline several-fold while
+          barely moving the GPU, so a ratio only means something within one mode and one session.
+          Decode used to lose too: half of every step turned out to be the browser creating GPU
+          objects for each token, and reusing them changed no bit of the output.
+        </p>
+        <p class="showcase-desc">
+          Two of the three things I predicted about this engine turned out to be wrong, and the
+          report keeps both: the outlier activation channel that was supposed to break
+          quantization has the smallest normalisation gain of all 896, so no projection ever sees
+          it; and batching roughly 400 GPU submissions per token down to one did not measurably
+          help, which means submission count was never the bottleneck.
         </p>
         <div class="figbox-grid">
           <div class="figbox"><span class="n">6.4e-5</span><span class="c">GPU against ONNX Runtime, relative, per layer</span></div>
           <div class="figbox"><span class="n">0</span><span class="c">Floats differing between cached and recomputed decode</span></div>
           <div class="figbox"><span class="n">3,098</span><span class="c">Tokenizer cases against the reference, zero differences</span></div>
-          <div class="figbox"><span class="n">1.3&times;</span><span class="c">How much faster ONNX Runtime still is at decoding</span></div>
+          <div class="figbox"><span class="n" data-figure="llm-decode-ratio">1.4×</span><span class="c">Faster than ONNX Runtime at decoding, same session, <span data-figure="llm-mode">Best performance</span></span></div>
+          <div class="figbox"><span class="n" data-figure="llm-prefill-ratio">4.2×</span><span class="c">How much faster ONNX Runtime still is at the prompt, same session, <span data-figure="llm-mode">Best performance</span></span></div>
         </div>
         <div class="showcase-actions">
           <a class="btn-primary" href="https://abho7.github.io/llm-inference-webgpu/web/demo.html" target="_blank" rel="noopener">
@@ -1992,7 +2007,8 @@
             token. Batching the whole forward pass into one changed the throughput by nothing
             measurable. The change stayed, because 400 submissions per token is indefensible
             either way, but I would have reported it as the fix if I had shipped it without
-            re-measuring.</li>
+            re-measuring. The missing half was found later: the browser creating GPU objects for
+            every token, which is what decode's change above came from.</li>
             <li><b>bfloat16 to f16 is nearly free here</b>, which is not obvious: bf16 carries 7
             mantissa bits and f16 carries 10, so the mantissa is <em>wider</em> in f16 and only
             the narrower exponent range costs anything. Across all 494,032,768 weights, 0.0249%
