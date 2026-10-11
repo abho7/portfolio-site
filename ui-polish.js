@@ -142,6 +142,7 @@
       { group: "Projects", label: "mcp-memory-server · live HNSW visualizer", note: "↵", href: "#proj-mcp" },
       { group: "Projects", label: "fluid-sim · Navier-Stokes on WebGPU", note: "↵", href: "#proj-fluid" },
       { group: "Projects", label: "llm-inference-webgpu · transformer inference engine", note: "↵", href: "#proj-llm" },
+      { group: "Projects", label: "tensor-compiler-webgpu · IR, autodiff, WGSL kernels", note: "↵", href: "#proj-tensor" },
       { group: "Links", label: "GitHub", note: "↗", href: "https://github.com/abho7", external: true },
       { group: "Links", label: "LinkedIn", note: "↗", href: "https://www.linkedin.com/in/abhineeth-duddela-6b2a90319/", external: true },
       { group: "Links", label: "Email", note: "↵", href: "mailto:abhineeth78@gmail.com" },

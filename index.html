@@ -668,6 +668,70 @@
         </div>
       </article>
 
+      <!-- tensor-compiler-webgpu. Every figure here, and in its showcase below,
+           is written by tools/tensor-compiler-figures.mjs from the project's
+           golden/measurements.json (data-figure="tc-..."), never typed. -->
+      <article class="pcard spot reveal v-blu">
+        <div class="pcard-viz">
+          <svg viewBox="-52 -4 424 128" role="img" aria-label="An IR program and its autodiff gradient graph are run twice: by a float64 reference interpreter and by WGSL kernels on the GPU. Every element is compared against an error budget fixed before any kernel ran.">
+            <!-- the graph on top, the two executors under it; the comparison
+                 between them is the point, so it is the only moving line -->
+            <g class="vz-line" fill="#08080b">
+              <rect x="20" y="8" width="120" height="22" rx="4"/>
+              <rect x="180" y="8" width="120" height="22" rx="4"/>
+            </g>
+            <g class="vz-txt" text-anchor="middle">
+              <text x="80" y="23">IR graph</text><text x="240" y="23">gradient graph</text>
+            </g>
+            <path class="vz-line vz-flow s1" d="M140 19 H180"/>
+            <path class="vz-faint" d="M80 30 V46 H240 V30 M160 46 V54"/>
+            <g class="vz-line" fill="#08080b">
+              <rect x="20" y="56" width="120" height="22" rx="4"/>
+              <rect x="180" y="56" width="120" height="22" rx="4"/>
+            </g>
+            <g class="vz-txt" text-anchor="middle">
+              <text x="80" y="71">float64 reference</text><text x="240" y="71">WGSL on the GPU</text>
+            </g>
+            <path class="vz-line vz-flow s2" d="M140 67 H180"/>
+            <circle cx="160" cy="67" r="4.5" class="vz-fill vz-beat"/>
+            <text class="vz-txt" x="160" y="96" text-anchor="middle">every element within a budget fixed before the GPU ran</text>
+            <text class="vz-txt raw" x="160" y="112" text-anchor="middle"><tspan data-figure="tc-direct">252 of 252</tspan> direct cases &#183; <tspan data-figure="tc-fuzz-runs">5,318 of 5,318</tspan> fuzz runs</text>
+          </svg>
+        </div>
+        <div class="pcard-top">
+          <span class="pcard-badge">&#8711;</span>
+          <div>
+            <h3>tensor-compiler-webgpu</h3>
+            <div class="pcard-status">In progress</div>
+          </div>
+        </div>
+        <div class="pcard-cat">Compilers · WebGPU · numerical verification</div>
+        <p>
+          A tensor compiler from scratch: a static-shape IR, reverse-mode autodiff as a graph
+          transform, a float64 reference interpreter, and every op lowered to its own WGSL kernel.
+          Milestones 1 and 2 of 4 are done. The float32 error budget was derived from the WGSL
+          specification and committed before any kernel ran; direct per-op tests then caught
+          <b data-figure="tc-bugs">7 of 7</b> injected kernel bugs, and the first GPU run's failure is
+          kept in the record. Training in the browser and the fusion study it exists for are not
+          built yet.
+        </p>
+        <dl class="pspec">
+          <div><dt>Direct per-op tests</dt><dd data-figure="tc-direct">252 of 252</dd></div>
+          <div><dt>Fuzz runs, GPU vs CPU</dt><dd data-figure="tc-fuzz-runs">5,318 of 5,318</dd></div>
+          <div><dt>Injected kernel bugs caught</dt><dd data-figure="tc-bugs">7 of 7</dd></div>
+        </dl>
+        <div class="tags">
+          <span class="tag">JavaScript</span><span class="tag">WGSL</span>
+          <span class="tag">WebGPU</span><span class="tag">Autodiff</span>
+          <span class="tag">Differential Testing</span>
+        </div>
+        <div class="pcard-actions">
+          <a class="tlink" href="#proj-tensor">How it was checked <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="tlink ext" href="https://abho7.github.io/tensor-compiler-webgpu/" target="_blank" rel="noopener">Report <span class="arrow" aria-hidden="true">↗</span></a>
+          <a class="tlink ext" href="https://github.com/abho7/tensor-compiler-webgpu" target="_blank" rel="noopener">Source <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+
       <article class="pcard spot reveal v-grn">
         <div class="pcard-viz">
           <svg viewBox="-52 -4 424 128" role="img" aria-label="A three-layer navigable small world graph. The search enters at the sparse top layer, descends greedily through a middle layer, and finishes with a bounded best-first search across the dense bottom layer.">
@@ -2076,6 +2140,136 @@
             Read the report <span aria-hidden="true">&rarr;</span>
           </a>
           <a class="tlink ext" href="https://github.com/abho7/toy-compiler" target="_blank" rel="noopener">
+            GitHub <span class="arrow" aria-hidden="true">&#8599;</span>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- tensor-compiler-webgpu. Same choice as toy-compiler: the verification
+         argument drawn, the report one click away. Milestones 1 and 2 of 4 are
+         done, so this block describes checking, not performance: the project
+         has measured no timings yet. Every figure is written by
+         tools/tensor-compiler-figures.mjs from golden/measurements.json. -->
+    <article class="showcase flip reveal" id="proj-tensor">
+      <div class="showcase-media">
+        <div class="panel" data-wake="tensor">
+          <div class="panel-bar">
+            <span class="dot"></span>
+            <span>Verification chain</span>
+            <span class="src">float32 budget, fixed in advance</span>
+          </div>
+          <div class="panel-body">
+            <figure class="diagram">
+              <svg viewBox="0 0 640 330" preserveAspectRatio="xMidYMid meet" role="img"
+                   aria-label="An IR program, and the gradient graph autodiff builds from it, run on a float64 reference interpreter with inputs rounded to float32, and as one WGSL kernel per op on the GPU. Every element is compared against a bound propagated from the WGSL specification's accuracy for each op, committed before any kernel ran. Below, kernel bugs injected on purpose: the direct per-op tests caught all of them, while the differential fuzzer never saw the missing bounds check.">
+                <defs>
+                  <marker id="tcw-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+                  </marker>
+                </defs>
+
+                <rect x="140" y="10" width="360" height="46" rx="6" class="d-box"/>
+                <text x="320" y="31" text-anchor="middle" class="d-label" font-size="12">IR program and its gradient graph</text>
+                <text x="320" y="47" text-anchor="middle" class="d-label d-dim" font-size="9.5">autodiff is a graph transform, so both lower the same way</text>
+
+                <path d="M320 56 V78" class="d-line"/>
+                <path d="M160 78 H480" class="d-line"/>
+                <path d="M160 78 V102" class="d-line" marker-end="url(#tcw-ar)"/>
+                <path d="M480 78 V102" class="d-line" marker-end="url(#tcw-ar)"/>
+
+                <rect x="40" y="106" width="240" height="62" rx="6" class="d-box"/>
+                <text x="160" y="130" text-anchor="middle" class="d-label" font-size="11.5">float64 reference interpreter</text>
+                <text x="160" y="148" text-anchor="middle" class="d-label d-dim" font-size="9.5">inputs rounded to float32 first</text>
+
+                <!-- Accent as an inline stroke rather than the d-accent class: that
+                     class sets fill as well, which would fill the box solid. -->
+                <rect x="360" y="106" width="240" height="62" rx="6" class="d-box"
+                      style="stroke: var(--accent)"/>
+                <text x="480" y="130" text-anchor="middle" class="d-label" font-size="11.5">WGSL kernels on the GPU</text>
+                <text x="480" y="148" text-anchor="middle" class="d-label d-dim" font-size="9.5">one kernel per op, no fusion</text>
+
+                <path d="M160 168 V190 H480 V168" class="d-line"/>
+                <path d="M320 190 V196" class="d-line"/>
+
+                <text x="320" y="210" text-anchor="middle" class="d-label" font-size="10.5">every element: |gpu &#8722; ref| &#8804; <tspan data-figure="tc-safety">2</tspan> &#183; E</text>
+                <text x="320" y="226" text-anchor="middle" class="d-label d-dim" font-size="9.5">E propagated from the WGSL spec's per-op accuracy, committed before any kernel ran</text>
+
+                <rect x="110" y="238" width="420" height="40" rx="6" class="d-box"/>
+                <text x="320" y="255" text-anchor="middle" class="d-label" font-size="11"><tspan data-figure="tc-direct">252 of 252</tspan> direct per-op cases &#183; <tspan data-figure="tc-fuzz-runs">5,318 of 5,318</tspan> fuzz runs</text>
+                <text x="320" y="270" text-anchor="middle" class="d-label d-dim" font-size="9.5">the direct cases carry the claim; the fuzzing is supporting evidence</text>
+
+                <line x1="18" y1="292" x2="622" y2="292" class="d-line d-dim"/>
+
+                <text x="18" y="308" class="d-label d-dim" font-size="9.5">and the checks themselves, tested with kernel bugs put there on purpose</text>
+                <text x="18" y="324" class="d-label" font-size="10">direct tests: <tspan data-figure="tc-bugs">7 of 7</tspan> caught</text>
+                <text x="622" y="324" text-anchor="end" class="d-label" font-size="10">fuzzer, missing bounds check: <tspan data-figure="tc-missed">0 of 1,954</tspan></text>
+              </svg>
+              <figcaption>
+                Two executors and one budget, written down before the GPU ran anything. The
+                direct tests are where the correctness claim rests: the fuzzer has a blind spot
+                they do not, and the diagram shows it rather than leaving it out.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase-text">
+        <div class="showcase-meta">Compilers &middot; WebGPU &middot; Milestones 1 and 2 of 4</div>
+        <h3>A tensor compiler held to an error budget it wrote down before running anything.</h3>
+        <p class="showcase-desc">
+          A static-shape tensor IR, reverse-mode autodiff written as a graph-to-graph transform,
+          a float64 interpreter that defines what every program means, and every op lowered to
+          its own WGSL kernel, so the gradient graphs run on the GPU as well as the forward ones.
+          No ML framework in the engine; PyTorch only wrote golden files, offline. Milestones 1
+          and 2 of 4 are done: the IR, autodiff and the float64 reference, then the kernels
+          checked against it. Milestone 3, training a model in the browser, and milestone 4, the
+          fusion study, are not built.
+        </p>
+        <p class="showcase-desc">
+          The float32 budget was derived from the WGSL specification's stated accuracy for each
+          operation and committed before any kernel existed: each element may differ from the
+          float64 reference by at most <b data-figure="tc-safety">2</b> times a bound propagated
+          node by node, with inputs rounded to float32 first so only kernel error is measured.
+          Direct per-op tests carry the correctness claim, on the inputs most likely to break a
+          kernel: sizes off the workgroup and tile grid, size-1 dimensions, rank 3 and 4, huge,
+          tiny and subnormal magnitudes, exact zeros and long reductions. <b data-figure="tc-direct">252 of 252</b>
+          pass. Differential fuzzing is supporting evidence: <b data-figure="tc-fuzz-runs">5,318 of 5,318</b> runs
+          across <span data-figure="tc-fuzz-programs">2,000</span> generated programs, forward and
+          gradient, every node compared. Kernel bugs were then injected one at a time to test the
+          tests, and the direct cases caught <b data-figure="tc-bugs">7 of 7</b>; a correct change of
+          summation order was flagged by nothing, which shows the budget is not simply tight.
+        </p>
+        <p class="showcase-desc">
+          Two results went against it and stay in the record. The first GPU run passed
+          <span data-figure="tc-first-run">251 of 252</span> direct cases: this adapter's <code>tanh</code>
+          returns NaN once <code>exp</code> overflows float32, which the specification permits and
+          my pre-registered derivation had not accounted for. The kernel now clamps its argument,
+          the budget is unchanged, and the change is logged as revision R2. And the fuzzer missed a
+          missing bounds check in every one of the <span data-figure="tc-missed-affected">1,954</span>
+          programs it could affect: with buffers sized exactly to each tensor, the stray writes
+          changed nothing any comparison could see, and only the direct tests' canary-padded
+          buffers caught it. Out-of-bounds reads returned zero on the one adapter this ran on
+          (<span data-figure="tc-adapter">intel gen-12lp</span>), which explains two lower detection rates; that
+          behaviour was observed there and nowhere else.
+        </p>
+        <p class="showcase-desc">
+          The remaining milestones exist for one question: <em>when does kernel fusion pay off on
+          an integrated GPU, and when does it lose?</em> Nothing here answers it yet. Milestones 1
+          and 2 measure correctness only, and no timing has been taken.
+        </p>
+        <div class="figbox-grid">
+          <div class="figbox"><span class="n" data-figure="tc-direct">252 of 252</span><span class="c">Direct per-op adversarial cases within the float32 budget</span></div>
+          <div class="figbox"><span class="n" data-figure="tc-bugs">7 of 7</span><span class="c">Injected kernel bugs the direct tests caught</span></div>
+          <div class="figbox"><span class="n" data-figure="tc-fuzz-runs">5,318 of 5,318</span><span class="c">Fuzz runs, forward and gradient, GPU against CPU</span></div>
+          <div class="figbox"><span class="n" data-figure="tc-missed">0 of 1,954</span><span class="c">Programs where fuzzing saw the missing bounds check</span></div>
+        </div>
+        <div class="showcase-actions">
+          <a class="btn-primary" href="https://abho7.github.io/tensor-compiler-webgpu/" target="_blank" rel="noopener">
+            Read the report <span aria-hidden="true">&rarr;</span>
+          </a>
+          <a class="tlink ext" href="https://github.com/abho7/tensor-compiler-webgpu" target="_blank" rel="noopener">
             GitHub <span class="arrow" aria-hidden="true">&#8599;</span>
           </a>
         </div>
