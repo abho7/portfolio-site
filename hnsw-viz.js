@@ -274,7 +274,8 @@
         wrap.className = "hnsw-panel";
         wrap.innerHTML =
           `<div class="hnsw-panel-label">layer ${layer} · ${nodeIds.length} node${nodeIds.length === 1 ? "" : "s"}</div>` +
-          `<svg class="hnsw-svg" viewBox="0 0 ${VBW} ${VBH}" preserveAspectRatio="xMidYMid meet">` +
+          `<svg class="hnsw-svg" viewBox="0 0 ${VBW} ${VBH}" preserveAspectRatio="xMidYMid meet"` +
+          ` role="img" aria-label="HNSW layer ${layer}: ${nodeIds.length} node${nodeIds.length === 1 ? "" : "s"}, ${seen.size} edge${seen.size === 1 ? "" : "s"}">` +
           `<g class="hnsw-edges">${edgesSvg}</g><g class="hnsw-nodes">${nodesSvg}</g>` +
           `<g class="hnsw-query-layer" id="hnsw-query-${layer}"></g>` +
           `</svg>`;
