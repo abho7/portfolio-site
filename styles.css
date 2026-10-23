@@ -557,7 +557,13 @@ html.near-end body::before { opacity: .2; }
   background: none; border: 0; padding: .3rem; cursor: pointer;
   font-family: var(--mono); font-size: .7rem; color: var(--label);
   transition: color .18s ease;
+  position: relative;
 }
+/* The glyph draws a 29x24px button, and below 62rem it is the only way into
+   the navigation. An invisible ::before widens what a finger can hit to 45x44
+   without moving or resizing anything drawn. 8px each side stays inside the
+   rail's .85rem gap, so it never overlaps the neighbouring control. */
+.cmdk-trigger::before { content: ""; position: absolute; inset: -10px -8px; }
 .cmdk-trigger:hover { color: var(--ink); }
 .rail-cta {
   text-decoration: none; font-size: .88rem; font-weight: 600;
