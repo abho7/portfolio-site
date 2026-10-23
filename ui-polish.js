@@ -207,9 +207,19 @@
         window.location.href = item.href;
       } else {
         const target = document.querySelector(item.href);
+        if (!target) return;
         // Same overshoot as an anchor link; main.js explains.
-        if (target && window.holdStillForJump) window.holdStillForJump(target);
-        if (target) target.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+        if (window.holdStillForJump) window.holdStillForJump(target);
+        // Navigate the way a link does when the hash changes: a fragment
+        // navigation also moves the sequential focus starting point, so the
+        // next Tab continues from the destination rather than from the
+        // trigger that close() just refocused. scrollIntoView moves nothing.
+        if (location.hash !== item.href) {
+          if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
+          location.hash = item.href;
+        } else {
+          target.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+        }
       }
     }
 
