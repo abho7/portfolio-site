@@ -87,7 +87,7 @@
   <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Quick navigation">
     <div class="cmdk-input-row">
       <span class="cmdk-prompt">›</span>
-      <input type="text" id="cmdk-input" class="cmdk-input" placeholder="Jump to a section, project, or link…" autocomplete="off">
+      <input type="text" id="cmdk-input" class="cmdk-input" aria-label="Jump to a section, project, or link" placeholder="Jump to a section, project, or link…" autocomplete="off">
       <span class="cmdk-hint">esc</span>
     </div>
     <div class="cmdk-list" id="cmdk-list"></div>
@@ -1299,6 +1299,7 @@
           </p>
           <div class="sim-controls">
             <input type="text" id="nlp-compare-input" class="nlp-input" maxlength="200"
+                   aria-label="Message to classify"
                    value="This new album is an absolute disaster lol" placeholder="Type a message…">
             <button class="ctl is-primary" id="nlp-compare-run" type="button">Compare</button>
           </div>
