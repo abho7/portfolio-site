@@ -844,9 +844,11 @@ section { padding-block: var(--section-y); scroll-margin-top: 4.5rem; }
 /* Two up, not three. At three columns each card was ~19rem of measure, which
    forced the technical prose into 5-6 word lines and left no room for the spec
    sheet to read as a table. Two columns gives each project close to double the
-   area and lets the description breathe. minmax(24rem,1fr) still collapses to
-   one column on narrow viewports without a breakpoint. */
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(24rem,1fr)); gap: clamp(1.25rem,2.5vw,2rem); }
+   area and lets the description breathe. The minimum still collapses to one
+   column on narrow viewports without a breakpoint; min(24rem,100%) rather than
+   a bare 24rem so that column can shrink below 384px instead of running off a
+   360px phone. */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(24rem,100%),1fr)); gap: clamp(1.25rem,2.5vw,2rem); }
 .pcard {
   --pad: clamp(1.6rem,3vw,2.4rem);
   background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
