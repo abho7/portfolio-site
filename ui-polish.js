@@ -162,7 +162,8 @@
       activeIndex = 0;
 
       if (!filtered.length) {
-        list.innerHTML = `<div class="cmdk-empty">No matches</div>`;
+        list.innerHTML = `<div class="cmdk-empty" role="option" aria-disabled="true">No matches</div>`;
+        input.removeAttribute("aria-activedescendant");
         return;
       }
 
@@ -170,22 +171,29 @@
       let lastGroup = null;
       filtered.forEach((it, i) => {
         if (it.group !== lastGroup) {
-          html += `<div class="cmdk-group">${it.group}</div>`;
+          html += `<div class="cmdk-group" role="presentation">${it.group}</div>`;
           lastGroup = it.group;
         }
-        html += `<div class="cmdk-item${i === activeIndex ? " active" : ""}" data-index="${i}">
+        html += `<div class="cmdk-item${i === activeIndex ? " active" : ""}" data-index="${i}" id="cmdk-opt-${i}"
+          role="option" aria-selected="${i === activeIndex}">
           <span>${it.label}</span><span class="cmdk-item-note">${it.note}</span>
         </div>`;
       });
       list.innerHTML = html;
+      // The input keeps focus, so the highlighted row is announced through
+      // aria-activedescendant rather than by moving focus into the list.
+      input.setAttribute("aria-activedescendant", `cmdk-opt-${activeIndex}`);
     }
 
     function setActive(i) {
       if (!filtered.length) return;
       activeIndex = (i + filtered.length) % filtered.length;
       [...list.querySelectorAll(".cmdk-item")].forEach((el) => {
-        el.classList.toggle("active", Number(el.dataset.index) === activeIndex);
+        const on = Number(el.dataset.index) === activeIndex;
+        el.classList.toggle("active", on);
+        el.setAttribute("aria-selected", String(on));
       });
+      input.setAttribute("aria-activedescendant", `cmdk-opt-${activeIndex}`);
       const activeEl = list.querySelector(".cmdk-item.active");
       if (activeEl) activeEl.scrollIntoView({ block: "nearest" });
     }

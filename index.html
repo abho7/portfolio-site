@@ -87,10 +87,11 @@
   <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Quick navigation">
     <div class="cmdk-input-row">
       <span class="cmdk-prompt">›</span>
-      <input type="text" id="cmdk-input" class="cmdk-input" aria-label="Jump to a section, project, or link" placeholder="Jump to a section, project, or link…" autocomplete="off">
+      <input type="text" id="cmdk-input" class="cmdk-input" aria-label="Jump to a section, project, or link"
+             role="combobox" aria-expanded="true" aria-controls="cmdk-list" aria-autocomplete="list" placeholder="Jump to a section, project, or link…" autocomplete="off">
       <span class="cmdk-hint">esc</span>
     </div>
-    <div class="cmdk-list" id="cmdk-list"></div>
+    <div class="cmdk-list" id="cmdk-list" role="listbox" aria-label="Destinations"></div>
   </div>
 </div>
 
