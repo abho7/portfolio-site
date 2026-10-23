@@ -22,26 +22,36 @@ Three panels on the page execute the real algorithm rather than replaying a reco
 
 `main.js` and `ui-polish.js` carry the scroll, reveal and keyboard behaviour.
 
-Exactly two requests leave the page, both to things this account publishes:
+Requests leave the page from three places, each a project this account publishes,
+though one of those projects then contacts a third party of its own:
 
 - On load, `main.js` re-reads the headline Raft figures from the deployed
   `raft-chaos-testing` report, whose `results.json` is served with
   `Access-Control-Allow-Origin: *`. The scenario and violation counts here are therefore
   the ones that project's CI last produced — if a future run regresses, this page says
   so on its own. If the fetch fails, the figures already in the markup stand.
-- When you ask it to classify something, `nlp-compare.js` posts to the deployed
-  classifier.
+- `nlp-compare.js` posts to the deployed classifier at
+  `crisis-nlp-demo.onrender.com/predict`: once on its own, the first time its panel
+  scrolls into view, and again each time you press Compare. Each POST is a cross-origin
+  JSON request, so the browser sends a CORS preflight (`OPTIONS`) to the same URL first.
+- Two panels embed live demos in `loading="lazy"` iframes, so neither loads until you
+  scroll near it: the classifier's own page at `crisis-nlp-demo.onrender.com/`, and
+  `abho7.github.io/fluid-sim/`, which then loads its own scripts from that site. The
+  classifier's page reads its own `/metrics` and loads its typefaces from Google Fonts
+  (`fonts.googleapis.com`, `fonts.gstatic.com`), so once that panel nears the viewport
+  the browser does contact Google.
 
-Both degrade to a static fallback, so the page reads correctly offline. `raft-sim.js`
-and `hnsw-viz.js` need no network at all.
+The two fetches degrade to a static fallback, so the page reads correctly offline; the
+iframes show the browser's own offline page instead. `raft-sim.js` and `hnsw-viz.js`
+need no network at all.
 
-## No third parties
+## Third parties
 
 The three typefaces (Instrument Serif, Space Grotesk, JetBrains Mono) are served from
 `fonts/` rather than from a font CDN, so there is no connection to warm and no request
-that leaks a visitor's address. The site sets no cookies and loads no analytics; see
-[privacy.html](privacy.html) and [cookies.html](cookies.html), which say the same thing
-in more detail.
+that leaks a visitor's address. The exception is the embedded classifier page above,
+which loads Google Fonts itself. The site sets no cookies and loads no analytics; see
+[privacy.html](privacy.html) and [cookies.html](cookies.html) for the detail.
 
 ## Generated assets
 
