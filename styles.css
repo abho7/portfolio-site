@@ -828,6 +828,10 @@ html.near-end body::before { opacity: .2; }
 
 /* ---------------------------------------------------------------- sections */
 section { padding-block: var(--section-y); scroll-margin-top: 4.5rem; }
+/* A project link lands inside a section, below that section's sticky bar
+   (.secbar, 3.375rem tall) as well as the rail, so it clears both plus a
+   little air. A section link needs only the rail: its bar is its first line. */
+.showcase[id] { scroll-margin-top: calc(var(--rail-h, 4.5rem) + 3.375rem + 1rem); }
 .sec-head { margin-bottom: clamp(2.5rem,6vh,4rem); }
 /* Section label as a bordered chip with a glyph, rather than a bare eyebrow. */
 .sec-eyebrow {

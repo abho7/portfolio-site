@@ -199,6 +199,8 @@
         window.location.href = item.href;
       } else {
         const target = document.querySelector(item.href);
+        // Same overshoot as an anchor link; main.js explains.
+        if (target && window.holdStillForJump) window.holdStillForJump(target);
         if (target) target.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
       }
     }

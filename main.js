@@ -175,6 +175,39 @@ function startReveals() {
   setTimeout(() => targets.forEach(show), 2500);
 }
 
+/* ------------------------------------------------------- anchor landing */
+/* Showcases and cards play a scroll-driven entrance (popIn in styles.css):
+   until one has fully entered it is drawn translated and scaled, up to ~180px
+   below its real box. A browser aims an anchor jump at the drawn box, so a
+   link to a showcase that has not entered yet overshoots, and once the entrance
+   completes the heading sits above the viewport. Suspending the target's own
+   animation for the jump makes the browser aim at the real box. It is handed
+   back when the scroll settles, by which point the entrance would be complete
+   at that scroll position anyway, so nothing visibly changes. */
+function holdStillForJump(el) {
+  if (!el) return;
+  el.style.animation = "none";
+  let released = false;
+  const release = () => {
+    if (released) return;
+    released = true;
+    el.style.animation = "";
+  };
+  window.addEventListener("scrollend", release, { once: true });
+  // No scrollend if the page was already there, or in a browser without it.
+  setTimeout(release, 6000);
+}
+window.holdStillForJump = holdStillForJump;
+
+// Capture phase, without preventDefault: the browser still performs the jump
+// itself (hash, history and focus starting point as usual), just after this.
+document.addEventListener("click", (e) => {
+  const a = e.target.closest && e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const id = decodeURIComponent(a.getAttribute("href").slice(1));
+  if (id) holdStillForJump(document.getElementById(id));
+}, true);
+
 startRotator();
 startReveals();
 loadRaftStats();
