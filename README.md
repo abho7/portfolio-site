@@ -22,8 +22,7 @@ Three panels on the page execute the real algorithm rather than replaying a reco
 
 `main.js` and `ui-polish.js` carry the scroll, reveal and keyboard behaviour.
 
-Requests leave the page from three places, each a project this account publishes,
-though one of those projects then contacts a third party of its own:
+Requests leave the page from three places, each a project this account publishes:
 
 - On load, `main.js` re-reads the headline Raft figures from the deployed
   `raft-chaos-testing` report, whose `results.json` is served with
@@ -37,9 +36,8 @@ though one of those projects then contacts a third party of its own:
 - Two panels embed live demos in `loading="lazy"` iframes, so neither loads until you
   scroll near it: the classifier's own page at `crisis-nlp-demo.onrender.com/`, and
   `abho7.github.io/fluid-sim/`, which then loads its own scripts from that site. The
-  classifier's page reads its own `/metrics` and loads its typefaces from Google Fonts
-  (`fonts.googleapis.com`, `fonts.gstatic.com`), so once that panel nears the viewport
-  the browser does contact Google.
+  classifier's page reads its own `/metrics` and serves its own typefaces, so it makes
+  no request to Google Fonts or any other font service.
 
 The two fetches degrade to a static fallback, so the page reads correctly offline; the
 iframes show the browser's own offline page instead. `raft-sim.js` and `hnsw-viz.js`
@@ -49,8 +47,8 @@ need no network at all.
 
 The three typefaces (Instrument Serif, Space Grotesk, JetBrains Mono) are served from
 `fonts/` rather than from a font CDN, so there is no connection to warm and no request
-that leaks a visitor's address. The exception is the embedded classifier page above,
-which loads Google Fonts itself. The site sets no cookies and loads no analytics; see
+that leaks a visitor's address. The embedded classifier page serves its own typefaces
+the same way. The site sets no cookies and loads no analytics; see
 [privacy.html](privacy.html) and [cookies.html](cookies.html) for the detail.
 
 ## Generated assets
