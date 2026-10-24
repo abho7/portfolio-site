@@ -88,6 +88,10 @@
       renderKeyword(keywordHost, text);
 
       const token = ++requestToken;
+      // A live region only from the first real request on, so the idle prompt
+      // written on arrival is never announced.
+      semanticHost.setAttribute("role", "status");
+      semanticHost.setAttribute("aria-live", "polite");
       renderSemanticLoading(semanticHost);
       runBtn.disabled = true;
       try {
@@ -112,14 +116,19 @@
       if (e.key === "Enter") compare();
     });
 
-    // Deferred rather than run at init: ui-polish.js triggers the first
-    // comparison when the panel scrolls into view, so the result appears as
-    // you arrive at it. Guarded so it can only ever fire once on its own.
+    // ui-polish.js calls this when the panel scrolls into view. It fills in
+    // the keyword side, which runs here in the page, and leaves the model side
+    // waiting: nothing is sent to the classifier until Compare or Enter.
     let autoRan = false;
     window.nlpAutoCompare = () => {
       if (autoRan) return;
       autoRan = true;
-      compare();
+      const text = input.value.trim();
+      if (!text) return;
+      renderKeyword(keywordHost, text);
+      if (!semanticHost.textContent) {
+        semanticHost.innerHTML = `<div class="nlp-note">Press Compare to send this sentence to the live model on Render.</div>`;
+      }
     };
   }
 
