@@ -860,11 +860,15 @@
     const projects = document.querySelectorAll(".pcard").length;
     const sims = ["__raftState", "hnswAutoQuery", "nlpAutoCompare"]
       .filter((k) => window[k] !== undefined).length;
+    // The embedded demos are counted, not called running: each loads only
+    // when its button is pressed (main.js).
+    const embeds = document.querySelectorAll(".frame-gate, iframe.demo, iframe.embed-frame").length;
 
     const paint = () => {
       const parts = [
         `${projects} projects`,
-        `${sims}/3 simulators live`,
+        `${sims} interactive panels`,
+        `${embeds} embedded demos, loaded on click`,
         // "no frameworks", not "zero dependencies": the page does pull a
         // webfont, so the stronger claim would not be true.
         "no frameworks",
