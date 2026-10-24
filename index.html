@@ -759,7 +759,7 @@
               <circle cx="96" cy="20" r="5.5"/><circle cx="232" cy="54" r="5.5"/>
               <circle cx="152" cy="88" r="6" class="vz-beat"/>
             </g>
-            <text class="vz-txt raw" x="160" y="112" text-anchor="middle">recall@10 = 1.000 &#183; 20.1&#215; over brute force at n=8,000</text>
+            <text class="vz-txt raw" x="160" y="112" text-anchor="middle">recall@10 = 1.000 &#183; 20.1&#215; vs a Python loop at n=8,000</text>
           </svg>
         </div>
         <div class="pcard-top">
@@ -781,7 +781,7 @@
         </p>
         <dl class="pspec">
           <div><dt>Recall@10</dt><dd>1.000 vs exact search</dd></div>
-          <div><dt>Speedup</dt><dd>1.8&times; to 20.1&times;, 500&ndash;8,000 vectors</dd></div>
+          <div><dt>Speedup</dt><dd>1.8&times;&ndash;20.1&times; over a Python loop; over NumPy, 3.3&times; at 8,000 vectors and slower at 500</dd></div>
           <div><dt>Dependencies</dt><dd>NumPy only</dd></div>
         </dl>
         <div class="tags">
