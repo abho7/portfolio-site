@@ -711,11 +711,15 @@
         <p>
           A tensor compiler from scratch: a static-shape IR, reverse-mode autodiff as a graph
           transform, a float64 reference interpreter, and every op lowered to its own WGSL kernel.
-          Milestones 1 and 2 of 4 are done. The float32 error budget was derived from the WGSL
-          specification and committed before any kernel ran; direct per-op tests then caught
-          <b data-figure="tc-bugs">7 of 7</b> injected kernel bugs, and the first GPU run's failure is
-          kept in the record. Training in the browser and the fusion study it exists for are not
-          built yet.
+          Milestones 1 to 3b are done: the reference, the kernels, then an MLP and a small
+          character-level transformer trained on the GPU. The float32 error budget was derived
+          from the WGSL specification and committed before any kernel ran; direct per-op tests
+          then caught <b data-figure="tc-bugs">7 of 7</b> injected kernel bugs, and the first GPU
+          run's failure is kept in the record. The transformer's <b data-figure="tc-m3b-steps">80 of 80</b>
+          training steps pass a per-kernel check, each launch judged on its own; the budget
+          carried through a whole step could not judge them, and left <span data-figure="tc-m3b-whole-unjudged">80 of 80</span>
+          unjudged. Milestone 4, the fusion pass, has correctness results only: no timing has
+          been taken, so nothing here says whether fusion is faster.
         </p>
         <dl class="pspec">
           <div><dt>Direct per-op tests</dt><dd data-figure="tc-direct">252 of 252</dd></div>
@@ -2167,10 +2171,11 @@
     </article>
 
     <!-- tensor-compiler-webgpu. Same choice as toy-compiler: the verification
-         argument drawn, the report one click away. Milestones 1 and 2 of 4 are
-         done, so this block describes checking, not performance: the project
-         has measured no timings yet. Every figure is written by
-         tools/tensor-compiler-figures.mjs from golden/measurements.json. -->
+         argument drawn, the report one click away. Milestones 1 to 3b are done
+         and milestone 4 has correctness results only, so this block describes
+         checking, not performance: the project has recorded no timings yet. Every
+         figure is written by tools/tensor-compiler-figures.mjs from
+         golden/measurements.json, and that script fails once timings appear. -->
     <article class="showcase flip reveal" id="proj-tensor">
       <div class="showcase-media">
         <div class="panel" data-wake="tensor">
@@ -2236,16 +2241,16 @@
       </div>
 
       <div class="showcase-text">
-        <div class="showcase-meta">Compilers &middot; WebGPU &middot; Milestones 1 and 2 of 4</div>
+        <div class="showcase-meta">Compilers &middot; WebGPU &middot; Milestones 1 to 3b of 4</div>
         <h3>A tensor compiler held to an error budget it wrote down before running anything.</h3>
         <p class="showcase-desc">
           A static-shape tensor IR, reverse-mode autodiff written as a graph-to-graph transform,
           a float64 interpreter that defines what every program means, and every op lowered to
           its own WGSL kernel, so the gradient graphs run on the GPU as well as the forward ones.
           No ML framework in the engine; PyTorch only wrote golden files, offline. Milestones 1
-          and 2 of 4 are done: the IR, autodiff and the float64 reference, then the kernels
-          checked against it. Milestone 3, training a model in the browser, and milestone 4, the
-          fusion study, are not built.
+          to 3b are done: the IR, autodiff and the float64 reference; the kernels checked against
+          it; then an MLP and a small character-level transformer trained in the browser.
+          Milestone 4, the fusion study, has its fusion pass built and checked, and nothing timed.
         </p>
         <p class="showcase-desc">
           The float32 budget was derived from the WGSL specification's stated accuracy for each
@@ -2275,9 +2280,26 @@
           behaviour was observed there and nowhere else.
         </p>
         <p class="showcase-desc">
-          The remaining milestones exist for one question: <em>when does kernel fusion pay off on
-          an integrated GPU, and when does it lose?</em> Nothing here answers it yet. Milestones 1
-          and 2 measure correctness only, and no timing has been taken.
+          Training is held to the same standard. On the GPU, <b data-figure="tc-m3-steps">400 of 400</b>
+          MLP training steps passed their teacher-forced checks against the float64 reference.
+          The transformer is where the budget stopped meaning anything when composed: carried
+          through a whole training step, the bound is infinite for <span data-figure="tc-m3b-unbounded">64%</span>
+          of the elements, so the whole-step check judged none of the transformer's steps and
+          left <span data-figure="tc-m3b-whole-unjudged">80 of 80</span> unjudged. Its
+          <b data-figure="tc-m3b-steps">80 of 80</b> passes come from a different, per-kernel check:
+          every kernel launch judged on the reference's own operands against that op's budget,
+          a change the record explains. Milestone 4's fused kernels pass the same kinds of check:
+          <b data-figure="tc-m4-direct">100 of 100</b> direct cases, <b data-figure="tc-m4-fuzz">5,318 of 5,318</b>
+          fuzz runs and, again per kernel, <b data-figure="tc-m4-steps">80 of 80</b> transformer steps.
+          The first recording did not: <span data-figure="tc-m4-run1">6 of 5,318</span> fuzz runs failed
+          to compile, because the fusion pass had pulled in a value that a matmul needs stored. The
+          fuzzer found it, the direct tests could not have, and the failing recording is kept.
+        </p>
+        <p class="showcase-desc">
+          The project exists for one question: <em>when does kernel fusion pay off on an
+          integrated GPU, and when does it lose?</em> Nothing here answers it yet. The fusion pass
+          is built and checked for correctness, but no timing session is in the record, so this
+          page makes no claim about speed in either direction.
         </p>
         <div class="figbox-grid">
           <div class="figbox"><span class="n" data-figure="tc-direct">252 of 252</span><span class="c">Direct per-op adversarial cases within the float32 budget</span></div>

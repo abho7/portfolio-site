@@ -25,7 +25,15 @@ const data = source.startsWith("http")
 const n = (v) => Number(v).toLocaleString("en-US");
 const of = (a, b) => `${n(a)} of ${n(b)}`;
 
-function figures({ m2 }) {
+// Milestone 4 has correctness results and no timings, and the page says so in
+// words. Once a timing session is recorded the wording is stale, so stop here.
+function assertNoTimings({ m4 }) {
+  if (m4.bench != null) {
+    throw new Error("measurements.json now records milestone 4 timings; the page still says there are none");
+  }
+}
+
+function figures({ m2, m3, m3b, m4 }) {
   const bugs = m2.sabotage.filter((s) => s.bug);
   const missed = m2.sabotage.find((s) => s.name === "elementwise-no-bounds-check");
   const affected = missed.fuzz.general.containing + missed.fuzz.targeted.containing;
@@ -40,9 +48,18 @@ function figures({ m2 }) {
     "tc-missed": of(caughtByFuzz, affected),
     "tc-missed-affected": n(affected),
     "tc-adapter": `${m2.adapter.vendor} ${m2.adapter.architecture}`.trim(),
+    "tc-m3-steps": of(m3.training.gpu.teacherForced.passed, m3.training.gpu.teacherForced.steps),
+    "tc-m3b-steps": of(m3b.gpu.teacherForced.local.passed, m3b.gpu.teacherForced.steps),
+    "tc-m3b-whole-unjudged": of(m3b.gpu.teacherForced.whole.unjudged, m3b.gpu.teacherForced.steps),
+    "tc-m3b-unbounded": `${Math.round((100 * m3b.vacuity.unjudgeable) / m3b.vacuity.elements)}%`,
+    "tc-m4-direct": of(m4.gpu.direct.passed, m4.gpu.direct.cases),
+    "tc-m4-fuzz": of(m4.gpu.fuzz.fusedPassed, m4.gpu.fuzz.runs),
+    "tc-m4-steps": of(m4.gpu.teacherForced.passed, m4.gpu.teacherForced.steps),
+    "tc-m4-run1": of(m4.gpuRun1.errors, m4.gpuRun1.runs),
   };
 }
 
+assertNoTimings(data);
 const F = figures(data);
 const path = new URL("../index.html", import.meta.url);
 const html = readFileSync(path, "utf8");
