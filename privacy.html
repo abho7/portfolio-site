@@ -85,9 +85,9 @@
 
   <h2>The embedded demos</h2>
   <p>
-    Two panels on the home page embed live projects of mine in an <code>iframe</code>. Both are
-    set to load lazily, which means your browser only connects to them if you scroll far enough
-    for them to come into view:
+    Two panels on the home page can embed live projects of mine in an <code>iframe</code>. Neither
+    loads by itself: each panel shows a button, and your browser connects to the project only when
+    you press it. Scrolling past a panel contacts nothing:
   </p>
   <ul>
     <li>
@@ -109,13 +109,12 @@
 
   <h2>The text box in the NLP comparison</h2>
   <p>
-    This is the only part of the site that sends anything you produce off the page. When the
-    comparison panel first scrolls into view, it sends the example sentence already in the box
-    (&ldquo;This new album is an absolute disaster lol&rdquo;) to my crisis-classifier service on
-    Render by itself, so a result is waiting when you get there. That sentence is the same for
-    every visitor. After that, when you type a message and press <em>Compare</em> or Enter, your
-    text is sent the same way, and the service returns the model's prediction and its per-word
-    attributions.
+    This is the only part of the site that sends anything you produce off the page. Nothing is
+    sent until you press <em>Compare</em> or Enter. When the panel comes into view it shows the
+    keyword side for the example sentence, which is worked out in your browser, and leaves the
+    model side waiting. When you press <em>Compare</em> or Enter, the text in the box, whether the
+    example or your own, is sent to my crisis-classifier service on Render, and the service
+    returns the model's prediction and its per-word attributions.
   </p>
   <p>
     That text is not stored by this site, and it is not connected to you in any way — no

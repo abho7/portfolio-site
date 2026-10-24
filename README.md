@@ -30,17 +30,20 @@ Requests leave the page from three places, each a project this account publishes
   the ones that project's CI last produced — if a future run regresses, this page says
   so on its own. If the fetch fails, the figures already in the markup stand.
 - `nlp-compare.js` posts to the deployed classifier at
-  `crisis-nlp-demo.onrender.com/predict`: once on its own, the first time its panel
-  scrolls into view, and again each time you press Compare. Each POST is a cross-origin
-  JSON request, so the browser sends a CORS preflight (`OPTIONS`) to the same URL first.
-- Two panels embed live demos in `loading="lazy"` iframes, so neither loads until you
-  scroll near it: the classifier's own page at `crisis-nlp-demo.onrender.com/`, and
-  `abho7.github.io/fluid-sim/`, which then loads its own scripts from that site. The
+  `crisis-nlp-demo.onrender.com/predict` only when you press Compare or Enter, never on
+  its own; arriving at the panel fills in the keyword side, which runs in the page. Each
+  POST is a cross-origin JSON request, so the browser sends a CORS preflight (`OPTIONS`)
+  to the same URL first.
+- Two panels can embed live demos, and neither loads until you press its button:
+  `main.js` then swaps the button's placeholder for the iframe. They are the classifier's
+  own page at `crisis-nlp-demo.onrender.com/`, and `abho7.github.io/fluid-sim/`, which
+  then loads its own scripts from that site. The
   classifier's page reads its own `/metrics` and serves its own typefaces, so it makes
   no request to Google Fonts or any other font service.
 
-The two fetches degrade to a static fallback, so the page reads correctly offline; the
-iframes show the browser's own offline page instead. `raft-sim.js` and `hnsw-viz.js`
+So scrolling the whole page makes one request off the site, for `results.json`. The
+two fetches degrade to a static fallback, so the page reads correctly offline; a loaded
+iframe shows the browser's own offline page instead. `raft-sim.js` and `hnsw-viz.js`
 need no network at all.
 
 ## Third parties
