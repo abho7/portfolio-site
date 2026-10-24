@@ -956,6 +956,8 @@ section { padding-block: var(--section-y); scroll-margin-top: 4.5rem; }
 @keyframes vzDash { to { stroke-dashoffset: -128; } }
 @keyframes vzBeat { 0%,100% { opacity: .3; } 50% { opacity: 1; } }
 @keyframes vzSpin { to { rotate: 360deg; } }
+/* Set by main.js on a looping element while it is off-screen. */
+.loop-paused { animation-play-state: paused !important; }
 
 @media (prefers-reduced-motion: reduce) {
   .vz-flow, .vz-beat, .vz-spin { animation: none; }

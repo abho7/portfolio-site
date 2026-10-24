@@ -262,6 +262,28 @@ function waitForApp(frame, status, healthUrl, slowText, fallbackHref) {
   poll();
 }
 
+// The decorations that loop forever (diagram dashes, beats and spins, the hero
+// orbit, caret and scroll cue) pause while they are well off-screen, and carry
+// on from the same frame when they come back, so nothing visibly changes. This
+// only sets animation-play-state: where reduced motion has already removed an
+// animation, the class does nothing. Each loop is watched through a container
+// that does not move (its <svg>, or its parent), never through itself: a moving
+// part frozen where a clip hides it, like the scroll cue's bar outside its
+// track, would otherwise never be seen again and never restart.
+function pauseOffscreenLoops() {
+  if (!("IntersectionObserver" in window)) return;
+  const byHost = new Map();
+  for (const el of document.querySelectorAll(".vz-flow, .vz-beat, .vz-spin, .hs-seg, .orbit-a, .orbit-b, .caret, .scroll-cue-line i")) {
+    const host = el.closest("svg") || el.parentElement;
+    if (!byHost.has(host)) byHost.set(host, []);
+    byHost.get(host).push(el);
+  }
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) for (const el of byHost.get(e.target)) el.classList.toggle("loop-paused", !e.isIntersecting);
+  }, { rootMargin: "200px 0px" });
+  byHost.forEach((_, host) => io.observe(host));
+}
+
 // Embedded demos load only on request. Each .frame-gate is replaced by its
 // iframe when its button is pressed, so scrolling past one contacts nothing.
 document.querySelectorAll(".frame-gate").forEach((gate) => {
@@ -300,6 +322,7 @@ document.querySelectorAll(".frame-gate").forEach((gate) => {
 
 startRotator();
 startReveals();
+pauseOffscreenLoops();
 loadRaftStats();
 if (typeof window.initRaftSim === "function") window.initRaftSim();
 if (typeof window.initHnswViz === "function") window.initHnswViz();
