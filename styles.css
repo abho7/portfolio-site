@@ -1121,6 +1121,8 @@ iframe.demo { width: 100%; height: 28rem; border: 0; display: block; background:
   padding: 1.5rem; text-align: center; background: var(--page); pointer-events: none;
   font-family: var(--mono); font-size: .72rem; letter-spacing: .04em; color: var(--label);
 }
+/* The overlay ignores the pointer; its give-up link must not. */
+.frame-status a { pointer-events: auto; margin-left: .4em; color: var(--accent); }
 
 /* live cluster timeline */
 .mini { display: grid; gap: 3px; }

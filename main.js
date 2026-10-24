@@ -208,6 +208,60 @@ document.addEventListener("click", (e) => {
   if (id) holdStillForJump(document.getElementById(id));
 }, true);
 
+// A sleeping Render service first answers with its own 503 wake-up page, and
+// the iframe's load event fires for that page too. So the wait message goes
+// only once BOTH hold: the app's own /health has answered "ok", and the iframe
+// has loaded since. If the iframe's last load came before that answer, it was
+// (or may have been) the wake-up page, so the frame is reloaded and the message
+// goes on the fresh load. A warm server answers before the first load, and
+// nothing is reloaded. Polling runs only after the click, pauses while the page
+// is hidden (resuming if it comes back from the back/forward cache), stops when
+// the frame is gone, and gives up after five minutes; at 90 s the
+// message says the wait may run long, and at five minutes it offers the
+// gate's own link instead.
+function waitForApp(frame, status, healthUrl, slowText, fallbackHref) {
+  let healthy = false, loads = 0, done = false, paused = false;
+  const started = Date.now();
+  const stop = () => { done = true; clearTimeout(slowTimer); };
+  const finish = () => { stop(); status.remove(); };
+  window.addEventListener("pagehide", () => { paused = true; });
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted && paused && !done) { paused = false; poll(); }
+  });
+  const slowTimer = setTimeout(() => { if (!done && slowText) status.textContent = slowText; }, 90000);
+  frame.addEventListener("load", () => {
+    loads++;
+    if (healthy && !done) finish();
+  });
+  const giveUp = () => {
+    stop();
+    status.textContent = "Still not responding. ";
+    if (fallbackHref) {
+      const a = document.createElement("a");
+      a.href = fallbackHref; a.target = "_blank"; a.rel = "noopener";
+      a.textContent = "Open it in a new tab.";
+      status.append(a);
+    }
+  };
+  const poll = async () => {
+    if (done || paused) return;
+    if (!frame.isConnected) { stop(); return; }
+    try {
+      const res = await fetch(healthUrl, { cache: "no-store", referrerPolicy: "no-referrer", signal: AbortSignal.timeout(4000) });
+      const body = res.ok ? await res.json() : null;
+      if (body && body.status === "ok") {
+        healthy = true;
+        if (loads > 0) frame.src = frame.src;   // the last load may be the wake-up page
+        return;                                 // the next load event clears the message
+      }
+    } catch (_) { /* asleep: the wake-up page sends no CORS header, or the request timed out */ }
+    if (done || paused) return;
+    if (Date.now() - started < 300000) setTimeout(poll, 3000);
+    else giveUp();
+  };
+  poll();
+}
+
 // Embedded demos load only on request. Each .frame-gate is replaced by its
 // iframe when its button is pressed, so scrolling past one contacts nothing.
 document.querySelectorAll(".frame-gate").forEach((gate) => {
@@ -217,26 +271,28 @@ document.querySelectorAll(".frame-gate").forEach((gate) => {
   // that cannot work; the classifier's gate keeps its plain link for them.
   load.hidden = false;
   load.addEventListener("click", () => {
+    const fallback = gate.querySelector("a[href]");
     const frame = document.createElement("iframe");
     frame.className = gate.dataset.class;
     frame.title = gate.dataset.title;
     frame.referrerPolicy = "no-referrer";
     frame.src = gate.dataset.src;
     // An optional wait message, for a host that may be asleep. It becomes a
-    // polite live region only now, after the click, and goes on load.
+    // polite live region only now, after the click.
     let status = null;
     if (gate.dataset.status) {
       status = document.createElement("div");
       status.className = "frame-status";
       status.setAttribute("role", "status");
       status.setAttribute("aria-live", "polite");
-      frame.addEventListener("load", () => status.remove(), { once: true });
     }
     gate.replaceWith(frame);
     if (status) {
       frame.after(status);
       // Text set a beat after the region exists, so it is announced.
       setTimeout(() => { status.textContent = gate.dataset.status; }, 50);
+      if (gate.dataset.health) waitForApp(frame, status, gate.dataset.health, gate.dataset.statusSlow, fallback && fallback.href);
+      else frame.addEventListener("load", () => status.remove(), { once: true });
     }
     frame.focus();
   });
