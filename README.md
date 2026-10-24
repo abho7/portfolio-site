@@ -39,7 +39,13 @@ Requests leave the page from three places, each a project this account publishes
   own page at `crisis-nlp-demo.onrender.com/`, and `abho7.github.io/fluid-sim/`, which
   then loads its own scripts from that site. The
   classifier's page reads its own `/metrics` and serves its own typefaces, so it makes
-  no request to Google Fonts or any other font service.
+  no request to Google Fonts or any other font service. Pressing the classifier's button
+  also starts `main.js` polling `crisis-nlp-demo.onrender.com/health` (a plain `GET`
+  with no referrer, every few seconds, at most five minutes) until the app answers,
+  because a sleeping Render service first serves its own wake-up page and the wait
+  message must outlast it. Render still sees each poll, the visitor's IP address and
+  the `Origin` header the browser adds to any cross-site request. Polling pauses while
+  the page is hidden and stops if the frame is removed.
 
 So scrolling the whole page makes one request off the site, for `results.json`. The
 two fetches degrade to a static fallback, so the page reads correctly offline; a loaded

@@ -42,7 +42,7 @@
 
 <main id="main" class="wrap legal">
   <h1>Privacy</h1>
-  <p class="updated">Last updated 23 October 2026</p>
+  <p class="updated">Last updated 24 October 2026</p>
 
   <p>
     This is a personal portfolio. It has no accounts, no sign-up, no forms, no shopping cart and
@@ -98,7 +98,13 @@
       <strong>crisis-nlp-demo</strong>, hosted on Render. Loading it means
       <a href="https://render.com/privacy" target="_blank" rel="noopener">Render</a> sees the
       request, including your IP address. That page's typefaces come from Render too, so it
-      makes no request to Google or any other font service.
+      makes no request to Google or any other font service. Because the service sleeps when
+      idle, pressing the button also makes this site ask the service's <code>/health</code>
+      address every few seconds whether it is awake, for at most five minutes, so the panel
+      can say when the page is ready. Those requests carry nothing you have typed and are
+      sent without a referrer, though Render still sees each request, your IP address and
+      this site's origin (<code>https://abho7.github.io</code>), which browsers always send
+      on a request to another site.
     </li>
   </ul>
   <p>
