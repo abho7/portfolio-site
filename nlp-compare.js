@@ -52,7 +52,7 @@
   }
 
   function renderSemanticError(host) {
-    host.innerHTML = `<div class="nlp-note">Couldn't reach the live model just now. Try the demo above, or Compare again in a moment.</div>`;
+    host.innerHTML = `<div class="nlp-note">Couldn't reach the live model just now. Try the classifier panel below, or Compare again in a moment.</div>`;
   }
 
   function renderSemantic(host, data) {
