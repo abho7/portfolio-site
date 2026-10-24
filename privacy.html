@@ -42,7 +42,7 @@
 
 <main id="main" class="wrap legal">
   <h1>Privacy</h1>
-  <p class="updated">Last updated 13 September 2026</p>
+  <p class="updated">Last updated 23 October 2026</p>
 
   <p>
     This is a personal portfolio. It has no accounts, no sign-up, no forms, no shopping cart and
@@ -77,9 +77,10 @@
 
   <h2>Fonts</h2>
   <p>
-    The three typefaces are stored in this site's own repository and served from the same place as
-    the page. Your browser does not contact Google, or any other font service, to render this
-    site.
+    The three typefaces this site uses are stored in its own repository and served from the same
+    place as the page, so your browser does not contact Google, or any other font service, to show
+    this site's own text. The one exception is the embedded classifier described below: its page
+    loads its own typefaces from Google Fonts.
   </p>
 
   <h2>The embedded demos</h2>
@@ -96,7 +97,10 @@
     <li>
       <strong>crisis-nlp-demo</strong>, hosted on Render. Loading it means
       <a href="https://render.com/privacy" target="_blank" rel="noopener">Render</a> sees the
-      request, including your IP address.
+      request, including your IP address. That page also loads its typefaces from Google Fonts,
+      so your browser contacts Google too, and Google sees that request, including your IP
+      address, under
+      <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a>.
     </li>
   </ul>
   <p>
@@ -107,9 +111,13 @@
 
   <h2>The text box in the NLP comparison</h2>
   <p>
-    This is the only part of the site that sends anything you produce off the page. When you type
-    a message and press <em>Compare</em>, that text is sent to my crisis-classifier service on
-    Render, which returns the model's prediction and its per-word attributions.
+    This is the only part of the site that sends anything you produce off the page. When the
+    comparison panel first scrolls into view, it sends the example sentence already in the box
+    (&ldquo;This new album is an absolute disaster lol&rdquo;) to my crisis-classifier service on
+    Render by itself, so a result is waiting when you get there. That sentence is the same for
+    every visitor. After that, when you type a message and press <em>Compare</em> or Enter, your
+    text is sent the same way, and the service returns the model's prediction and its per-word
+    attributions.
   </p>
   <p>
     That text is not stored by this site, and it is not connected to you in any way — no
