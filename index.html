@@ -1330,9 +1330,16 @@
             <span class="src">crisis-nlp-demo.onrender.com</span>
           </div>
           <div class="frame-wrap">
-            <iframe class="demo" src="https://crisis-nlp-demo.onrender.com/"
-                    title="Live crisis text classifier" loading="lazy"
-                    referrerpolicy="no-referrer"></iframe>
+            <!-- Loaded on request, not on scroll: main.js swaps this for the
+                 iframe when the button is pressed. -->
+            <div class="frame-gate" data-src="https://crisis-nlp-demo.onrender.com/"
+                 data-title="Live crisis text classifier" data-class="demo"
+                 data-status="Waking the server. The first load can take up to a minute.">
+              <p class="frame-gate-note">The classifier's own page, hosted on Render. Nothing is
+                loaded from it until you ask.</p>
+              <button type="button" class="btn-primary frame-gate-load" hidden>Load the live classifier</button>
+              <a class="tlink ext" href="https://crisis-nlp-demo.onrender.com/" target="_blank" rel="noopener">Or open it in a new tab <span class="arrow" aria-hidden="true">↗</span></a>
+            </div>
           </div>
         </div>
       </div>
@@ -1725,9 +1732,13 @@
             <span class="src">512&sup2; at 60&nbsp;fps</span>
           </div>
           <div class="panel-body is-embed">
-            <iframe class="embed-frame" src="https://abho7.github.io/fluid-sim/"
-                    title="fluid-sim: an incompressible Navier-Stokes solver running on WebGPU"
-                    loading="lazy" referrerpolicy="no-referrer"></iframe>
+            <div class="frame-gate" data-src="https://abho7.github.io/fluid-sim/"
+                 data-title="fluid-sim: an incompressible Navier-Stokes solver running on WebGPU"
+                 data-class="embed-frame">
+              <p class="frame-gate-note">The solver runs on your GPU once loaded, which keeps it
+                busy, so it waits for you to start it.</p>
+              <button type="button" class="btn-primary frame-gate-load" hidden>Load the simulation</button>
+            </div>
             <p class="embed-note">
               Drag inside the panel to push the fluid. Needs WebGPU &mdash;
               <a href="https://abho7.github.io/fluid-sim/" target="_blank" rel="noopener">open it

@@ -1100,8 +1100,27 @@ html.panels-armed .panel.is-awake { opacity: 1; transform: none; }
 .panel.is-awake .panel-bar .dot { background: var(--live); box-shadow: 0 0 8px rgba(74,222,128,.6); }
 .panel-bar .src { margin-left: auto; color: var(--label); text-transform: none; letter-spacing: .04em; }
 .panel-body { padding: clamp(1rem,2.2vw,1.5rem); }
-.frame-wrap { background: var(--page); }
+.frame-wrap { position: relative; background: var(--page); }
 iframe.demo { width: 100%; height: 28rem; border: 0; display: block; background: var(--page); }
+/* Stand-in for an embedded demo until it is asked for: same height as the
+   iframe it becomes, so loading it does not move the page. */
+.frame-gate {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1.1rem; padding: 1.5rem; text-align: center; background: var(--page);
+}
+.frame-wrap .frame-gate { height: 28rem; }
+.is-embed .frame-gate { height: clamp(20rem, 52vh, 32rem); }
+.showcase.wide .is-embed .frame-gate { height: clamp(24rem, 64vh, 40rem); }
+.frame-gate-note { margin: 0; max-width: 34ch; font-size: .86rem; line-height: 1.6; color: var(--ink-2); }
+/* .btn-primary's display would otherwise beat [hidden]; main.js unhides it. */
+.frame-gate-load[hidden] { display: none; }
+/* Shown over a just-requested iframe until its load event: it covers the
+   blank frame in place, so the panel keeps its height when it goes. */
+.frame-status {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem; text-align: center; background: var(--page); pointer-events: none;
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .04em; color: var(--label);
+}
 
 /* live cluster timeline */
 .mini { display: grid; gap: 3px; }

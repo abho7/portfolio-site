@@ -208,6 +208,40 @@ document.addEventListener("click", (e) => {
   if (id) holdStillForJump(document.getElementById(id));
 }, true);
 
+// Embedded demos load only on request. Each .frame-gate is replaced by its
+// iframe when its button is pressed, so scrolling past one contacts nothing.
+document.querySelectorAll(".frame-gate").forEach((gate) => {
+  const load = gate.querySelector(".frame-gate-load");
+  if (!load) return;
+  // Hidden in the markup so a visitor without JavaScript never sees a button
+  // that cannot work; the classifier's gate keeps its plain link for them.
+  load.hidden = false;
+  load.addEventListener("click", () => {
+    const frame = document.createElement("iframe");
+    frame.className = gate.dataset.class;
+    frame.title = gate.dataset.title;
+    frame.referrerPolicy = "no-referrer";
+    frame.src = gate.dataset.src;
+    // An optional wait message, for a host that may be asleep. It becomes a
+    // polite live region only now, after the click, and goes on load.
+    let status = null;
+    if (gate.dataset.status) {
+      status = document.createElement("div");
+      status.className = "frame-status";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      frame.addEventListener("load", () => status.remove(), { once: true });
+    }
+    gate.replaceWith(frame);
+    if (status) {
+      frame.after(status);
+      // Text set a beat after the region exists, so it is announced.
+      setTimeout(() => { status.textContent = gate.dataset.status; }, 50);
+    }
+    frame.focus();
+  });
+});
+
 startRotator();
 startReveals();
 loadRaftStats();
