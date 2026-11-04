@@ -133,6 +133,7 @@
       { group: "Sections", label: "Work", note: "↵", href: "#work" },
       { group: "Sections", label: "Live Systems", note: "↵", href: "#systems" },
       { group: "Sections", label: "Research", note: "↵", href: "#research" },
+      { group: "Sections", label: "Papers and presentations", note: "↵", href: "#papers" },
       { group: "Sections", label: "Internship", note: "↵", href: "#internship" },
       { group: "Sections", label: "Cricket", note: "↵", href: "#cricket" },
       { group: "Sections", label: "Awards", note: "↵", href: "#awards" },
@@ -1179,6 +1180,7 @@
     const UNITS = {
       work:    [".pcard", "project", "projects"],
       systems: [".showcase", "live instrument", "live instruments"],
+      papers:  [".index-row", "item", "items"],
       awards:  [".index-row", "entry", "entries"],
       contact: [".ch-row", "channel", "channels"],
     };
