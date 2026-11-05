@@ -2515,20 +2515,21 @@
       <h2 class="sec-title">Papers and <em class="ital">presentations</em></h2>
       <p class="sec-lede">
         Recent papers, posters and talks, each marked with where it stands. Status as of
-        3 November 2026.
+        4 November 2026.
       </p>
     </div>
 
     <article class="reveal">
       <div class="index-row">
         <div>
-          <h3 class="index-title">Flightpath: a course scheduler built on constraint programming</h3>
+          <h3 class="index-title">Optimal Degree Planning as Constraint Satisfaction: Exact CP-SAT Scheduling Versus Heuristic Search for on-Time Graduation</h3>
           <div class="index-meta">December 2026 · <span class="st">Full paper</span> · AAI 2026, International Conference on Advances in AI · Langkawi, Malaysia · paper only, not presenting in person</div>
           <div class="index-fig" style="margin-top: .6rem; max-width: var(--prose)">
             Plans which classes a student takes each term so that every prerequisite comes first,
-            no term goes over its credit limit, and the student finishes as early as possible.
-            The rules are handed to a constraint solver (Google's CP-SAT), which searches for a
-            plan that satisfies all of them.
+            no term goes over its credit limit, and the student graduates on time. The paper
+            compares two ways of finding that plan: an exact solver (Google's CP-SAT) that looks
+            for the plan with the fewest terms, and a hand-written search that needs no outside
+            solver but is not guaranteed to find the best plan.
           </div>
         </div>
         <div class="index-fig"><b>Accepted</b></div>
@@ -2536,7 +2537,63 @@
       </div>
       <div class="index-row">
         <div>
-          <h3 class="index-title">Reading crisis text: finding urgent posts during disasters</h3>
+          <h3 class="index-title">Deterministic Simulation is Not Enough: Dual-Harness Verification of a from-Scratch Raft Implementation</h3>
+          <div class="index-meta">January 2027 · <span class="st">Full paper</span> · IEEE CCWC 2027 · Las Vegas</div>
+          <div class="index-fig" style="margin-top: .6rem; max-width: var(--prose)">
+            Raft is a method that lets several computers keep one shared copy of their data even
+            when some of them crash. This paper argues that testing such a system only inside a
+            perfectly repeatable simulation is not enough, and checks a from-scratch
+            implementation twice: once in simulation, and again over real network connections
+            with real processes shut down.
+          </div>
+        </div>
+        <div class="index-fig"><b>Submitted</b>decision pending</div>
+        <div class="index-actions"></div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">Diversity-Aware Neighbor Selection Prevents Graph Connectivity Collapse in HNSW Vector Search for on-Device Semantic Retrieval</h3>
+          <div class="index-meta">January 2027 · <span class="st">Full paper</span> · IEEE ICCE 2027 · Las Vegas</div>
+          <div class="index-fig" style="margin-top: .6rem; max-width: var(--prose)">
+            Search by meaning, such as finding saved notes that answer a question, often walks a
+            graph that links each item to similar items. The simplest way of choosing those links
+            can leave whole parts of the graph unreachable on realistic data. This paper shows
+            that choosing a more varied set of neighbours keeps the graph connected, for search
+            that runs entirely on the user's own device.
+          </div>
+        </div>
+        <div class="index-fig"><b>Submitted</b>decision pending</div>
+        <div class="index-actions"></div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">AltPilot: Drafting Alternative Text for Data Visualizations from the Code That Draws Them</h3>
+          <div class="index-meta">February 2027 · <span class="st">Poster</span> · IUI 2027, Posters track · Helsinki, Finland</div>
+          <div class="index-fig" style="margin-top: .6rem; max-width: var(--prose)">
+            Alternative text is the written description of an image that people using screen
+            readers hear in its place. AltPilot drafts that description for a chart from the code
+            that draws it, so the author starts from a draft instead of a blank box.
+          </div>
+        </div>
+        <div class="index-fig"><b>Submitted</b>decision pending</div>
+        <div class="index-actions"></div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">Comparing Classical and Transformer-Based Natural Language Processing for Detecting Urgent Crisis Messages on Social Media</h3>
+          <div class="index-meta">February 26 to 28, 2027 · <span class="st">Oral talk, abstract</span> · Texas Academy of Science annual meeting · Temple College</div>
+          <div class="index-fig" style="margin-top: .6rem; max-width: var(--prose)">
+            A talk comparing older methods that judge a post by the words it contains with newer
+            language models that read words in context, at spotting social-media posts that signal
+            a real emergency, and why that matters to the people responding.
+          </div>
+        </div>
+        <div class="index-fig"><b>Submitted</b>decision pending</div>
+        <div class="index-actions"></div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">Harnessing Natural Language Processing for Disaster Response and Crisis Management</h3>
           <div class="index-meta">March 2027 · <span class="st">K-12 poster</span> · IEEE ISEC 2027 · Johns Hopkins University</div>
           <div class="index-fig" style="margin-top: .6rem; max-width: var(--prose)">
             Teaches a computer to read social-media posts written during a disaster and pick
@@ -2549,7 +2606,7 @@
       </div>
       <div class="index-row">
         <div>
-          <h3 class="index-title">Flightpath: a course scheduler built on constraint programming</h3>
+          <h3 class="index-title">Flightpath: Using Constraint Optimization to Help Students Plan an On-Time Graduation</h3>
           <div class="index-meta">March 2027 · <span class="st">K-12 poster</span> · IEEE ISEC 2027 · Johns Hopkins University</div>
           <div class="index-fig" style="margin-top: .6rem; max-width: var(--prose)">
             The course planner above, presented as a poster: it turns degree requirements into
@@ -2561,7 +2618,7 @@
       </div>
       <div class="index-row">
         <div>
-          <h3 class="index-title">Raft KV Store: a database that survives crashes</h3>
+          <h3 class="index-title">Learning Distributed Consensus by Building It: A From-Scratch Raft Key-Value Store with Adversarial Testing</h3>
           <div class="index-meta">March 2027 · <span class="st">K-12 poster</span> · IEEE ISEC 2027 · Johns Hopkins University</div>
           <div class="index-fig" style="margin-top: .6rem; max-width: var(--prose)">
             A small database spread across several computers that is built to keep working when
@@ -2576,12 +2633,35 @@
       </div>
       <div class="index-row">
         <div>
-          <h3 class="index-title">Reading crisis text: finding urgent posts during disasters</h3>
-          <div class="index-meta">February 2027 · <span class="st">Oral talk, abstract</span> · Texas Academy of Science annual meeting · Temple College</div>
+          <h3 class="index-title">One extended abstract</h3>
+          <div class="index-meta">March 2027 · <span class="st">Extended abstract</span> · SAIS 2027, Southern Association for Information Systems</div>
           <div class="index-fig" style="margin-top: .6rem; max-width: var(--prose)">
-            A spoken presentation of the crisis-text work: how a computer can tell posts about a
-            real emergency apart from everyday chatter, and why that helps the people
-            responding.
+            Title withheld while under review.
+          </div>
+        </div>
+        <div class="index-fig"><b>Submitted</b>decision pending</div>
+        <div class="index-actions"></div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">Three poster abstracts</h3>
+          <div class="index-meta">April 2027 · <span class="st">Poster abstracts</span> · ACMSE 2027, ACM Southeast Conference</div>
+          <div class="index-fig" style="margin-top: .6rem; max-width: var(--prose)">
+            Titles withheld while under review.
+          </div>
+        </div>
+        <div class="index-fig"><b>Submitted</b>decision pending</div>
+        <div class="index-actions"></div>
+      </div>
+      <div class="index-row">
+        <div>
+          <h3 class="index-title">QuartoMine: A Tool and Dataset for Mining Quarto Computational Documents</h3>
+          <div class="index-meta">April 2027 · <span class="st">Data and tools paper</span> · MSR 2027, Data and Tool Showcase Track · Dublin, Ireland</div>
+          <div class="index-fig" style="margin-top: .6rem; max-width: var(--prose)">
+            Quarto documents mix writing, code and the code's results in one file, and are used
+            for reports, papers and course material. QuartoMine is a tool for gathering and
+            studying such documents, together with a dataset collected with it, so others can
+            look at how they are written.
           </div>
         </div>
         <div class="index-fig"><b>Submitted</b>decision pending</div>
