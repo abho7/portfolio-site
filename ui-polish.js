@@ -130,6 +130,7 @@
 
     const ITEMS = [
       { group: "Sections", label: "About", note: "↵", href: "#about" },
+      { group: "Sections", label: "Founding work", note: "↵", href: "#founding" },
       { group: "Sections", label: "Work", note: "↵", href: "#work" },
       { group: "Sections", label: "Live Systems", note: "↵", href: "#systems" },
       { group: "Sections", label: "Research", note: "↵", href: "#research" },

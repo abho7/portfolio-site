@@ -868,6 +868,21 @@ section { padding-block: var(--section-y); scroll-margin-top: 4.5rem; }
 .pcard:hover { border-color: var(--line-2); background: var(--card-2); transform: translateY(-3px); }
 @media (prefers-reduced-motion: reduce) { .pcard:hover { transform: none; } }
 
+/* Founding work: the same card, given more room. Always two columns where
+   there is width for them (never three, never a lone card on a second row),
+   wider gaps, more padding, larger type, and a border in the card's own colour
+   so the pair reads as heavier than a project card without a new component. */
+.founding-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: clamp(1.75rem,4vw,3rem); }
+@media (max-width: 62rem) { .founding-grid { grid-template-columns: 1fr; } }
+.pcard.fcard { --pad: clamp(1.9rem,3.6vw,3rem); border-color: var(--viz-line); }
+.pcard.fcard h3 { font-size: clamp(1.7rem,2.6vw,2.1rem); }
+.pcard.fcard p { font-size: 1rem; }
+.pcard.fcard .fcard-why { border-left: 2px solid var(--viz); padding-left: 1rem; color: var(--ink); }
+.fcard-why b {
+  display: block; margin-bottom: .35rem; font-family: var(--mono); font-size: .6rem; font-weight: 400;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--label);
+}
+
 /* ------------------------------------------------------- schematic plates
    Every card opens with a small drawing of the thing it describes: the ring
    the gradients actually travel around, the log the followers actually
