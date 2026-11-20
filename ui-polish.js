@@ -859,7 +859,9 @@
     const host = document.getElementById("footer-signature");
     if (!host) return;
 
-    const projects = document.querySelectorAll(".pcard").length;
+    // Work cards only: the Founding section reuses .pcard styling (as .fcard)
+    // for organizations, which are not software projects.
+    const projects = document.querySelectorAll(".pcard:not(.fcard)").length;
     const sims = ["__raftState", "hnswAutoQuery", "nlpAutoCompare"]
       .filter((k) => window[k] !== undefined).length;
     // The embedded demos are counted, not called running: each loads only
