@@ -1240,6 +1240,15 @@ iframe.demo { width: 100%; height: 28rem; border: 0; display: block; background:
 .index-title { font-size: 1.3rem; font-weight: 400; letter-spacing: 0; margin: 0; line-height: 1.2; }
 .index-meta { font-family: var(--mono); font-size: .64rem; letter-spacing: .08em; color: var(--label); margin-top: .4rem; }
 .index-meta .st { color: var(--amber); }
+/* Affiliation badge: the institution a paper or internship was done with,
+   under the title. Same mono pill as .tag, in the accent the org lines use. */
+.affil {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: .15rem .55rem; width: fit-content; max-width: 100%;
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .04em; line-height: 1.5; color: var(--accent);
+  border: 1px solid var(--line-2); border-radius: .85rem; padding: .28rem .75rem; margin-top: .55rem;
+}
+.affil-k { font-size: .54rem; letter-spacing: .18em; text-transform: uppercase; color: var(--label); }
+.dossier .affil { margin-top: .9rem; }
 .index-fig { font-size: .82rem; color: var(--label); }
 .index-fig b { color: var(--accent); font-size: 1.05rem; font-weight: 700; letter-spacing: -.02em; margin-right: .4rem; font-variant-numeric: tabular-nums; }
 .index-actions { display: flex; gap: 1.1rem; font-family: var(--mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; }
